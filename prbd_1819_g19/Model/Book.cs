@@ -20,6 +20,7 @@ namespace prbd_1819_g19
 
         }
 
+
         public void RemoveCategory(Category category)
         {
 

@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Data.Entity;
+using System.Collections.Generic;
 
 namespace prbd_1819_g19 {
     public enum DbType { MsSQL, MySQL }
@@ -92,22 +93,44 @@ namespace prbd_1819_g19 {
         //birthdate = null et role = Member
         public User CreateUser(string userName, string password, string fullName, string email, DateTime birthDate, Role role)
         {
-
+            User newUser = null;
+            if (userName != "" || password != "" || fullName != "" || email != "")
+            {
+                newUser = new User(userName, password, fullName, email, birthDate, "Member");
+                Users.Add(newUser);
+            }
+            return newUser;
         }
 
         public Book CreateBook(string isbn, string title, string author, string editor, int numCopies = 1)
         {
-
+            Book newBook = null;
+            if (numCopies > 0 && (isbn != "" || title != "" || author != "" || editor != ""))
+            {
+                newBook = new Book(isbn, title, author, editor, numCopies);
+                for (int i = 0; i < numCopies; ++i)
+                {
+                    Books.Add(newBook);
+                }
+            }
+            return newBook;
         }
 
         public Category CreateCategory(string name)
         {
-
+            Category newCat = null;
+            if (name != "")
+            {
+                newCat = new Category(name);
+                Categories.Add(newCat);
+            }
+            return newCat;
+                
         }
 
         public List<Book> FindBooksByText(string key)
         {
-
+            
         }
 
         public List<RentalItem> GetActiveRentalItems()

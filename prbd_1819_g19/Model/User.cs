@@ -4,6 +4,19 @@ namespace prbd_1819_g19
 {
     public class User
     {
+        private string userName;
+        private string v;
+
+        public User(string userName, string password, string fullName, string email, DateTime birthDate, string v)
+        {
+            this.userName = userName;
+            Password = password;
+            FullName = fullName;
+            Email = email;
+            BirthDate = birthDate;
+            this.v = v;
+        }
+
         public int UserId { get; set; }
         public string UsernName { get; set; }
         public string Password { get; set; }

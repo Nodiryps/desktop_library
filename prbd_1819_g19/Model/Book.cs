@@ -6,8 +6,20 @@ using System.Threading.Tasks;
 
 namespace prbd_1819_g19
 {
-    class Book
+    public class Book
     {
+        private string title;
+        private int numCopies;
+
+        public Book(string isbn, string title, string author, string editor, int numCopies)
+        {
+            Isbn = isbn;
+            this.title = title;
+            Author = author;
+            Editor = editor;
+            this.numCopies = numCopies;
+        }
+
         public int BookId { get; set; }
         public string Isbn { get; set; }
         public string Author { get; set; }

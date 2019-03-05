@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace prbd_1819_g19
 {
-    public class Book
+    public class Book : EntityBase<Model> 
     {
         private string title;
         private int numCopies;
@@ -29,13 +29,13 @@ namespace prbd_1819_g19
 
         public void AddCategory(Category category)
         {
-
+            
         }
 
 
         public void RemoveCategory(Category category)
         {
-
+            
         }
 
         public void AddCopies(int quantity, DateTime date)

@@ -96,7 +96,11 @@ namespace prbd_1819_g19 {
             User newUser = null;
             if (userName != "" || password != "" || fullName != "" || email != "")
             {
-                newUser = new User(userName, password, fullName, email, birthDate, "Member");
+//                if(birthDate = "")
+//                {
+//                    birthDate = null;
+//                }
+                newUser = new User(userName, password, fullName, email, null, "Member");
                 Users.Add(newUser);
             }
             return newUser;
@@ -130,12 +134,32 @@ namespace prbd_1819_g19 {
 
         public List<Book> FindBooksByText(string key)
         {
-            
+            List<Book> list;
+            key = "%" + key + "%"; 
+            var query = from book in Book
+                        where  Like(book.isbn, key)
+                            || Like(book.title, key)
+                            || Like(book.author, key)
+                            || Like(book.editor, key)
+                        select book;
+            foreach(var b in query) 
+            {
+                list.Add(b);
+            }
+            return list;
         }
 
         public List<RentalItem> GetActiveRentalItems()
         {
-
+            List<RentalItem> list;
+            var query = from rentItem in RentalItem
+                        where rentItem.ReturnDate == null
+                        select rentItem;
+            foreach(var r in query) 
+            {
+                list.Add(r);
+            }
+            return list;
         }
     }
 }

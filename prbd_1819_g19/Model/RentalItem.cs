@@ -1,11 +1,18 @@
 ﻿using System;
+using static prbd_1819_g19.Program;
 
 namespace prbd_1819_g19
 {
     public class RentalItem : EntityBase<Model>
     {
         public int RentalItemId { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
+
+        public RentalItem(int id, DateTime? returnDate)
+        {
+            RentalItemId = id;
+            ReturnDate = returnDate;
+        }
 
         public void DoReturn()
         {
@@ -14,7 +21,7 @@ namespace prbd_1819_g19
 
         public void CancelReturn()
         {
-            ReturnDate == null;
+            ReturnDate = null;
         }
     }
 }

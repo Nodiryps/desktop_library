@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Data.Entity;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace prbd_1819_g19 {
     public enum DbType { MsSQL, MySQL }
@@ -91,17 +92,15 @@ namespace prbd_1819_g19 {
         }
 
         //birthdate = null et role = Member
-        public User CreateUser(string userName, string password, string fullName, string email, DateTime birthDate, Role role)
+        public User CreateUser(string userName, string password, string fullName, string email, DateTime? birthDate, Role role)
         {
             User newUser = null;
             if (userName != "" || password != "" || fullName != "" || email != "")
             {
-//                if(birthDate = "")
-//                {
-//                    birthDate = null;
-//                }
-                newUser = new User(userName, password, fullName, email, null, "Member");
-                Users.Add(newUser);
+                
+                    birthDate = null;
+                
+                newUser = Users.Create();
             }
             return newUser;
         }
@@ -109,13 +108,9 @@ namespace prbd_1819_g19 {
         public Book CreateBook(string isbn, string title, string author, string editor, int numCopies = 1)
         {
             Book newBook = null;
-            if (numCopies > 0 && (isbn != "" || title != "" || author != "" || editor != ""))
+            if (numCopies > 1 && (isbn != "" || title != "" || author != "" || editor != ""))
             {
-                newBook = new Book(isbn, title, author, editor, numCopies);
-                for (int i = 0; i < numCopies; ++i)
-                {
-                    Books.Add(newBook);
-                }
+                newBook = Books.Create();
             }
             return newBook;
         }
@@ -125,8 +120,7 @@ namespace prbd_1819_g19 {
             Category newCat = null;
             if (name != "")
             {
-                newCat = new Category(name);
-                Categories.Add(newCat);
+                newCat = Categories.Create();
             }
             return newCat;
                 
@@ -134,13 +128,13 @@ namespace prbd_1819_g19 {
 
         public List<Book> FindBooksByText(string key)
         {
-            List<Book> list;
+            List<Book> list = new List<Book>();
             key = "%" + key + "%"; 
-            var query = from book in Book
-                        where  Like(book.isbn, key)
-                            || Like(book.title, key)
-                            || Like(book.author, key)
-                            || Like(book.editor, key)
+            var query = from book in Books
+                        where  Like(book.Isbn, key)
+                            || Like(book.Title, key)
+                            || Like(book.Author, key)
+                            || Like(book.Editor, key)
                         select book;
             foreach(var b in query) 
             {
@@ -149,10 +143,19 @@ namespace prbd_1819_g19 {
             return list;
         }
 
+        private bool Like(string toSearch, string key)
+        {
+            return new Regex(@"\A" + new Regex(@"\.|\$|\^|\{|\[|\(|\||\)|\*|\+|\?|\\")
+                .Replace(key, ch => @"\" + ch)
+                .Replace('_', '.')
+                .Replace("%", ".*") + @"\z", RegexOptions.Singleline)
+                .IsMatch(toSearch);
+        }
+
         public List<RentalItem> GetActiveRentalItems()
         {
-            List<RentalItem> list;
-            var query = from rentItem in RentalItem
+            List<RentalItem> list = new List<RentalItem>();
+            var query = from rentItem in RentalItems
                         where rentItem.ReturnDate == null
                         select rentItem;
             foreach(var r in query) 

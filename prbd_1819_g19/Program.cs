@@ -5,9 +5,10 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity.Core.Objects;
 
 namespace prbd_1819_g19 {
-    partial class Program {
+    public class Program {
 
            static void Main(string[] args) {
 #if MSSQL

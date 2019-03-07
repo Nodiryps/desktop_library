@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using static prbd_1819_g19.Program;
 
 namespace prbd_1819_g19
@@ -24,15 +25,22 @@ namespace prbd_1819_g19
         public Role Role { get; set; }
         public RentalItem ActiveRentalItem { get; }
         public int Age { get; }
+        public List<RentalItem> Basket = new List<RentalItem>();
 
-        public Rental CreateBasket()
+        //public Rental CreateBasket()
+        //{
+
+        //}
+
+        public List<RentalItem> GetBasket()
         {
-
+            return Basket;
         }
 
-        public void AddToBasket(Book book)
+        public RentalItem AddToBasket(Book book)
         {
 
+            Basket.Add(Book);
         }
 
         public void RemoveFromBasket(RentalItem item)

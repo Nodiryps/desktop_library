@@ -8,10 +8,10 @@ namespace prbd_1819_g19
         public DateTime? AcquisitionDate { get; set; }
         public User RentedBy { get; }
 
-        public BookCopy(int id, DateTime? start, User rentedBy)
+        public BookCopy(int id, User rentedBy)
         {
             BookCopyId = id;
-            AcquisitionDate = start;
+            AcquisitionDate = DateTime.Now;
             RentedBy = rentedBy;
         }
     }

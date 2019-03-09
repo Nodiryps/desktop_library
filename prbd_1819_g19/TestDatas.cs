@@ -115,7 +115,7 @@ namespace prbd_1819_g19
         {
             Console.WriteLine($"Ajout de 3 copies à book3");
             book3.AddCopies(3, new DateTime(2018, 12, 31, 17, 30, 0));
-            printList<BookCopy>("book3.Copies", Model.BookCopies);
+            printList<BookCopy>("book3.Copies", BookCopiesList());
             Debug.Assert(book3.NumAvailableCopies == 4);
             Console.WriteLine("obtention d'une copie du book3 - BookCopy bookCopy = book3.GetAvailableCopy()");
             explicationGetAvailableCopy();
@@ -125,6 +125,14 @@ namespace prbd_1819_g19
             book3.DeleteCopy(bookCopy);
             Debug.Assert(book3.NumAvailableCopies == 3);
             printList<BookCopy>("book3.Copies", book3.Copies);
+        }
+
+        private List<BookCopy> BookCopiesList()
+        {
+            List<BookCopy> list = new List<BookCopy>();
+            foreach (BookCopy copy in Model.BookCopies)
+                list.Add(copy);
+            return list;
         }
 
         private void explicationGetAvailableCopy()
@@ -158,11 +166,11 @@ namespace prbd_1819_g19
                 Console.WriteLine("Appel RentalItem rentalItemBook3 = ben.AddToBasket(book3); On récupère le rentalItem créé");
                 RentalItem rentalItemBook3 = ben.AddToBasket(book3);
                 Console.WriteLine(ben.Basket);
-                printList("Rental Items du panier de ben", ben.GetBasket());
+                printList("Rental Items du panier de ben", ben.Basket);
                 Console.WriteLine("Suppression d'un élément du panier de ben - ben.RemoveFromBasket(rentalItemBook3)");
                 explicationRemoveFromBasket();
                 ben.RemoveFromBasket(rentalItemBook3);
-                printList("Rental Items du panier de ben", ben.GetBasket());
+                printList("Rental Items du panier de ben", ben.Basket);
                 Console.WriteLine("Confirmation du panier de ben - basket.Confirm()");
                 explicationConfirm();
                 ben.ConfirmBasket();
@@ -174,7 +182,7 @@ namespace prbd_1819_g19
                 ben.AddToBasket(book2);
                 ben.AddToBasket(book3);
                 Console.WriteLine(ben.Basket);
-                printList("Rental Items du panier de ben", ben.GetBasket());
+                printList("Rental Items du panier de ben", ben.Basket);
                 Console.WriteLine("Vidage du panier de ben - ben.ClearBasket()");
                 ben.ClearBasket();
                 Console.WriteLine(ben.Basket);

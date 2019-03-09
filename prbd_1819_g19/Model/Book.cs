@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace prbd_1819_g19
 {
     public class Book : EntityBase<Model> 
     {
-        public Book(string isbn, string title, string author, string editor, int numCopies)
+        protected Book(string isbn, string title, string author, string editor, int numCopies)
         {
             Isbn = isbn;
             Title = title;
@@ -19,8 +20,10 @@ namespace prbd_1819_g19
                 NumAvailableCopies = numCopies;
             else
                 throw new Exception("numCopies < 1 !");
+
         }
 
+        [Key]
         public int BookId { get; set; }
         public string Isbn { get; set; }
         public string Title { get; set; }
@@ -28,47 +31,47 @@ namespace prbd_1819_g19
         public string Editor { get; set; }
         public string PicturePath { get; set; }
         public int NumAvailableCopies { get; }
+        public virtual ICollection<Category> Categories { get; set; }
+        public virtual ICollection<BookCopy> Copies { get; set; }
 
         public void AddCategory(Category category)
         {
-            if (Model.Categories.Find(category.Name) == null)
-                Model.Categories.Add(category);
+            if(Model.Categories.Find(category.Name) != null)
+                if (!Categories.Contains(category))
+                {
+                    Categories.Add(category);
+                    Model.Categories.Add(category);
+                }
         }
 
         public void AddCategories(Category[] tab)
         {
-            foreach(Category category in tab)
-                if (Model.Categories.Find(category.Name) == null)
-                    Model.Categories.Add(category);
+            foreach (Category category in tab)
+                AddCategory(category);
         }
-
 
         public void RemoveCategory(Category category)
         {
-            if(Model.Categories.Find(category.Name) != null)
-                Model.Categories.Remove(category);
+            if(Categories.Contains(category))
+                Categories.Remove(category);
         }
 
         public void AddCopies(int quantity, DateTime date)
         {
             if(Model.BookCopies.Find(BookId) == null)
             {
+                BookCopy toAdd = Model.BookCopies.Create();
+                toAdd.BookCopyId = BookId;
+                toAdd.AcquisitionDate = DateTime.Now;
+
                 for (int i = 0; i < quantity; ++i)
                 {
-                    BookCopy toAdd = Model.BookCopies.Create();
+                    Copies.Add(toAdd);
                     Model.BookCopies.Add(toAdd);
                 }
             }
         }
-
-        public List<BookCopy> GetBookCopies()
-        {
-            List<BookCopy> list = new List<BookCopy>();
-            Model.BookCopies.Find(BookId);
-
-            return list;
-        }
-
+        
         public BookCopy GetAvailableCopy()
         {
             BookCopy availableCopy = null;
@@ -80,7 +83,10 @@ namespace prbd_1819_g19
         public void DeleteCopy(BookCopy copy)
         {
             if (Model.BookCopies.Find(copy.BookCopyId) != null)
+            {
                 Model.BookCopies.Remove(copy);
+                Copies.Remove(copy);
+            }
         }
 
         public void Delete()

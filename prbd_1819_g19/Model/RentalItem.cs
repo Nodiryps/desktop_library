@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using static prbd_1819_g19.Program;
 
 namespace prbd_1819_g19
 {
     public class RentalItem : EntityBase<Model>
     {
+        [Key]
         public int RentalItemId { get; set; }
         public DateTime? ReturnDate { get; set; }
 

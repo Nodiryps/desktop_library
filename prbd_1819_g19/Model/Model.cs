@@ -99,6 +99,9 @@ namespace prbd_1819_g19 {
             {
                 role = Role.Member;
                 newUser = Users.Create();
+                newUser.UserName = userName; newUser.Password = password;
+                newUser.FullName = fullName; newUser.Email = email;
+                newUser.BirthDate = birthDate; newUser.Role = Role.Member;
                 Users.Add(newUser);
                 SaveChanges();
             }
@@ -111,7 +114,9 @@ namespace prbd_1819_g19 {
             if (numCopies > 1 && (isbn != "" || title != "" || author != "" || editor != ""))
             {
                 newBook = Books.Create();
-                Books.Add(newBook);
+                newBook.Isbn = isbn; newBook.Title = title; newBook.Author = author; newBook.Editor = editor;
+                for(int i = 0; i < numCopies; ++i)
+                    Books.Add(newBook);
                 SaveChanges();
             }
             return newBook;
@@ -123,6 +128,8 @@ namespace prbd_1819_g19 {
             if (name != "")
             {
                 newCat = Categories.Create();
+                newCat.Name = name;
+                newCat.Books = new List<Book>();
                 Categories.Add(newCat);
                 SaveChanges();
             }

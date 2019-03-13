@@ -18,7 +18,7 @@ namespace prbd_1819_g19
 
         public bool HasBook(Book book)
         {
-            return Model.Categories.Find(book.BookId) != null;
+            return Books.Contains(book);
         }
 
         public void AddBook(Book book)

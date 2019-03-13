@@ -74,10 +74,13 @@ namespace prbd_1819_g19
         
         public BookCopy GetAvailableCopy()
         {
-            BookCopy availableCopy = null;
-            if (NumAvailableCopies > 0)
-                availableCopy.BookCopyId = BookId;
-            return availableCopy;
+            return (
+                    from c in Model.BookCopies
+                    where c.Book.BookId == BookId && 
+                        ( from i in c.RentalItems where i.ReturnDate == null select i ).Count() == 0
+                    select c
+            ).FirstOrDefault();
+                
         }
 
         public void DeleteCopy(BookCopy copy)

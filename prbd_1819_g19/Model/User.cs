@@ -27,76 +27,72 @@ namespace prbd_1819_g19
         public Role Role { get; set; }
         public RentalItem ActiveRentalItem { get; }
         public int Age { get; }
-        public virtual ICollection<RentalItem> Basket { get; set; }
+        public Rental Basket { get; }
 
         public Rental CreateBasket()
         {
             Rental newRental = Model.Rentals.Create();
             newRental.RentalDate = DateTime.Now;
+            //var query = from rentalItem in Model.RentalItems
+            //            where rentalItem.RentalItemId ==
+
             return newRental;
         }
 
         public RentalItem AddToBasket(Book book)
         {
             RentalItem newItem = null;
-            if (!IsBasketFull() && book.NumAvailableCopies >= 1)
+            if (book.NumAvailableCopies >= 1)
             {
+                var bookCopy = from copy in Model.BookCopies
+                            where copy.BookCopyId == book.BookId 
+                            select copy;
+
                 Model.RentalItems.Create();
                 newItem.RentalItemId = book.BookId;
                 newItem.ReturnDate = null;
-                Basket.Add(newItem);
             }
             return newItem;
         }
 
-        private bool IsBasketEmpty()
-        {
-            return Basket.Count == 0;
-        }
+        //private bool IsBasketFull()
+        //{
+        //    return Basket.Count == 5;
+        //}
 
-        private bool IsBasketFull()
-        {
-            return Basket.Count == 5;
-        }
-
-        private bool MaxRents()
-        {
-            int cpt = 0;
-            foreach (Rental r in Model.Rentals)
-                ++cpt;
-            return Basket.Count + cpt  > 5;
-        }
+        //private bool MaxRents()
+        //{
+        //    int cpt = 0;
+        //    foreach (Rental r in Model.Rentals.Count)
+        //        ++cpt;
+        //    return Basket.Count + cpt  > 5;
+        //}
 
         public void RemoveFromBasket(RentalItem item)
         {
-            if (!IsBasketEmpty())
-                Basket.Remove(item);
+            Basket.RemoveItem(item);
         }
 
         public void ClearBasket()
         {
-            if (!IsBasketEmpty())
-                Basket.Clear();
+            Basket.Clear();
         }
 
         public void ConfirmBasket()
         {
             MsgConfirmBasket();
-
-            if (!IsBasketEmpty() && !MaxRents())
+          
+            foreach (RentalItem item in Basket.ListRental)
             {
-                foreach (RentalItem item in Basket)
-                {
-                    Rental rental = Model.Rentals.Create();
-                    rental.RentalId = item.RentalItemId;
-                    rental.RentalDate = DateTime.Now;
-                }
-            }            
+                Rental rental = Model.Rentals.Create();
+                rental.RentalId = item.RentalItemId;
+                rental.RentalDate = DateTime.Now;
+            }
         }
 
         private void MsgConfirmBasket()
         {
-            if (IsBasketEmpty())
+            if (Basket.IsEmpty())
                 Console.WriteLine("Empty Basket !");
             if (MaxRents())
                 Console.WriteLine("You already have 5 rents !");

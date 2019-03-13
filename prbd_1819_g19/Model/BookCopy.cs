@@ -9,6 +9,7 @@ namespace prbd_1819_g19
         public int BookCopyId { get; set; }
         public DateTime? AcquisitionDate { get; set; }
         public User RentedBy { get; }
+        public virtual Book Book { get; set; }
 
         public BookCopy(int id, User rentedBy)
         {

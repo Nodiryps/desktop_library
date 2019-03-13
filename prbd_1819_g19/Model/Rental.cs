@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using static prbd_1819_g19.Program;
 
@@ -10,6 +11,7 @@ namespace prbd_1819_g19
         public int RentalId { get; set; }
         public DateTime? RentalDate { get; set; }
         public int NumOpenItems { get; }
+        public virtual ICollection<RentalItem> ListRental { get; set; }
 
         public Rental(int id, DateTime? date)
         {
@@ -31,22 +33,29 @@ namespace prbd_1819_g19
 
         public void RemoveItem(RentalItem item)
         {
+            if (!IsEmpty())
+                ListRental.Remove(item);
+        }
 
+        public bool IsEmpty()
+        {
+            return ListRental.Count == 0;
         }
 
         public void Return(RentalItem item)
         {
-
+            item.ReturnDate = DateTime.Now;
         }
 
         public void Confirm()
         {
-
+            RentalDate = DateTime.Now;
         }
 
         public void Clear()
         {
-
+            if (!IsEmpty())
+                ListRental.Clear();
         }
     }
 }

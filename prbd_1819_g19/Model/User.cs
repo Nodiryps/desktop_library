@@ -7,17 +7,7 @@ namespace prbd_1819_g19
 {
     public class User : EntityBase<Model>
     {
-        protected User(string userName, string password, string fullName, string email, DateTime? birthDate, Role role)
-        {
-            UserName = userName;
-            Password = password;
-            FullName = fullName;
-            Email = email;
-            BirthDate = birthDate;
-            Role = role;
-        }
-
-        [Key]
+        [Required]
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -28,6 +18,16 @@ namespace prbd_1819_g19
         public RentalItem ActiveRentalItem { get; }
         public int Age { get; }
         public Rental Basket { get; }
+
+        protected User(string userName, string password, string fullName, string email, DateTime? birthDate, Role role)
+        {
+            UserName = userName;
+            Password = password;
+            FullName = fullName;
+            Email = email;
+            BirthDate = birthDate;
+            Role = role;
+        }
 
         public Rental CreateBasket()
         {
@@ -55,18 +55,10 @@ namespace prbd_1819_g19
             return newItem;
         }
 
-        //private bool IsBasketFull()
-        //{
-        //    return Basket.Count == 5;
-        //}
-
-        //private bool MaxRents()
-        //{
-        //    int cpt = 0;
-        //    foreach (Rental r in Model.Rentals.Count)
-        //        ++cpt;
-        //    return Basket.Count + cpt  > 5;
-        //}
+        private bool IsBasketFull()
+        {
+            return Basket.ListRental.Count == 5;
+        }
 
         public void RemoveFromBasket(RentalItem item)
         {
@@ -94,13 +86,11 @@ namespace prbd_1819_g19
         {
             if (Basket.IsEmpty())
                 Console.WriteLine("Empty Basket !");
-            if (MaxRents())
-                Console.WriteLine("You already have 5 rents !");
         }
 
         public void Return(BookCopy copy)
         {
-            foreach(RentalItem item in Basket)
+            foreach(RentalItem item in Basket.ListRental)
             {
                 if (item.RentalItemId == copy.BookCopyId)
                     item.ReturnDate = DateTime.Now;

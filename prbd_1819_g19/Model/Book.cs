@@ -10,20 +10,7 @@ namespace prbd_1819_g19
 {
     public class Book : EntityBase<Model> 
     {
-        protected Book(string isbn, string title, string author, string editor, int numCopies)
-        {
-            Isbn = isbn;
-            Title = title;
-            Author = author;
-            Editor = editor;
-            if (numCopies >= 1)
-                NumAvailableCopies = numCopies;
-            else
-                throw new Exception("numCopies < 1 !");
-
-        }
-
-        [Key]
+        [Required]
         public int BookId { get; set; }
         public string Isbn { get; set; }
         public string Title { get; set; }
@@ -31,8 +18,18 @@ namespace prbd_1819_g19
         public string Editor { get; set; }
         public string PicturePath { get; set; }
         public int NumAvailableCopies { get; }
+
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<BookCopy> Copies { get; set; }
+
+        protected Book(string isbn, string title, string author, string editor, int numCopies)
+        {
+            Isbn = isbn;
+            Title = title;
+            Author = author;
+            Editor = editor;
+            NumAvailableCopies = numCopies;
+        }
 
         public void AddCategory(Category category)
         {
@@ -40,7 +37,6 @@ namespace prbd_1819_g19
                 if (!Categories.Contains(category))
                 {
                     Categories.Add(category);
-                    Model.Categories.Add(category);
                 }
         }
 
@@ -58,27 +54,24 @@ namespace prbd_1819_g19
 
         public void AddCopies(int quantity, DateTime date)
         {
-            if(Model.BookCopies.Find(BookId) == null)
+            for (int i = 0; i < quantity; ++i)
             {
-                BookCopy toAdd = Model.BookCopies.Create();
-                toAdd.BookCopyId = BookId;
-                toAdd.AcquisitionDate = DateTime.Now;
-
-                for (int i = 0; i < quantity; ++i)
-                {
-                    Copies.Add(toAdd);
-                    Model.BookCopies.Add(toAdd);
-                }
+                BookCopy copy = Model.BookCopies.Create();
+                Copies.Add(copy);
+                Model.BookCopies.Add(copy);
             }
         }
         
         public BookCopy GetAvailableCopy()
         {
             return (
-                    from c in Model.BookCopies
-                    where c.Book.BookId == BookId && 
-                        ( from i in c.RentalItems where i.ReturnDate == null select i ).Count() == 0
-                    select c
+                    from copy in Model.BookCopies
+                    where copy.Book.BookId == BookId && 
+                        ( from item in copy.RentalItems
+                          where item.ReturnDate == null
+                          select item 
+                        ).Count() == 0
+                    select copy
             ).FirstOrDefault();
                 
         }

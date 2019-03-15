@@ -7,7 +7,7 @@ namespace prbd_1819_g19
 {
     public class Rental : EntityBase<Model>
     {
-        [Key]
+        [Required]
         public int RentalId { get; set; }
         public DateTime? RentalDate { get; set; }
         public int NumOpenItems { get; }

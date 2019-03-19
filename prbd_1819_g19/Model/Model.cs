@@ -83,7 +83,12 @@ namespace prbd_1819_g19 {
 
         public void ClearDatabase()
         {
-
+            Users.RemoveRange(Users);
+            Books.RemoveRange(Books);
+            BookCopies.RemoveRange(BookCopies);
+            Categories.RemoveRange(Categories);
+            Rentals.RemoveRange(Rentals);
+            RentalItems.RemoveRange(RentalItems);
         }
 
         public void CreateTestData()

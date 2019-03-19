@@ -92,16 +92,21 @@ namespace prbd_1819_g19 {
         }
 
         //birthdate = null et role = Member
-        public User CreateUser(string userName, string password, string fullName, string email, DateTime? birthDate, Role role)
+        public User CreateUser(string userName, string password, string fullName, string email, DateTime? birthDate = null, Role role = Role.Member)
         {
             User newUser = null;
             if (userName != "" || password != "" || fullName != "" || email != "")
             {
-                role = Role.Member;
                 newUser = Users.Create();
+
                 newUser.UserName = userName; newUser.Password = password;
                 newUser.FullName = fullName; newUser.Email = email;
-                newUser.BirthDate = birthDate; newUser.Role = Role.Member;
+
+                if(birthDate != null)
+                    newUser.BirthDate = birthDate;
+                if (role != Role.Member)
+                    newUser.Role = role;
+
                 Users.Add(newUser);
                 SaveChanges();
             }
@@ -111,7 +116,7 @@ namespace prbd_1819_g19 {
         public Book CreateBook(string isbn, string title, string author, string editor, int numCopies = 1)
         {
             Book newBook = null;
-            if (numCopies > 1 && (isbn != "" || title != "" || author != "" || editor != ""))
+            if (numCopies >= 1 && (isbn != "" || title != "" || author != "" || editor != ""))
             {
                 newBook = Books.Create();
                 newBook.Isbn = isbn; newBook.Title = title; newBook.Author = author; newBook.Editor = editor;

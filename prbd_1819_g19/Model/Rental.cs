@@ -11,7 +11,7 @@ namespace prbd_1819_g19
         public int RentalId { get; set; }
         public DateTime? RentalDate { get; set; }
         public int NumOpenItems { get; }
-        public virtual ICollection<RentalItem> ListRental { get; set; }
+        public virtual ICollection<RentalItem> Items { get; set; }
 
         public Rental(int id, DateTime? date)
         {
@@ -19,12 +19,12 @@ namespace prbd_1819_g19
             RentalDate = date;
         }
 
-        public RentalItem RentCopy(BookCopy copy)
-        {
-            RentalItem item = Model.RentalItems.Create();
-
-            Model.Rentals.Add();
-        }
+        //public RentalItem RentCopy(BookCopy copy)
+        //{
+        //    RentalItem item = Model.RentalItems.Create();
+        //    item.BookCopy.
+        //    Model.Rentals.Add();
+        //}
 
         public void RemoveCopy(BookCopy copy)
         {
@@ -34,12 +34,12 @@ namespace prbd_1819_g19
         public void RemoveItem(RentalItem item)
         {
             if (!IsEmpty())
-                ListRental.Remove(item);
+                Items.Remove(item);
         }
 
         public bool IsEmpty()
         {
-            return ListRental.Count == 0;
+            return Items.Count == 0;
         }
 
         public void Return(RentalItem item)
@@ -55,7 +55,7 @@ namespace prbd_1819_g19
         public void Clear()
         {
             if (!IsEmpty())
-                ListRental.Clear();
+                Items.Clear();
         }
     }
 }

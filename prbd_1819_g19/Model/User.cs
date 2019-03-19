@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using static prbd_1819_g19.Program;
@@ -33,8 +34,8 @@ namespace prbd_1819_g19
         {
             Rental newRental = Model.Rentals.Create();
             newRental.RentalDate = DateTime.Now;
-            //var query = from rentalItem in Model.RentalItems
-            //            where rentalItem.RentalItemId ==
+
+            
 
             return newRental;
         }
@@ -44,9 +45,9 @@ namespace prbd_1819_g19
             RentalItem newItem = null;
             if (book.NumAvailableCopies >= 1)
             {
-                var bookCopy = from copy in Model.BookCopies
-                            where copy.BookCopyId == book.BookId 
-                            select copy;
+                //var bookCopy = from copy in Model.BookCopies
+                //            where copy.BookCopyId == book.BookId 
+                //            select copy;
 
                 Model.RentalItems.Create();
                 newItem.RentalItemId = book.BookId;
@@ -57,7 +58,7 @@ namespace prbd_1819_g19
 
         private bool IsBasketFull()
         {
-            return Basket.ListRental.Count == 5;
+            return Basket.Items.Count == 5;
         }
 
         public void RemoveFromBasket(RentalItem item)
@@ -74,7 +75,7 @@ namespace prbd_1819_g19
         {
             MsgConfirmBasket();
           
-            foreach (RentalItem item in Basket.ListRental)
+            foreach (RentalItem item in Basket.Items)
             {
                 Rental rental = Model.Rentals.Create();
                 rental.RentalId = item.RentalItemId;
@@ -90,7 +91,7 @@ namespace prbd_1819_g19
 
         public void Return(BookCopy copy)
         {
-            foreach(RentalItem item in Basket.ListRental)
+            foreach(RentalItem item in Basket.Items)
             {
                 if (item.RentalItemId == copy.BookCopyId)
                     item.ReturnDate = DateTime.Now;

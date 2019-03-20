@@ -52,9 +52,9 @@ namespace prbd_1819_g19
 
         private void CreateUsers()
         {
-            admin = model.CreateUser("admin", "admin", "Administrator", "admin@test.com", null, Role.Admin);
+            admin = model.CreateUser("admin", "admin", "Administrator", "admin@test.com", null, role: Role.Admin);
             ben = model.CreateUser("ben", "ben", "Benoît Penelle", "ben@test.com", new DateTime(1968, 10, 1), role: Role.Manager);
-            bruno = model.CreateUser("bruno", "bruno", "Bruno Lacroix", "bruno@test.com", null, Role.Member);
+            bruno = model.CreateUser("bruno", "bruno", "Bruno Lacroix", "bruno@test.com");
             users.AddRange(new User[] { admin, ben, bruno });
         }
 
@@ -158,11 +158,11 @@ namespace prbd_1819_g19
                 Console.WriteLine("Appel RentalItem rentalItemBook3 = ben.AddToBasket(book3); On récupère le rentalItem créé");
                 RentalItem rentalItemBook3 = ben.AddToBasket(book3);
                 Console.WriteLine(ben.Basket);
-                printList("Rental Items du panier de ben", ben.Basket);
+                printList("Rental Items du panier de ben", ben.Basket.Items);
                 Console.WriteLine("Suppression d'un élément du panier de ben - ben.RemoveFromBasket(rentalItemBook3)");
                 explicationRemoveFromBasket();
                 ben.RemoveFromBasket(rentalItemBook3);
-                printList("Rental Items du panier de ben", ben.Basket);
+                printList("Rental Items du panier de ben", ben.Basket.Items);
                 Console.WriteLine("Confirmation du panier de ben - basket.Confirm()");
                 explicationConfirm();
                 ben.ConfirmBasket();
@@ -174,7 +174,7 @@ namespace prbd_1819_g19
                 ben.AddToBasket(book2);
                 ben.AddToBasket(book3);
                 Console.WriteLine(ben.Basket);
-                printList("Rental Items du panier de ben", ben.Basket);
+                printList("Rental Items du panier de ben", ben.Basket.Items);
                 Console.WriteLine("Vidage du panier de ben - ben.ClearBasket()");
                 ben.ClearBasket();
                 Console.WriteLine(ben.Basket);

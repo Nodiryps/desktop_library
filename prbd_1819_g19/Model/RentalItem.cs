@@ -8,7 +8,7 @@ namespace prbd_1819_g19
     {
         public int RentalItemId { get; set; }
         public DateTime? ReturnDate { get; set; }
-        public virtual BookCopy bookCopy { get; set; }
+        public virtual BookCopy BookCopy { get; set; }
 
         public RentalItem(int id, DateTime? returnDate)
         {

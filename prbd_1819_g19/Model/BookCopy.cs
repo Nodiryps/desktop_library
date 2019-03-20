@@ -7,15 +7,10 @@ namespace prbd_1819_g19
     public class BookCopy
     {
         public int BookCopyId { get; set; }
-        public DateTime? AcquisitionDate { get; set; } = DateTime.Now;
+        public DateTime? AcquisitionDate { get; set; }
         public User RentedBy { get; }
+
         public virtual Book Book { get; set; }
         public virtual ICollection<RentalItem> RentalItems { get; set; }
-
-        public BookCopy(int id, User rentedBy)
-        {
-            BookCopyId = id;
-            RentedBy = rentedBy;
-        }
     }
 }

@@ -15,12 +15,6 @@ namespace prbd_1819_g19
         public virtual ICollection<RentalItem> Items { get; set; }
         public virtual ICollection<User> Users { get; set; }
 
-        public Rental(int id, DateTime? date)
-        {
-            RentalId = id;
-            RentalDate = date;
-        }
-
         public RentalItem RentCopy(BookCopy copy)
         {
             var rentalItem = (from item in Model.RentalItems

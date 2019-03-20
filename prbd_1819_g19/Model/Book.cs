@@ -15,27 +15,17 @@ namespace prbd_1819_g19
         public string Author { get; set; }
         public string Editor { get; set; }
         public string PicturePath { get; set; }
-        public int NumAvailableCopies { get; }
+        public int NumAvailableCopies { get => Copies.Count(); }
 
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<BookCopy> Copies { get; set; }
 
-        protected Book(string isbn, string title, string author, string editor, int numCopies)
-        {
-            Isbn = isbn;
-            Title = title;
-            Author = author;
-            Editor = editor;
-            NumAvailableCopies = numCopies;
-        }
-
         public void AddCategory(Category category)
         {
-            if(Model.Categories.Find(category.Name) != null)
-                if (!Categories.Contains(category))
-                {
-                    Categories.Add(category);
-                }
+            //if(Model.Categories.Find(category.Name) != null)
+            if (!Categories.Contains(category))
+                Categories.Add(category);
+                
         }
 
         public void AddCategories(Category[] tab)
@@ -55,6 +45,9 @@ namespace prbd_1819_g19
             for (int i = 0; i < quantity; ++i)
             {
                 BookCopy copy = Model.BookCopies.Create();
+                copy.Book = this;
+                copy.AcquisitionDate = date;
+                copy.RentalItems.Add(Model.RentalItems.Create());
                 Copies.Add(copy);
                 Model.BookCopies.Add(copy);
             }
@@ -76,11 +69,11 @@ namespace prbd_1819_g19
 
         public void DeleteCopy(BookCopy copy)
         {
-            if (Model.BookCopies.Find(copy.BookCopyId) != null)
-            {
-                Model.BookCopies.Remove(copy);
-                Copies.Remove(copy);
-            }
+            //if (Model.BookCopies.Find(copy.BookCopyId) != null)
+            //{
+            Model.BookCopies.Remove(copy);
+            Copies.Remove(copy);
+            //}
         }
 
         public void Delete()

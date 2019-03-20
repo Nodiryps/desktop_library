@@ -19,16 +19,6 @@ namespace prbd_1819_g19
         public int Age { get; }
         public Rental Basket { get; }
 
-        protected User(string userName, string password, string fullName, string email, DateTime? birthDate, Role role)
-        {
-            UserName = userName;
-            Password = password;
-            FullName = fullName;
-            Email = email;
-            BirthDate = birthDate;
-            Role = role;
-        }
-
         public Rental CreateBasket()
         {
             Rental newRental = Model.Rentals.Create();
@@ -44,9 +34,9 @@ namespace prbd_1819_g19
             RentalItem newItem = null;
             if (book.NumAvailableCopies > 0)
             {
-                var bookCopy =  from copy in Model.BookCopies
-                                where book.BookId == copy.Book.BookId 
-                                select copy;
+                //var bookCopy =  from copy in Model.BookCopies
+                //                where book.BookId == copy.Book.BookId 
+                //                select copy;
 
                 Model.RentalItems.Create();
                 newItem.RentalItemId = book.BookId;

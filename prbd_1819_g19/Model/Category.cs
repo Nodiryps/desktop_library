@@ -10,11 +10,6 @@ namespace prbd_1819_g19
         public string Name { get; set; }
         public virtual ICollection<Book> Books { get; set; }
 
-        protected Category(string name)
-        {
-            Name = name;
-        }
-
         public bool HasBook(Book book)
         {
             return Books.Contains(book);

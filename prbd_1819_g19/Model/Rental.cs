@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using static prbd_1819_g19.Program;
+using PRBD_Framework;
 
 namespace prbd_1819_g19
 {
@@ -13,7 +13,7 @@ namespace prbd_1819_g19
         public DateTime? RentalDate { get; set; }
         public int NumOpenItems { get; }
         public virtual ICollection<RentalItem> Items { get; set; }
-        public virtual ICollection<User> Users { get; set; }
+        public virtual User User { get; set; }
 
         public RentalItem RentCopy(BookCopy copy)
         {
@@ -45,6 +45,11 @@ namespace prbd_1819_g19
             return Items.Count == 0;
         }
 
+        public bool IsFull()
+        {
+            return Items.Count == 5;
+        }
+
         public void Return(RentalItem item)
         {
             item.ReturnDate = DateTime.Now;
@@ -59,6 +64,11 @@ namespace prbd_1819_g19
         {
             if (!IsEmpty())
                 Items.Clear();
+        }
+
+        public override string ToString()
+        {
+            return "rentalId: " + RentalId.ToString();
         }
     }
 }

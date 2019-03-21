@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using static prbd_1819_g19.Program;
+using PRBD_Framework;
 
 namespace prbd_1819_g19
 {
@@ -18,31 +18,25 @@ namespace prbd_1819_g19
         public RentalItem ActiveRentalItem { get; }
         public int Age { get; }
         public Rental Basket { get; }
+        public virtual ICollection<Rental> Rentals { get; set; }
 
         public Rental CreateBasket()
         {
             Rental newRental = Model.Rentals.Create();
-            newRental.RentalDate = DateTime.Now;
-            //var query = from rentalItem in Model.RentalItems
-            //            where rentalItem.RentalItemId ==
-
+            Model.Rentals.Add(newRental);
             return newRental;
         }
 
         public RentalItem AddToBasket(Book book)
         {
-            RentalItem newItem = null;
+            RentalItem item = null;
             if (book.NumAvailableCopies > 0)
             {
-                //var bookCopy =  from copy in Model.BookCopies
-                //                where book.BookId == copy.Book.BookId 
-                //                select copy;
-
-                Model.RentalItems.Create();
-                newItem.RentalItemId = book.BookId;
-                newItem.ReturnDate = null;
+                item = Model.RentalItems.Create();
+                BookCopy copy = book.GetAvailableCopy();
+                item.BookCopy = copy;
             }
-            return newItem;
+            return item;
         }
 
         private bool IsBasketFull()
@@ -62,20 +56,24 @@ namespace prbd_1819_g19
 
         public void ConfirmBasket()
         {
-            MsgConfirmBasket();
-          
+            MsgErrConfirmBasket();
+            Rental rental = Model.Rentals.Create();
+
             foreach (RentalItem item in Basket.Items)
             {
-                Rental rental = Model.Rentals.Create();
                 rental.RentalId = item.RentalItemId;
                 rental.RentalDate = DateTime.Now;
             }
+            Model.Rentals.Add(rental);
+            Rentals.Add(rental);
         }
 
-        private void MsgConfirmBasket()
+        private void MsgErrConfirmBasket()
         {
             if (Basket.IsEmpty())
-                Console.WriteLine("Empty Basket !");
+                Console.WriteLine("!!! EMPTY Basket !!!");
+            if (Basket.IsFull())
+                Console.WriteLine("!!! Basket FULL !!!");
         }
 
         public void Return(BookCopy copy)
@@ -85,6 +83,11 @@ namespace prbd_1819_g19
                 if (item.RentalItemId == copy.BookCopyId)
                     item.ReturnDate = DateTime.Now;
             }
+        }
+
+        public override string ToString()
+        {
+            return "username: " + UserName.ToString();
         }
     }
 }

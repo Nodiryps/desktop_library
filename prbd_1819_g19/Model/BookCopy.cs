@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using PRBD_Framework;
 
 namespace prbd_1819_g19
 {
@@ -12,5 +13,10 @@ namespace prbd_1819_g19
 
         public virtual Book Book { get; set; }
         public virtual ICollection<RentalItem> RentalItems { get; set; }
+
+        public override string ToString()
+        {
+            return "copy: " + Book.Title.ToString();
+        }
     }
 }

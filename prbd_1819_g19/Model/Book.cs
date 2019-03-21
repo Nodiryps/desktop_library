@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using static prbd_1819_g19.Program;
+using PRBD_Framework;
 
 namespace prbd_1819_g19
 {
@@ -22,7 +22,6 @@ namespace prbd_1819_g19
 
         public void AddCategory(Category category)
         {
-            //if(Model.Categories.Find(category.Name) != null)
             if (!Categories.Contains(category))
                 Categories.Add(category);
                 
@@ -30,8 +29,9 @@ namespace prbd_1819_g19
 
         public void AddCategories(Category[] tab)
         {
-            foreach (Category category in tab)
+            foreach (Category category in tab) 
                 AddCategory(category);
+            Console.Write("ADDDDDDDDDDDDDDDDDDDDDDDDCAT");
         }
 
         public void RemoveCategory(Category category)
@@ -47,9 +47,14 @@ namespace prbd_1819_g19
                 BookCopy copy = Model.BookCopies.Create();
                 copy.Book = this;
                 copy.AcquisitionDate = date;
-                copy.RentalItems.Add(Model.RentalItems.Create());
                 Copies.Add(copy);
+                Console.Write("gneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                //RentalItem item = Model.RentalItems.Create();
+                //item.ReturnDate = null;
+                //item.BookCopy = copy;
+                //copy.RentalItems.Add(item);
                 Model.BookCopies.Add(copy);
+                Model.SaveChanges();
             }
         }
         
@@ -80,6 +85,11 @@ namespace prbd_1819_g19
         {
             if (Model.Books.Find(BookId) != null)
                 Model.Books.Remove(this);
+        }
+
+        public override string ToString()
+        {
+            return "book: " + Title.ToString();
         }
     }
 }

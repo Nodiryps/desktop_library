@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using static prbd_1819_g19.Program;
+using PRBD_Framework;
 
 namespace prbd_1819_g19
 {
@@ -31,6 +31,11 @@ namespace prbd_1819_g19
         {
             if(Model.Categories.Find(this) != null)
                 Model.Categories.Remove(this);
+        }
+
+        public override string ToString()
+        {
+            return "category: " + Name.ToString();
         }
     }
     

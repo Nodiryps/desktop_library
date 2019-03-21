@@ -83,12 +83,18 @@ namespace prbd_1819_g19 {
 
         public void ClearDatabase()
         {
-
+            //Users.RemoveRange(Users);
+            //Books.RemoveRange(Books);
+            //Rentals.RemoveRange(Rentals);
+            //BookCopies.RemoveRange(BookCopies);
+            //Categories.RemoveRange(Categories);
+            //RentalItems.RemoveRange(RentalItems);
+            SaveChanges();
         }
 
         public void CreateTestData()
         {
-            new TestDatas(DbType.MySQL).Run();
+            new TestDatas(DbType.MsSQL);
         }
 
         //birthdate = null et role = Member

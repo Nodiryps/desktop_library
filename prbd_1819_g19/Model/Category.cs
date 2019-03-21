@@ -8,6 +8,7 @@ namespace prbd_1819_g19
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }
+
         public virtual ICollection<Book> Books { get; set; }
 
         public bool HasBook(Book book)

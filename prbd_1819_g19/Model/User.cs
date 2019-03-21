@@ -15,27 +15,32 @@ namespace prbd_1819_g19
         public string Email { get; set; }
         public DateTime? BirthDate { get; set; }
         public Role Role { get; set; }
-        public RentalItem ActiveRentalItem { get; }
-        public int Age { get; }
-        public Rental Basket { get; }
+        public virtual RentalItem[] ActiveRentalItem { get; }
+        public int Age { get => DateTime.Now.Year - BirthDate.Value.Year; }
+
+        public Rental Basket { get; set; }
         public virtual ICollection<Rental> Rentals { get; set; }
 
         public Rental CreateBasket()
         {
-            Rental newRental = Model.Rentals.Create();
-            Model.Rentals.Add(newRental);
-            return newRental;
+            Basket = Model.Rentals.Create();
+            Model.Rentals.Add(Basket);
+            return Basket;
         }
 
         public RentalItem AddToBasket(Book book)
         {
+            CreateBasket();
             RentalItem item = null;
             if (book.NumAvailableCopies > 0)
             {
                 item = Model.RentalItems.Create();
                 BookCopy copy = book.GetAvailableCopy();
                 item.BookCopy = copy;
+                Basket.Items.Add(item);
+                Model.RentalItems.Add(item);
             }
+            Model.SaveChanges();
             return item;
         }
 

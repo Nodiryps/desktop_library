@@ -144,7 +144,6 @@ namespace prbd_1819_g19
                 Console.WriteLine("catEssai.RemoveBook(book1)");
                 catEssai.RemoveBook(book1);
                 printList("catEssai.Books", catEssai.Books);
-                Console.Read();
             });
         }
 

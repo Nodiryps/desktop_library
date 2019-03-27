@@ -147,17 +147,17 @@ namespace prbd_1819_g19 {
         public List<Book> FindBooksByText(string key)
         {
             List<Book> list = new List<Book>();
-            key = "%" + key + "%"; 
-            var query = from book in Books
-                        where  Like(book.Isbn, key)
-                            || Like(book.Title, key)
-                            || Like(book.Author, key)
-                            || Like(book.Editor, key)
-                        select book;
-            foreach(var b in query) 
-            {
-                list.Add(b);
-            }
+            //key = "%" + key + "%"; 
+            //var query = from book in Books
+            //            where  Like(book.Isbn, key)
+            //                || Like(book.Title, key)
+            //                || Like(book.Author, key)
+            //                || Like(book.Editor, key)
+            //            select book;
+            //foreach(var b in query) 
+            //{
+            //    list.Add(b);
+            //}
             return list;
         }
 

@@ -18,19 +18,21 @@ namespace prbd_1819_g19
         public virtual RentalItem[] ActiveRentalItem { get; }
         public int Age { get => DateTime.Now.Year - BirthDate.Value.Year; }
 
-        public Rental Basket { get; set; }
+        public Rental Basket { get; }
         public virtual ICollection<Rental> Rentals { get; set; }
 
         public Rental CreateBasket()
         {
             Basket = Model.Rentals.Create();
             Model.Rentals.Add(Basket);
+            Model.SaveChanges();
             return Basket;
         }
 
         public RentalItem AddToBasket(Book book)
         {
-            CreateBasket();
+            if(Basket == null)
+                CreateBasket();
             RentalItem item = null;
             if (book.NumAvailableCopies > 0)
             {

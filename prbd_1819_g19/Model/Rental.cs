@@ -12,6 +12,7 @@ namespace prbd_1819_g19
         public int RentalId { get; set; }
         public DateTime? RentalDate { get; set; }
         public int NumOpenItems { get; }
+
         public virtual ICollection<RentalItem> Items { get; set; }
         public virtual User User { get; set; }
 
@@ -52,12 +53,13 @@ namespace prbd_1819_g19
 
         public void Return(RentalItem item)
         {
-            item.ReturnDate = DateTime.Now;
+            item.DoReturn();
         }
 
         public void Confirm()
         {
-            
+            Model.Rentals.Add(this);
+            Model.SaveChanges();
         }
 
         public void Clear()

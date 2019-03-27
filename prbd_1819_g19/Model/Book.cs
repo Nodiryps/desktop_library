@@ -31,7 +31,6 @@ namespace prbd_1819_g19
         {
             foreach (Category category in tab) 
                 AddCategory(category);
-            Console.Write("ADDDDDDDDDDDDDDDDDDDDDDDDCAT");
         }
 
         public void RemoveCategory(Category category)
@@ -48,7 +47,6 @@ namespace prbd_1819_g19
                 copy.Book = this;
                 copy.AcquisitionDate = date;
                 Copies.Add(copy);
-                Console.Write("gneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
                 //RentalItem item = Model.RentalItems.Create();
                 //item.ReturnDate = null;
                 //item.BookCopy = copy;

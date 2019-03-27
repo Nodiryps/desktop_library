@@ -17,8 +17,7 @@ namespace prbd_1819_g19
         public Role Role { get; set; }
         public virtual RentalItem[] ActiveRentalItem { get; }
         public int Age { get => DateTime.Now.Year - BirthDate.Value.Year; }
-
-        public Rental Basket { get; }
+        public Rental Basket { get; set; }
         public virtual ICollection<Rental> Rentals { get; set; }
 
         public Rental CreateBasket()
@@ -31,9 +30,11 @@ namespace prbd_1819_g19
 
         public RentalItem AddToBasket(Book book)
         {
-            if(Basket == null)
+            if (Basket == null)
                 CreateBasket();
+
             RentalItem item = null;
+
             if (book.NumAvailableCopies > 0)
             {
                 item = Model.RentalItems.Create();
@@ -42,6 +43,7 @@ namespace prbd_1819_g19
                 Basket.Items.Add(item);
                 Model.RentalItems.Add(item);
             }
+
             Model.SaveChanges();
             return item;
         }

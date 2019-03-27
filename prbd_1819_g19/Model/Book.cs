@@ -16,7 +16,6 @@ namespace prbd_1819_g19
         public string Editor { get; set; }
         public string PicturePath { get; set; }
         public int NumAvailableCopies { get => Copies.Count(); }
-
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<BookCopy> Copies { get; set; }
 

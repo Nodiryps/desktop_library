@@ -12,7 +12,6 @@ namespace prbd_1819_g19
         public int RentalId { get; set; }
         public DateTime? RentalDate { get; set; }
         public int NumOpenItems { get; }
-
         public virtual ICollection<RentalItem> Items { get; set; }
         public virtual User User { get; set; }
 
@@ -41,16 +40,6 @@ namespace prbd_1819_g19
                 Items.Remove(item);
         }
 
-        public bool IsEmpty()
-        {
-            return Items.Count == 0;
-        }
-
-        public bool IsFull()
-        {
-            return Items.Count == 5;
-        }
-
         public void Return(RentalItem item)
         {
             item.DoReturn();
@@ -66,6 +55,16 @@ namespace prbd_1819_g19
         {
             if (!IsEmpty())
                 Items.Clear();
+        }
+
+        public bool IsEmpty()
+        {
+            return Items.Count == 0;
+        }
+
+        public bool IsFull()
+        {
+            return Items.Count == 5;
         }
 
         public override string ToString()

@@ -83,12 +83,12 @@ namespace prbd_1819_g19 {
 
         public void ClearDatabase()
         {
-            //Users.RemoveRange(Users);
-            //Books.RemoveRange(Books);
-            //Rentals.RemoveRange(Rentals);
-            //BookCopies.RemoveRange(BookCopies);
-            //Categories.RemoveRange(Categories);
-            //RentalItems.RemoveRange(RentalItems);
+            Users.RemoveRange(Users.Include("Rentals"));
+            Books.RemoveRange(Books.Include("Copies").Include("Categories"));
+            BookCopies.RemoveRange(BookCopies);
+            Categories.RemoveRange(Categories.Include("Books"));
+            Rentals.RemoveRange(Rentals.Include("Items"));
+            RentalItems.RemoveRange(RentalItems.Include("BookCopy"));
             SaveChanges();
         }
 
@@ -147,27 +147,23 @@ namespace prbd_1819_g19 {
         public List<Book> FindBooksByText(string key)
         {
             List<Book> list = new List<Book>();
-            //key = "%" + key + "%"; 
-            //var query = from book in Books
-            //            where  Like(book.Isbn, key)
-            //                || Like(book.Title, key)
-            //                || Like(book.Author, key)
-            //                || Like(book.Editor, key)
-            //            select book;
-            //foreach(var b in query) 
-            //{
-            //    list.Add(b);
-            //}
+            //var q = from b in Model.Books
+            //where b.Author.Contains(key) || b.Title.Contains(key) || b.Editor.Contains(key) || b.Isbn.Contains(key)
+            //select b;
+            //foreach (var book in q)
+            //list.Add(book);
+            foreach (var b in Books)
+            {
+                if (b.Author.Contains(key))
+                    list.Add(b);
+                if (b.Title.Contains(key))
+                    list.Add(b);
+                if (b.Editor.Contains(key))
+                    list.Add(b);
+                if (b.Isbn.Contains(key))
+                    list.Add(b);
+            }
             return list;
-        }
-
-        private bool Like(string toSearch, string key)
-        {
-            return new Regex(@"\A" + new Regex(@"\.|\$|\^|\{|\[|\(|\||\)|\*|\+|\?|\\")
-                .Replace(key, ch => @"\" + ch)
-                .Replace('_', '.')
-                .Replace("%", ".*") + @"\z", RegexOptions.Singleline)
-                .IsMatch(toSearch);
         }
 
         public List<RentalItem> GetActiveRentalItems()

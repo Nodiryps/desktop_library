@@ -10,7 +10,6 @@ namespace prbd_1819_g19
         public int BookCopyId { get; set; }
         public DateTime? AcquisitionDate { get; set; }
         public virtual User RentedBy { get; }
-
         public virtual Book Book { get; set; }
         public virtual ICollection<RentalItem> RentalItems { get; set; }
 

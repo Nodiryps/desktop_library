@@ -19,6 +19,7 @@ namespace prbd_1819_g19
         {
             if(Model.Books.Find(book.BookId) != null)
                 Books.Add(book);
+            
         }
 
         public void RemoveBook(Book book)
@@ -29,8 +30,11 @@ namespace prbd_1819_g19
 
         public void Delete()
         {
-            if(Model.Categories.Find(this) != null)
+            if (Model.Categories.Find(this) != null)
+            {
                 Model.Categories.Remove(this);
+                Model.SaveChanges();
+            }
         }
 
         public override string ToString()

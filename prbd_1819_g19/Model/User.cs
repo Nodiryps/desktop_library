@@ -75,6 +75,7 @@ namespace prbd_1819_g19
             }
             Model.Rentals.Add(rental);
             Rentals.Add(rental);
+            Model.SaveChanges();
         }
 
         private void MsgErrConfirmBasket()

@@ -84,11 +84,15 @@ namespace prbd_1819_g19 {
         public void ClearDatabase()
         {
             Users.RemoveRange(Users.Include("Rentals"));
-            Books.RemoveRange(Books.Include("Copies").Include("Categories"));
-            BookCopies.RemoveRange(BookCopies);
+            Books.RemoveRange(Books.Include("Copies")
+                                   .Include("Categories"));
+            BookCopies.RemoveRange(BookCopies.Include("Book")
+                                             .Include("RentalItems"));
             Categories.RemoveRange(Categories.Include("Books"));
-            Rentals.RemoveRange(Rentals.Include("Items"));
-            RentalItems.RemoveRange(RentalItems.Include("BookCopy"));
+            Rentals.RemoveRange(Rentals.Include("Items")
+                                       .Include("User"));
+            RentalItems.RemoveRange(RentalItems.Include("BookCopy")
+                                               .Include("Rental"));
             SaveChanges();
         }
 

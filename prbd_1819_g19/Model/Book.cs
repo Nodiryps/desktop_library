@@ -75,13 +75,17 @@ namespace prbd_1819_g19
             //{
             Model.BookCopies.Remove(copy);
             Copies.Remove(copy);
+            Model.SaveChanges();
             //}
         }
 
         public void Delete()
         {
             if (Model.Books.Find(BookId) != null)
+            {
                 Model.Books.Remove(this);
+                Model.SaveChanges();
+            }
         }
 
         public override string ToString()

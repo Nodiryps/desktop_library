@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using PRBD_Framework;
+using System.Linq;
 
 namespace prbd_1819_g19
 {
@@ -17,34 +18,39 @@ namespace prbd_1819_g19
         public Role Role { get; set; }
         public virtual RentalItem[] ActiveRentalItem { get; }
         public int Age { get => DateTime.Now.Year - BirthDate.Value.Year; }
-        public Rental Basket { get; set; }
         public virtual ICollection<Rental> Rentals { get; set; }
+        public Rental Basket
+        {
+            get => (from rental in Model.Rentals
+                    where rental.User.UserId == UserId && rental.RentalDate == null
+                    select rental).FirstOrDefault();
+        }
+
 
         public Rental CreateBasket()
         {
-            Basket = Model.Rentals.Create();
-            Model.Rentals.Add(Basket);
-            Model.SaveChanges();
-            return Basket;
+            Rental newRental = Model.Rentals.Create();
+            newRental.User = this;
+            Model.Rentals.Add(newRental);
+            Rentals.Add(newRental);
+
+            //Console.WriteLine(newRental);
+            //Console.WriteLine(Rentals.Count);
+            //Console.Read();
+
+            return newRental;
         }
 
         public RentalItem AddToBasket(Book book)
         {
-            if (Basket == null)
-                CreateBasket();
+            Rental newRental = CreateBasket();
+            newRental.User = this;
 
-            RentalItem item = null;
+            BookCopy copy = book.GetAvailableCopy();
+            RentalItem item = newRental.RentCopy(copy);
 
-            if (book.NumAvailableCopies > 0)
-            {
-                item = Model.RentalItems.Create();
-                BookCopy copy = book.GetAvailableCopy();
-                item.BookCopy = copy;
-                Basket.Items.Add(item);
-                Model.RentalItems.Add(item);
-            }
+            newRental.Items.Add(item);
 
-            Model.SaveChanges();
             return item;
         }
 
@@ -88,7 +94,7 @@ namespace prbd_1819_g19
 
         public void Return(BookCopy copy)
         {
-            foreach(RentalItem item in Basket.Items)
+            foreach (RentalItem item in Basket.Items)
             {
                 if (item.RentalItemId == copy.BookCopyId)
                     item.ReturnDate = DateTime.Now;

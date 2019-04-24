@@ -6,7 +6,7 @@ using PRBD_Framework;
 
 namespace prbd_1819_g19
 {
-    public class Book : EntityBase<Model> 
+    public class Book : EntityBase<Model>
     {
         [Required]
         public int BookId { get; set; }
@@ -23,18 +23,18 @@ namespace prbd_1819_g19
         {
             if (!Categories.Contains(category))
                 Categories.Add(category);
-                
+
         }
 
         public void AddCategories(Category[] tab)
         {
-            foreach (Category category in tab) 
+            foreach (Category category in tab)
                 AddCategory(category);
         }
 
         public void RemoveCategory(Category category)
         {
-            if(Categories.Contains(category))
+            if (Categories.Contains(category))
                 Categories.Remove(category);
         }
 
@@ -46,37 +46,38 @@ namespace prbd_1819_g19
                 copy.Book = this;
                 copy.AcquisitionDate = date;
                 Copies.Add(copy);
-                //RentalItem item = Model.RentalItems.Create();
-                //item.ReturnDate = null;
-                //item.BookCopy = copy;
-                //copy.RentalItems.Add(item);
+
+                RentalItem item = Model.RentalItems.Create();
+
+                item.ReturnDate = null;
+                item.BookCopy = copy;
+                Model.RentalItems.Add(item);
+                copy.RentalItems.Add(item);
+
                 Model.BookCopies.Add(copy);
                 Model.SaveChanges();
             }
         }
-        
+
         public BookCopy GetAvailableCopy()
         {
             return (
                     from copy in Model.BookCopies
-                    where copy.Book.BookId == BookId && 
-                        ( from item in copy.RentalItems
-                          where item.ReturnDate == null
-                          select item 
+                    where copy.Book.BookId == this.BookId &&
+                        (from item in copy.RentalItems
+                         where item.ReturnDate == null
+                         select item
                         ).Count() == 0
                     select copy
             ).FirstOrDefault();
-                
+
         }
 
         public void DeleteCopy(BookCopy copy)
         {
-            //if (Model.BookCopies.Find(copy.BookCopyId) != null)
-            //{
             Model.BookCopies.Remove(copy);
             Copies.Remove(copy);
             Model.SaveChanges();
-            //}
         }
 
         public void Delete()

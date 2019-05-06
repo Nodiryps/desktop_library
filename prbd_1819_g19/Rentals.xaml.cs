@@ -12,13 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using prbd_1819_g19;
+using PRBD_Framework;
 
 namespace prbd_1819_g19
 {
     /// <summary>
     /// Logique d'interaction pour Rentals.xaml
     /// </summary>
-    public partial class Rentals : UserControl
+    public partial class Rentals : UserControlBase
     {
         public Rentals()
         {

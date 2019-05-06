@@ -13,6 +13,8 @@ namespace prbd_1819_g19
     /// </summary>
     public partial class BooksView : UserControlBase
     {
+
+        public Category cats;
         public BooksView()
         {
             InitializeComponent();
@@ -37,9 +39,13 @@ namespace prbd_1819_g19
                 Console.WriteLine(member);
                 App.NotifyColleagues(AppMessages.MSG_DISPLAY_MEMBER, member);
             });
-            CategoryFilter = new RelayCommand(() =>
+            CategoryFilter = new RelayCommand<Category>(cat=>
             {
+
                 Console.WriteLine(SelectedCat);
+                
+                ApplyComboBoxFilter();
+                Console.WriteLine(cat);
             });
 
             App.Register<Book>(this, AppMessages.MSG_MEMBER_CHANGED, member => { ApplyFilterAction(); });
@@ -58,7 +64,7 @@ namespace prbd_1819_g19
         public ObservableCollection<Category> Categories
         {
             get => categories;
-            set => SetProperty<ObservableCollection<Category>>(ref categories, value, ApplyComboBoxFilter);
+            set => SetProperty<ObservableCollection<Category>>(ref categories, value);
         }
 
         private string filter;
@@ -96,11 +102,12 @@ namespace prbd_1819_g19
 
         private void ApplyComboBoxFilter()
         {
-            if (string.IsNullOrEmpty(SelectedCat.ToString()))
-            {
+        
                 Books = new ObservableCollection<Book>(SelectedCat.Books);
-            }
+          
         }
+
+     
 
 
     }

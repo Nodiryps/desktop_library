@@ -30,15 +30,10 @@ namespace prbd_1819_g19
             //                 ).FirstOrDefault();
 
             RentalItem item = Model.RentalItems.Create();
-
             item.BookCopy.BookCopyId = copy.BookCopyId;
             item.ReturnDate = null;
             Items.Add(item);
-
-
-
-
-
+            Model.SaveChanges();
             return item;
         }
 

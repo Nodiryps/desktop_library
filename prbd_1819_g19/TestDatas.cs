@@ -38,8 +38,8 @@ namespace prbd_1819_g19
                 CreateEntities(model);
                 testBooks();
                 testCategory();
-                testBasket();
-                testModel();
+                //testBasket();
+                //testModel();
             }
         }
 
@@ -114,6 +114,7 @@ namespace prbd_1819_g19
 
         private void testBookCopies()
         {
+            Console.Read();
             Console.WriteLine($"Ajout de 3 copies à book3");
             book3.AddCopies(3, new DateTime(2018, 12, 31, 17, 30, 0));
             printList<BookCopy>("book3.Copies", book3.Copies);
@@ -123,7 +124,8 @@ namespace prbd_1819_g19
             BookCopy bookCopy = book3.GetAvailableCopy();
             Console.WriteLine($"bookCopy : {bookCopy}");
             Console.WriteLine($"suppression de bookCopy - book3.DeleteCopy(bookCopy)");
-            book3.DeleteCopy(bookCopy);
+            Console.Read();
+            //book3.DeleteCopy(bookCopy);
             //Debug.Assert(book3.NumAvailableCopies == 3);
             printList<BookCopy>("book3.Copies", book3.Copies);
         }
@@ -147,100 +149,100 @@ namespace prbd_1819_g19
             });
         }
 
-        private void testBasket()
-        {
-            runTest("Test Basket", () =>
-            {
-                Console.WriteLine("Création d'un panier pour ben contenant des copies de book1, book2, book3");
-                Console.WriteLine("Appels : ben.AddToBasket(book1); ben.AddToBasket(book2)");
-                explicationAddToBasket();
-                ben.AddToBasket(book1);
-                ben.AddToBasket(book2);
-                Console.WriteLine("Appel RentalItem rentalItemBook3 = ben.AddToBasket(book3); On récupère le rentalItem créé");
-                RentalItem rentalItemBook3 = ben.AddToBasket(book3);
-                Console.WriteLine(ben.Basket);
-                printList("Rental Items du panier de ben", ben.Basket.Items);
-                Console.WriteLine("Suppression d'un élément du panier de ben - ben.RemoveFromBasket(rentalItemBook3)");
-                explicationRemoveFromBasket();
-                ben.RemoveFromBasket(rentalItemBook3);
-                printList("Rental Items du panier de ben", ben.Basket.Items);
-                Console.WriteLine("Confirmation du panier de ben - basket.Confirm()");
-                explicationConfirm();
-                ben.ConfirmBasket();
-                Console.WriteLine(ben.Basket);
-                Console.WriteLine("Re-Création du panier de ben essayant d'ajouter des copies de book1, book2, book3");
-                Console.WriteLine("");
-                Console.WriteLine("On constate que ce ne sont pas les mêmes copies (puisque les précédentes sont déjà louées)");
-                ben.AddToBasket(book1);
-                ben.AddToBasket(book2);
-                ben.AddToBasket(book3);
-                Console.WriteLine(ben.Basket);
-                printList("Rental Items du panier de ben", ben.Basket.Items);
-                Console.WriteLine("Vidage du panier de ben - ben.ClearBasket()");
-                ben.ClearBasket();
-                Console.WriteLine(ben.Basket);
-            });
-        }
+        //        private void testBasket()
+        //        {
+        //            runTest("Test Basket", () =>
+        //            {
+        //                Console.WriteLine("Création d'un panier pour ben contenant des copies de book1, book2, book3");
+        //                Console.WriteLine("Appels : ben.AddToBasket(book1); ben.AddToBasket(book2)");
+        //                explicationAddToBasket();
+        //                ben.AddToBasket(book1);
+        //                ben.AddToBasket(book2);
+        //                Console.WriteLine("Appel RentalItem rentalItemBook3 = ben.AddToBasket(book3); On récupère le rentalItem créé");
+        //                RentalItem rentalItemBook3 = ben.AddToBasket(book3);
+        //                Console.WriteLine(ben.Basket);
+        //                printList("Rental Items du panier de ben", ben.Basket.Items);
+        //                Console.WriteLine("Suppression d'un élément du panier de ben - ben.RemoveFromBasket(rentalItemBook3)");
+        //                explicationRemoveFromBasket();
+        //                ben.RemoveFromBasket(rentalItemBook3);
+        //                printList("Rental Items du panier de ben", ben.Basket.Items);
+        //                Console.WriteLine("Confirmation du panier de ben - basket.Confirm()");
+        //                explicationConfirm();
+        //                ben.ConfirmBasket();
+        //                Console.WriteLine(ben.Basket);
+        //                Console.WriteLine("Re-Création du panier de ben essayant d'ajouter des copies de book1, book2, book3");
+        //                Console.WriteLine("");
+        //                Console.WriteLine("On constate que ce ne sont pas les mêmes copies (puisque les précédentes sont déjà louées)");
+        //                ben.AddToBasket(book1);
+        //                ben.AddToBasket(book2);
+        //                ben.AddToBasket(book3);
+        //                Console.WriteLine(ben.Basket);
+        //                printList("Rental Items du panier de ben", ben.Basket.Items);
+        //                Console.WriteLine("Vidage du panier de ben - ben.ClearBasket()");
+        //                ben.ClearBasket();
+        //                Console.WriteLine(ben.Basket);
+        //            });
+        //        }
 
-        private void explicationAddToBasket()
-        {
-            Console.WriteLine("\nLa méthode user.AddToBasket(Book book) doit :");
-            Console.WriteLine("\t- obtenir le basket courant de user (ou le créer si il n'existe pas)");
-            Console.WriteLine("\t- obtenir une copie disponible de book : bookCopy");
-            Console.WriteLine("\t- si une copie est disponible, appeler la méthode rental.RentCopy(bookCopy)");
-            explicationRentCopy();
-            Console.WriteLine("\t- retourne le RentalItem créé\n");
-        }
+        //        private void explicationAddToBasket()
+        //        {
+        //            Console.WriteLine("\nLa méthode user.AddToBasket(Book book) doit :");
+        //            Console.WriteLine("\t- obtenir le basket courant de user (ou le créer si il n'existe pas)");
+        //            Console.WriteLine("\t- obtenir une copie disponible de book : bookCopy");
+        //            Console.WriteLine("\t- si une copie est disponible, appeler la méthode rental.RentCopy(bookCopy)");
+        //            explicationRentCopy();
+        //            Console.WriteLine("\t- retourne le RentalItem créé\n");
+        //        }
 
-        private void explicationRentCopy()
-        {
-            Console.WriteLine("\n\t(La méthode rental.RentCopy(BookCopy bookCopy) crée un nouvel RentalItem et lui associe bookCopy)\n");
-        }
+        //        private void explicationRentCopy()
+        //        {
+        //            Console.WriteLine("\n\t(La méthode rental.RentCopy(BookCopy bookCopy) crée un nouvel RentalItem et lui associe bookCopy)\n");
+        //        }
 
-        private void explicationRemoveFromBasket()
-        {
-            Console.WriteLine("\nLa méthode user.RemoveFromBasket(RentalItem rentalItem) retire rentalItem du panier (qui est un Rental) courant");
-            Console.WriteLine("\tAttention, il faut que le panier existe");
-            Console.WriteLine("\tFait appel à Rental.RemoveItem(rentalItem) qui retire l'item de la liste des items du Rental\n");
-        }
+        //        private void explicationRemoveFromBasket()
+        //        {
+        //            Console.WriteLine("\nLa méthode user.RemoveFromBasket(RentalItem rentalItem) retire rentalItem du panier (qui est un Rental) courant");
+        //            Console.WriteLine("\tAttention, il faut que le panier existe");
+        //            Console.WriteLine("\tFait appel à Rental.RemoveItem(rentalItem) qui retire l'item de la liste des items du Rental\n");
+        //        }
 
-        private void explicationConfirm()
-        {
-            Console.WriteLine("\nLa méthode Rental.Confirm() :");
-            Console.WriteLine("\t- donne la date courante comme RentalDate au rental");
-            Console.WriteLine("\t- sauvegarde le panier");
-            Console.WriteLine("\t- Attention : après l'appel à cette méthode sur un panier courant, celui-ci n'existe plus (puisqu'il a été sauvegardé)");
-        }
+        //        private void explicationConfirm()
+        //        {
+        //            Console.WriteLine("\nLa méthode Rental.Confirm() :");
+        //            Console.WriteLine("\t- donne la date courante comme RentalDate au rental");
+        //            Console.WriteLine("\t- sauvegarde le panier");
+        //            Console.WriteLine("\t- Attention : après l'appel à cette méthode sur un panier courant, celui-ci n'existe plus (puisqu'il a été sauvegardé)");
+        //        }
 
-        private void explicationClearBasket()
-        {
-            Console.WriteLine("\nLa méthode user.ClearBasket() vide le panier courant (s'il existe)");
-            Console.WriteLine("\tAttention, il faut que le panier existe");
-            Console.WriteLine("\tFait appel à Rental.Clear() qui vide la liste des items du Rental\n");
-        }
+        //        private void explicationClearBasket()
+        //        {
+        //            Console.WriteLine("\nLa méthode user.ClearBasket() vide le panier courant (s'il existe)");
+        //            Console.WriteLine("\tAttention, il faut que le panier existe");
+        //            Console.WriteLine("\tFait appel à Rental.Clear() qui vide la liste des items du Rental\n");
+        //        }
 
-        private void testModel()
-        {
-            runTest("Test Model", () => {
-                List<Book> search = model.FindBooksByText("Tolkien");
-                printList("model.FindBooksByText(\"Tolkien\")", search);
-                explicationFindBooksByText();
-                printList("model.FindRentalItemsActive()", model.GetActiveRentalItems());
-                explicationFindRentalItemsActive();
-            });
+        //        private void testModel()
+        //        {
+        //            runTest("Test Model", () => {
+        //                List<Book> search = model.FindBooksByText("Tolkien");
+        //                printList("model.FindBooksByText(\"Tolkien\")", search);
+        //                explicationFindBooksByText();
+        //                printList("model.FindRentalItemsActive()", model.GetActiveRentalItems());
+        //                explicationFindRentalItemsActive();
+        //            });
 
-        }
+        //        }
 
-        private void explicationFindBooksByText()
-        {
-            Console.WriteLine("\nLa méthode model.FindBooksByText(str) retourne une liste de livres contenant le String 'str' dans :");
-            Console.WriteLine("\tISBN, Author, Editor, Title\n");
-        }
+        //        private void explicationFindBooksByText()
+        //        {
+        //            Console.WriteLine("\nLa méthode model.FindBooksByText(str) retourne une liste de livres contenant le String 'str' dans :");
+        //            Console.WriteLine("\tISBN, Author, Editor, Title\n");
+        //        }
 
-        private void explicationFindRentalItemsActive()
-        {
-            Console.WriteLine("\nLa méthode model.FindRentalItemsActive() retourne la liste d'items actifs, c'est à dire ceux dont ReturnDate est à null\n");
-        }
+        //        private void explicationFindRentalItemsActive()
+        //        {
+        //            Console.WriteLine("\nLa méthode model.FindRentalItemsActive() retourne la liste d'items actifs, c'est à dire ceux dont ReturnDate est à null\n");
+        //        }
 
         private void runTest(String title, Action action)
         {

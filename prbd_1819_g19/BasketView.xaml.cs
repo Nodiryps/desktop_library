@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PRBD_Framework;
 
 namespace prbd_1819_g19
 {
     /// <summary>
     /// Logique d'interaction pour BasketView.xaml
     /// </summary>
-    public partial class BasketView : UserControl
+    public partial class BasketView : UserControlBase
     {
         public BasketView()
         {

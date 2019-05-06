@@ -1,0 +1,33 @@
+﻿<f:WindowBase 
+        x:Class="prbd_1819_g19.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localBooks="clr-namespace:prbd_1819_g19"
+        xmlns:localCat="clr-namespace:prbd_1819_g19"
+        xmlns:localBasket="clr-namespace:prbd_1819_g19"
+        xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+        
+        mc:Ignorable="d"
+        Title="My Social Network" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+
+    <TabControl x:Name="tabControl" Margin="10" Grid.Row="1">
+        <TabItem x:Name="booksTab" Header="Books">
+            <ContentControl>
+                <localBooks:BooksView/>
+            </ContentControl>
+        </TabItem>
+        <TabItem x:Name="catTab" Header="Categories">
+            <ContentControl>
+                <localCat:CategoriesView/>
+            </ContentControl>
+        </TabItem>
+        <TabItem x:Name="basketTab" Header="Basket">
+            <ContentControl>
+                <localBasket:BasketView/>
+            </ContentControl>
+        </TabItem>
+
+    </TabControl>
+</f:WindowBase>

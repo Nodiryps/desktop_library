@@ -39,7 +39,7 @@ namespace prbd_1819_g19
 
         public override string ToString()
         {
-            return "category: " + Name.ToString();
+            return Name.ToString();
         }
     }
     

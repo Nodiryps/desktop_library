@@ -1,9 +1,9 @@
-﻿using MySql.Data.EntityFramework;
-using System;
+﻿using System;
 using System.Linq;
 using System.Data.Entity;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using PRBD_Framework;
+using MySql.Data.EntityFramework;
 
 namespace prbd_1819_g19 {
     public enum DbType { MsSQL, MySQL }
@@ -83,16 +83,13 @@ namespace prbd_1819_g19 {
 
         public void ClearDatabase()
         {
-            Users.RemoveRange(Users.Include("Rentals"));
-            Books.RemoveRange(Books.Include("Copies")
-                                   .Include("Categories"));
-            BookCopies.RemoveRange(BookCopies.Include("Book")
-                                             .Include("RentalItems"));
-            Categories.RemoveRange(Categories.Include("Books"));
-            Rentals.RemoveRange(Rentals.Include("Items")
-                                       .Include("User"));
-            RentalItems.RemoveRange(RentalItems.Include("BookCopy")
-                                               .Include("Rental"));
+            Users.RemoveRange(Users);
+            Rentals.RemoveRange(Rentals);
+            RentalItems.RemoveRange(RentalItems);
+            BookCopies.RemoveRange(BookCopies);
+            Books.RemoveRange(Books);
+            Categories.RemoveRange(Categories);
+
             SaveChanges();
         }
 

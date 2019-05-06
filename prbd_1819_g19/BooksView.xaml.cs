@@ -32,7 +32,7 @@ namespace prbd_1819_g19
             });
             NewBooks = new RelayCommand(() =>
             {
-                App.NotifyColleagues(AppMessages.MSG_NEW_MEMBER);
+                App.NotifyColleagues(AppMessages.MSG_NEW_BOOK);
             });
             DisplayBookDetails = new RelayCommand<Book>(member =>
             {
@@ -48,7 +48,7 @@ namespace prbd_1819_g19
                 Console.WriteLine(cat);
             });
 
-            App.Register<Book>(this, AppMessages.MSG_MEMBER_CHANGED, member => { ApplyFilterAction(); });
+          //  App.Register<Book>(this, AppMessages.MSG_MEMBER_CHANGED, member => { ApplyFilterAction(); });
         }
 
         public Category SelectedCat { get; set; }
@@ -78,6 +78,7 @@ namespace prbd_1819_g19
         public ICommand NewBooks { get; set; }
         public ICommand DisplayBookDetails { get; set; }
         public ICommand CategoryFilter { get; set; }
+
 
         private void ApplyFilterAction()
         {

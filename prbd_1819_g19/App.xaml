@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:prbd_1819_g19"
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
-             StartupUri="MainWindow.xaml">
+             StartupUri="LoginView.xaml">
     <Application.Resources>
 
     </Application.Resources>

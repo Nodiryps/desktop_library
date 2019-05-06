@@ -8,14 +8,15 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace prbd_1819_g19
 {
     public enum AppMessages
     {
-        MSG_NEW_MEMBER,
+        MSG_NEW_BOOK,
         MSG_PSEUDO_CHANGED,
-        MSG_MEMBER_CHANGED,
+        MSG_BOOK,
         MSG_DISPLAY_MEMBER,
         MSG_TIMER,
         MSG_CLOSE_TAB
@@ -32,6 +33,8 @@ namespace prbd_1819_g19
             Model.ClearDatabase();
             Model.CreateTestData();
             InitializeComponent();
+
+            
         }
 
         public void Msg(Object obj)

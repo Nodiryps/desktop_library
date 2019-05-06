@@ -72,12 +72,12 @@ namespace prbd_1819_g19
         private Timer timer = new Timer(1000);
 #endif
 
-        public BookDetailView(User member, bool isNew)
+        public BookDetailView(Book book, bool isNew)
         {
             InitializeComponent();
 
             DataContext = this;
-            Member = member;
+            //Member = member;
             IsNew = isNew;
 
             //imageHelper = new ImageHelper(App.IMAGE_PATH, Member.PicturePath);
@@ -153,7 +153,7 @@ namespace prbd_1819_g19
             //imageHelper.Confirm(Member.UserName);
             //PicturePath = imageHelper.CurrentFile;
             App.Model.SaveChanges();
-            App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
+            //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
         }
 
         private void CancelAction()
@@ -201,7 +201,7 @@ namespace prbd_1819_g19
             App.Model.SaveChanges();
             //RaisePropertyChanged(nameof(FollowUnfollowLabel));
             //RaisePropertyChanged(nameof(FollowStatus));
-            App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
+            //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
         }
     }
 }

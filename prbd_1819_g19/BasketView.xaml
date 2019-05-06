@@ -33,7 +33,7 @@
 
             <Label Content="This Basket is for :" VerticalAlignment="Center" Grid.Row="1" />
             <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Margin="5" >
-                <ComboBox ItemsSource="{Binding Members}" DisplayMemberPath="Pseudo" SelectedItem="{Binding Author}" />
+                <ComboBox ItemsSource="{Binding Members}" DisplayMemberPath="Pseudo" SelectedItem="{Binding Author}" Margin="41,0,0,0" />
             </f:ValidatedField>
 
         </Grid>

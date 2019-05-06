@@ -15,7 +15,7 @@
             <RowDefinition Height="82*"/>
             <RowDefinition Height="143*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding MessagesView}" Margin="434,10,10,84" 
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding MessagesView}" Margin="434,76,10,18" 
                       SelectedItem="{Binding SelectedMessage}" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding ReadMode}" SelectionMode="Single" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Path=DateTime, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}" SortDirection="Descending"/>
@@ -55,13 +55,14 @@
             <CheckBox IsChecked="{Binding IsPrivate}" Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" Margin="10,4.333,663,10" RenderTransformOrigin="0.3,-1.696"/>
             <Label Content="Essai" VerticalAlignment="Center" Grid.Row="4" Margin="120,1.333,535,2" Grid.Column="1" />
             <CheckBox IsChecked="{Binding IsPrivate}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Margin="84,5.333,589,10" RenderTransformOrigin="0.3,-1.696"/>
+           
 
 
 
 
         </Grid>
-        <Button Content="Load" Margin="0,0,467,239" VerticalAlignment="Bottom" Command="{Binding SaveOneCommand}" HorizontalAlignment="Right" Width="75" Height="26" RenderTransformOrigin="0.5,0.5" Grid.Row="1"/>
-        <Button Content="Clear" Margin="0,0,467,207" VerticalAlignment="Bottom" Command="{Binding CancelCommand}" HorizontalAlignment="Right" Width="75" Height="21" Grid.Row="1"/>
+        <Button Content="Load" Margin="0,0,455,195" VerticalAlignment="Bottom" Command="{Binding SaveOneCommand}" HorizontalAlignment="Right" Width="75" Height="26" RenderTransformOrigin="0.5,0.5" Grid.Row="1"/>
+        <Button Content="Clear" Margin="0,0,455,154" VerticalAlignment="Bottom" Command="{Binding CancelCommand}" HorizontalAlignment="Right" Width="75" Height="21" Grid.Row="1"/>
 
         <Label Content="Informatique" VerticalAlignment="Center" Grid.Row="1" Margin="67,48,660,212" />
         <CheckBox IsChecked="{Binding IsPrivate}" Grid.Row="1" VerticalAlignment="Center" Margin="46,52,733,220" RenderTransformOrigin="0.3,-1.696"/>
@@ -79,6 +80,11 @@
                 </TransformGroup>
             </Label.RenderTransform>
         </Label>
+        <!--<ListBox ItemsSource="{Binding Cats}" Margin="235,11,30,240" Grid.Row="1">
+
+            <CheckBox Content="{Binding Name}"></CheckBox>
+        </ListBox>-->
+
         <CheckBox IsChecked="{Binding IsPrivate}" Grid.Row="1" VerticalAlignment="Center" Margin="46,113,733,159" RenderTransformOrigin="0.3,-1.696"/>
         <Label Content="Date: " HorizontalAlignment="Left" Margin="404,229,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <ScrollBar HorizontalAlignment="Left" Margin="586,230,0,0" Grid.Row="1" VerticalAlignment="Top" Width="18"/>

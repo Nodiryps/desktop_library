@@ -1,5 +1,6 @@
 ﻿using PRBD_Framework;
 using System;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,18 @@ namespace prbd_1819_g19
     {
         public User Member { get; set; }
         //private ImageHelper imageHelper;
+
+
+      
+
+             private ObservableCollection<Category> cats;
+        public ObservableCollection<Category> Cats
+        {
+            get => cats;
+            set => SetProperty<ObservableCollection<Category>>(ref cats, value);
+        }
+
+
 
         private bool isNew;
         public bool IsNew
@@ -79,7 +92,7 @@ namespace prbd_1819_g19
             DataContext = this;
             //Member = member;
             IsNew = isNew;
-
+            Cats = new ObservableCollection<Category>(App.Model.Categories);
             //imageHelper = new ImageHelper(App.IMAGE_PATH, Member.PicturePath);
 
             Save = new RelayCommand(SaveAction, CanSaveOrCancelAction);

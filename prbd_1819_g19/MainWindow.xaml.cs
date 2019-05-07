@@ -34,6 +34,8 @@ namespace prbd_1819_g19
                     frm.ShowDialog();
             });
 
+            BookDetail();
+
             App.Register(this, AppMessages.MSG_NEW_BOOK, () =>
             {
                 var book = App.Model.Books.Create();
@@ -44,7 +46,7 @@ namespace prbd_1819_g19
                 };
                 tabControl.Items.Add(tab);
                 Dispatcher.InvokeAsync(() => tab.Focus());
-                closeAnglet(tab);
+                CloseAnglet(tab);
 
             });
 
@@ -112,7 +114,7 @@ namespace prbd_1819_g19
         //    Dispatcher.InvokeAsync(() => tab.Focus());
         //}
 
-        public void closeAnglet(TabItem tab) {
+        public void CloseAnglet(TabItem tab) {
             tab.MouseDown += (o, e) => {
                 if (e.ChangedButton == MouseButton.Middle &&
                     e.ButtonState == MouseButtonState.Pressed)
@@ -128,7 +130,24 @@ namespace prbd_1819_g19
                     (tab.Content as UserControlBase).Dispose();
                 }
             };
+        }
 
+        public void BookDetail()
+        {
+            App.Register<Book>(this, AppMessages.MSG_DISPLAY_MEMBER, books =>
+            {
+                if (books != null)
+                {
+                    var tab = new TabItem()
+                    {
+                        Header = books.Title,
+                        Content = new BookDetailView(books, false)
+                    };
+                    tabControl.Items.Add(tab);
+                    Dispatcher.InvokeAsync(() => tab.Focus());
+                    CloseAnglet(tab);
+                }
+            });
         }
     }
 }

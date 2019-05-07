@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using PRBD_Framework;
 
@@ -15,6 +16,12 @@ namespace prbd_1819_g19
         public string Author { get; set; }
         public string Editor { get; set; }
         public string PicturePath { get; set; }
+        [NotMapped]
+        public string AbsolutePicturePath
+        {
+            get => PicturePath != null ? App.IMAGE_PATH + "\\" + PicturePath : null; 
+        }
+
         public int NumAvailableCopies { get => Copies.Count(); }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<BookCopy> Copies { get; set; }
@@ -47,13 +54,6 @@ namespace prbd_1819_g19
                 copy.AcquisitionDate = date;
                 Copies.Add(copy);
 
-                RentalItem item = Model.RentalItems.Create();
-
-                item.ReturnDate = null;
-                item.BookCopy = copy;
-                Model.RentalItems.Add(item);
-                copy.RentalItems.Add(item);
-
                 Model.BookCopies.Add(copy);
                 Model.SaveChanges();
             }
@@ -75,7 +75,9 @@ namespace prbd_1819_g19
 
         public void DeleteCopy(BookCopy copy)
         {
-            Model.BookCopies.Remove(copy);
+            Console.Write(copy);
+            if (copy != null)
+                Model.BookCopies.Remove(copy);
             Copies.Remove(copy);
             Model.SaveChanges();
         }

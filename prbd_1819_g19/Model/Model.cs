@@ -124,8 +124,13 @@ namespace prbd_1819_g19 {
                 newBook = Books.Create();
                 newBook.Isbn = isbn; newBook.Title = title; newBook.Author = author; newBook.Editor = editor;
                 for(int i = 0; i < numCopies; ++i)
+                {
                     Books.Add(newBook);
-                SaveChanges();
+                    BookCopy copy = BookCopies.Create();
+                    copy.Book = newBook;
+                    BookCopies.Add(copy);
+                    SaveChanges();
+                }
             }
             return newBook;
         }

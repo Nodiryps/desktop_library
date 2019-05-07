@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace prbd_1819_g19
@@ -34,10 +35,10 @@ namespace prbd_1819_g19
             {
                 App.NotifyColleagues(AppMessages.MSG_NEW_BOOK);
             });
-            DisplayBookDetails = new RelayCommand<Book>(member =>
+            DisplayBookDetails = new RelayCommand<Book>(book =>
             {
-                Console.WriteLine(member);
-                App.NotifyColleagues(AppMessages.MSG_DISPLAY_MEMBER, member);
+                Console.WriteLine(book);
+                App.NotifyColleagues(AppMessages.MSG_DISPLAY_MEMBER, book);
             });
             CategoryFilter = new RelayCommand<Category>(cat=>
             {
@@ -103,12 +104,10 @@ namespace prbd_1819_g19
 
         private void ApplyComboBoxFilter()
         {
-        
                 Books = new ObservableCollection<Book>(SelectedCat.Books);
-          
         }
 
-     
+        
 
 
     }

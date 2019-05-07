@@ -29,11 +29,16 @@ namespace prbd_1819_g19
             //                 select item
             //                 ).FirstOrDefault();
 
-            RentalItem item = Model.RentalItems.Create();
-            item.BookCopy.BookCopyId = copy.BookCopyId;
-            item.ReturnDate = null;
-            Items.Add(item);
-            Model.SaveChanges();
+            RentalItem item = null;
+            if (copy != null)
+            {
+                item = Model.RentalItems.Create();
+                //item.BookCopy.BookCopyId = copy.BookCopyId;
+                item.ReturnDate = null;
+                Items.Add(item);
+                Model.SaveChanges();
+            }
+            
             return item;
         }
 
@@ -48,7 +53,7 @@ namespace prbd_1819_g19
 
         public void RemoveItem(RentalItem item)
         {
-            if (!IsEmpty())
+            if (!IsEmpty() && Items.Contains(item))
                 Items.Remove(item);
         }
 

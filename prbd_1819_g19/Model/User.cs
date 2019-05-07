@@ -31,12 +31,13 @@ namespace prbd_1819_g19
         {
             Rental newRental = Model.Rentals.Create();
             newRental.User = this;
-            Model.Rentals.Add(newRental);
+            //Model.Rentals.Add(newRental);
             Rentals.Add(newRental);
 
             //Console.WriteLine(newRental);
             //Console.WriteLine(Rentals.Count);
             //Console.Read();
+            Model.SaveChanges();
 
             return newRental;
         }

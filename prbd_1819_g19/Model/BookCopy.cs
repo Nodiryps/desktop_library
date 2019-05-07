@@ -13,6 +13,8 @@ namespace prbd_1819_g19
         public virtual Book Book { get; set; }
         public virtual ICollection<RentalItem> RentalItems { get; set; }
 
+        protected BookCopy() { }
+
         public override string ToString()
         {
             return "copy: " + Book.Title.ToString();

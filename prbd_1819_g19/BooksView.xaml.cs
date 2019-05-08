@@ -15,7 +15,6 @@ namespace prbd_1819_g19
     public partial class BooksView : UserControlBase
     {
 
-        public Category cats;
         public BooksView()
         {
             InitializeComponent();
@@ -31,22 +30,25 @@ namespace prbd_1819_g19
             {
                 Filter = "";
             });
+
             NewBooks = new RelayCommand(() =>
             {
                 App.NotifyColleagues(AppMessages.MSG_NEW_BOOK);
             });
+
             DisplayBookDetails = new RelayCommand<Book>(book =>
             {
-                Console.WriteLine(book);
                 App.NotifyColleagues(AppMessages.MSG_DISPLAY_MEMBER, book);
             });
+
             CategoryFilter = new RelayCommand<Category>(cat=>
             {
-
-                Console.WriteLine(SelectedCat);
-                
                 ApplyComboBoxFilter();
-                Console.WriteLine(cat);
+            });
+
+            AddToBasket = new RelayCommand<Book>(book => 
+            {
+                App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET);
             });
 
           //  App.Register<Book>(this, AppMessages.MSG_MEMBER_CHANGED, member => { ApplyFilterAction(); });
@@ -79,6 +81,7 @@ namespace prbd_1819_g19
         public ICommand NewBooks { get; set; }
         public ICommand DisplayBookDetails { get; set; }
         public ICommand CategoryFilter { get; set; }
+        public ICommand AddToBasket { get; set; }
 
 
         private void ApplyFilterAction()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using PRBD_Framework;
 using System.Linq;
+using System.Security.Principal;
 
 namespace prbd_1819_g19
 {
@@ -105,6 +106,11 @@ namespace prbd_1819_g19
         public override string ToString()
         {
             return "username: " + UserName.ToString();
+        }
+
+        public static implicit operator User(WindowsIdentity v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,10 +16,10 @@ namespace prbd_1819_g19
     {
         MSG_NEW_BOOK,
         MSG_PSEUDO_CHANGED,
-        MSG_BOOK,
         MSG_DISPLAY_MEMBER,
         MSG_TIMER,
-        MSG_CLOSE_TAB
+        MSG_CLOSE_TAB,
+        MSG_ADD_BOOK_TO_BASKET
     }
 
     public partial class App : ApplicationBase

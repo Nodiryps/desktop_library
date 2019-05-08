@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Reflection;
+using System.Security.Principal;
 
 namespace prbd_1819_g19
 {
@@ -35,6 +36,11 @@ namespace prbd_1819_g19
             });
 
             BookDetail();
+
+            App.Register(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, () => 
+            {
+                User currUser = WindowsIdentity.GetCurrent();
+            });
 
             App.Register(this, AppMessages.MSG_NEW_BOOK, () =>
             {

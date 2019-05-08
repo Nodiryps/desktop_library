@@ -17,17 +17,12 @@ namespace prbd_1819_g19
         public User Member { get; set; }
         //private ImageHelper imageHelper;
 
-
-      
-
-             private ObservableCollection<Category> cats;
+        private ObservableCollection<Category> cats;
         public ObservableCollection<Category> Cats
         {
             get => cats;
             set => SetProperty<ObservableCollection<Category>>(ref cats, value);
         }
-
-
 
         private bool isNew;
         public bool IsNew
@@ -42,17 +37,7 @@ namespace prbd_1819_g19
         }
 
         public bool IsExisting { get => !isNew; }
-
-        public string Pseudo
-        {
-            get { return Member.UserName; }
-            set
-            {
-                Member.UserName = value;
-                RaisePropertyChanged(nameof(Pseudo));
-                App.NotifyColleagues(AppMessages.MSG_PSEUDO_CHANGED, string.IsNullOrEmpty(value) ? "<new member>" : value);
-            }
-        }
+        
 
         //public string Profile
         //{
@@ -63,16 +48,73 @@ namespace prbd_1819_g19
         //        RaisePropertyChanged(nameof(Profile));
         //    }
         //}
+        private Book book;
+        public Book Book
+        {
+            get => book;
+            set => SetProperty<Book>(ref book, value);
+        }
 
-        //public string PicturePath
-        //{
-        //    get { return Member.AbsolutePicturePath; }
-        //    set
-        //    {
-        //        Member.PicturePath = value;
-        //        RaisePropertyChanged(nameof(PicturePath));
-        //    }
-        //}
+        public string ISBN
+        {
+            get { return book.Isbn; }
+            set
+            {
+                book.Isbn = value;
+                RaisePropertyChanged(nameof(ISBN));
+                RaisePropertyChanged(nameof(Title));
+            }
+        }
+
+        public string Title
+        {
+            get { return book.Title; }
+            set
+            {
+                book.Title = value;
+                RaisePropertyChanged(nameof(Title));
+            }
+        }
+
+        public string Author
+        {
+            get { return book.Author; }
+            set
+            {
+                book.Author = value;
+                RaisePropertyChanged(nameof(Author));
+            }
+        }
+
+        public string Editor
+        {
+            get { return book.Editor; }
+            set
+            {
+                book.Editor = value;
+                RaisePropertyChanged(nameof(Editor));
+            }
+        }
+
+        public string PicturePath
+        {
+            get { return book.AbsolutePicturePath; }
+            set
+            {
+                book.PicturePath = value;
+                RaisePropertyChanged(nameof(PicturePath));
+            }
+        }
+
+        public string AbsolutePicturePath
+        {
+            get { return book.AbsolutePicturePath; }
+            set
+            {
+
+            }
+
+        }        
 
         public ICommand Save { get; set; }
         public ICommand Cancel { get; set; }
@@ -90,7 +132,7 @@ namespace prbd_1819_g19
             InitializeComponent();
 
             DataContext = this;
-            //Member = member;
+            Book = book;
             IsNew = isNew;
             Cats = new ObservableCollection<Category>(App.Model.Categories);
             //imageHelper = new ImageHelper(App.IMAGE_PATH, Member.PicturePath);
@@ -177,7 +219,7 @@ namespace prbd_1819_g19
             //}
             if (IsNew)
             {
-                Pseudo = null;
+                //Pseudo = null;
                 //Profile = null;
                 //PicturePath = imageHelper.CurrentFile;
                 RaisePropertyChanged(nameof(Member));
@@ -200,7 +242,7 @@ namespace prbd_1819_g19
         {
             if (IsNew)
             {
-                return !string.IsNullOrEmpty(Pseudo) && !HasErrors;
+                //return !string.IsNullOrEmpty(Pseudo) && !HasErrors;
             }
             var change = (from c in App.Model.ChangeTracker.Entries<User>()
                           where c.Entity == Member

@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Reflection;
 using System.Security.Principal;
+using System.Collections.ObjectModel;
 
 namespace prbd_1819_g19
 {
@@ -28,33 +29,13 @@ namespace prbd_1819_g19
         {
             InitializeComponent();
             DataContext = this;
-            SandBox = new RelayCommand<string>((name) =>
-            {
-                WindowBase frm = (WindowBase)Assembly.GetExecutingAssembly().CreateInstance("prbd_1819_g19." + name);
-                if (frm != null)
-                    frm.ShowDialog();
-            });
+            WindowBase();
 
             BookDetail();
-
-            App.Register(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, () => 
-            {
-                User currUser = WindowsIdentity.GetCurrent();
-            });
-
-            App.Register(this, AppMessages.MSG_NEW_BOOK, () =>
-            {
-                var book = App.Model.Books.Create();
-                var tab = new TabItem()
-                {
-                    Header = "NEW BOOK  ",
-                    Content = new BookDetailView(book, true)
-                };
-                tabControl.Items.Add(tab);
-                Dispatcher.InvokeAsync(() => tab.Focus());
-                CloseAnglet(tab);
-
-            });
+            CloseTab();
+            AddBookToBasket();
+            NewBook();
+            NewCategory();
 
             ////App.Register(this, AppMessages.MSG_NEW_MEMBER, () => {
             //    // crée une nouvelle instance pour un nouveau membre
@@ -75,52 +56,138 @@ namespace prbd_1819_g19
             //    //}
             //}};
 
-            App.Register<string>(this, AppMessages.MSG_PSEUDO_CHANGED, (s) => {
-                (tabControl.SelectedItem as TabItem).Header = s;
-            });
+            //App.Register<string>(this, AppMessages.MSG_PSEUDO_CHANGED, (s) => {
+            //    (tabControl.SelectedItem as TabItem).Header = s;
+            //});
 
+            
+        }
+
+        private void NewBook()
+        {
+            App.Register(this, AppMessages.MSG_NEW_BOOK, () =>
+            {
+                var book = App.Model.Books.Create();
+                App.Model.Books.Add(book);
+                AddTabBook(book, true);
+                //var book = App.Model.Books.Create();
+                //var tab = new TabItem()
+                //{
+                //    Header = "<new book>",
+                //    Content = new BookDetailView(book, true)
+                //};
+                //tabControl.Items.Add(tab);
+                //Dispatcher.InvokeAsync(() => tab.Focus());
+                //CloseAnglet(tab);
+
+            });
+        }
+
+        private void BookDetail()
+        {
+            App.Register<Book>(this, AppMessages.MSG_BOOK_DETAIL, book =>
+            {
+                if (book != null)
+                {
+                    AddTabBook(book, false);
+                    //var tab = new TabItem()
+                    //{
+                    //    Header = books.Title,
+                    //    Content = new BookDetailView(books, false)
+                    //};
+                    //tabControl.Items.Add(tab);
+                    //Dispatcher.InvokeAsync(() => tab.Focus());
+                    //CloseAnglet(tab);
+                }
+            });
+        }
+
+        private void AddBookToBasket()
+        {
+            App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
+            {
+                User currUser = WindowsIdentity.GetCurrent();
+                //if (currUser.Basket != null)
+                //    currUser.AddToBasket(book);
+                //else
+                //    currUser.CreateBasket();
+            });
+        }
+
+        private void NewCategory()
+        {
+            App.Register(this, AppMessages.MSG_ADD_CAT, () =>
+            {
+                var cat = App.Model.Categories.Create();
+                App.Model.Categories.Add(cat);
+                AddTabCat(new ObservableCollection<Category>(App.Model.Categories), true);
+            });
+        }
+
+        private void UpdateCategory()
+        {
+            App.Register<Category>(this, AppMessages.MSG_UPDATE_CAT, newCat =>
+            {
+                App.Model.Categories.Add(newCat);
+                AddTabCat(new ObservableCollection<Category>(App.Model.Categories), false);
+            });
+        }
+
+        private void DeleteCategory()
+        {
+            App.Register<Category>(this, AppMessages.MSG_DEL_CAT, catToDel =>
+            {
+                App.Model.Categories.Remove(catToDel);
+                AddTabCat(new ObservableCollection<Category>(App.Model.Categories), false);
+            });
+        }
+
+        private void CancelCategory()
+        {
+            CloseTab();
+        }
+
+        private void AddTabCat(ObservableCollection<Category> list, bool isNew)
+        {
+            var ctl = new CategoriesView(list, isNew);
+            var tab = new TabItem()
+            {
+                Header = "<categories>",
+                Content = ctl
+            };
+            CloseAnglet(tab);
+            //ajoute cet onglet à la liste des onglets existant du TabControl
+            //tabControl.Items.Add(tab);
+            //exécute la méthode Focus() de l'onglet pour lui donner le focus (càd l'activer)
+            Dispatcher.InvokeAsync(() => tab.Focus());
+        }
+
+        private void AddTabBook(Book book, bool isNew)
+        {
+            var ctl = new BookDetailView(book, isNew);
+            var tab = new TabItem()
+            {
+                Header = isNew ? "<new book>" : book.Isbn,
+                Content = ctl
+            };
+            CloseAnglet(tab);
+            //ajoute cet onglet à la liste des onglets existant du TabControl
+            //tabControl.Items.Add(tab);
+            //exécute la méthode Focus() de l'onglet pour lui donner le focus (càd l'activer)
+            Dispatcher.InvokeAsync(() => tab.Focus());
+        }
+
+        private void CloseTab()
+        {
             App.Register<UserControlBase>(this, AppMessages.MSG_CLOSE_TAB, ctl => {
                 var tab = (from TabItem t in tabControl.Items where t.Content == ctl select t).SingleOrDefault();
                 ctl.Dispose();
                 tabControl.Items.Remove(tab);
             });
-            //App.Register<string>(this, AppMessages.MSG_MEMBER_CHANGED, (s) => {
-            //    (tabControl.SelectedItem as TabItem).Header = s;
-            //});
         }
 
-        //private void AddTab(User member, bool isNew)
-        //{
-        //    var ctl = new BookDetailView(member, isNew);
-        //    var tab = new TabItem()
-        //    {
-        //        Header = isNew ? "<new member>" : member.UserName,
-        //        Content = ctl
-        //    };
-        //    tab.MouseDown += (o, e) =>
-        //    {
-        //        if (e.ChangedButton == MouseButton.Middle &&
-        //            e.ButtonState == MouseButtonState.Pressed)
-        //        {
-        //            tabControl.Items.Remove(o);
-        //            (tab.Content as UserControlBase).Dispose();
-        //        }
-        //    };
-        //    tab.PreviewKeyDown += (o, e) =>
-        //    {
-        //        if (e.Key == Key.W && Keyboard.IsKeyDown(Key.LeftCtrl))
-        //        {
-        //            tabControl.Items.Remove(o);
-        //            (tab.Content as UserControlBase).Dispose();
-        //        }
-        //    };
-        //    ajoute ce onglet à la liste des onglets existant du TabControl
-        //    tabControl.Items.Add(tab);
-        //    exécute la méthode Focus() de l'onglet pour lui donner le focus (càd l'activer)
-        //    Dispatcher.InvokeAsync(() => tab.Focus());
-        //}
-
-        public void CloseAnglet(TabItem tab) {
+        public void CloseAnglet(TabItem tab)
+        {
             tab.MouseDown += (o, e) => {
                 if (e.ChangedButton == MouseButton.Middle &&
                     e.ButtonState == MouseButtonState.Pressed)
@@ -138,21 +205,13 @@ namespace prbd_1819_g19
             };
         }
 
-        public void BookDetail()
+        private void WindowBase()
         {
-            App.Register<Book>(this, AppMessages.MSG_DISPLAY_MEMBER, books =>
+            SandBox = new RelayCommand<string>((name) =>
             {
-                if (books != null)
-                {
-                    var tab = new TabItem()
-                    {
-                        Header = books.Title,
-                        Content = new BookDetailView(books, false)
-                    };
-                    tabControl.Items.Add(tab);
-                    Dispatcher.InvokeAsync(() => tab.Focus());
-                    CloseAnglet(tab);
-                }
+                WindowBase frm = (WindowBase)Assembly.GetExecutingAssembly().CreateInstance("prbd_1819_g19." + name);
+                if (frm != null)
+                    frm.ShowDialog();
             });
         }
     }

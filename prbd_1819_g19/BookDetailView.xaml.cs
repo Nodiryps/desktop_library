@@ -109,11 +109,7 @@ namespace prbd_1819_g19
         public string AbsolutePicturePath
         {
             get { return book.AbsolutePicturePath; }
-            set
-            {
-
-            }
-
+            set { }
         }        
 
         public ICommand Save { get; set; }

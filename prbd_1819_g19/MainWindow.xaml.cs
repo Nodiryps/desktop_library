@@ -71,14 +71,14 @@ namespace prbd_1819_g19
                 App.Model.Books.Add(book);
                 AddTabBook(book, true);
                 //var book = App.Model.Books.Create();
-                //var tab = new TabItem()
-                //{
-                //    Header = "<new book>",
-                //    Content = new BookDetailView(book, true)
-                //};
-                //tabControl.Items.Add(tab);
-                //Dispatcher.InvokeAsync(() => tab.Focus());
-                //CloseAnglet(tab);
+                var tab = new TabItem()
+                {
+                    Header = "<new book>",
+                    Content = new BookDetailView(book, true)
+                };
+                tabControl.Items.Add(tab);
+                Dispatcher.InvokeAsync(() => tab.Focus());
+                CloseAnglet(tab);
 
             });
         }
@@ -90,14 +90,14 @@ namespace prbd_1819_g19
                 if (book != null)
                 {
                     AddTabBook(book, false);
-                    //var tab = new TabItem()
-                    //{
-                    //    Header = books.Title,
-                    //    Content = new BookDetailView(books, false)
-                    //};
-                    //tabControl.Items.Add(tab);
-                    //Dispatcher.InvokeAsync(() => tab.Focus());
-                    //CloseAnglet(tab);
+                    var tab = new TabItem()
+                    {
+                        Header = book.Title,
+                        Content = new BookDetailView(book, false)
+                    };
+                    tabControl.Items.Add(tab);
+                    Dispatcher.InvokeAsync(() => tab.Focus());
+                    CloseAnglet(tab);
                 }
             });
         }

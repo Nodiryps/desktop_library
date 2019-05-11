@@ -23,13 +23,17 @@ namespace prbd_1819_g19
         MSG_ADD_CAT,
         MSG_UPDATE_CAT,
         MSG_DEL_CAT,
+        MSG_DISPLAY_MEMBER,
         MSG_DISPLAY_CAT,
     }
 
     public partial class App : ApplicationBase
     {
         public static Model Model = Model.CreateModel(DbType.MsSQL);
-        public static User CurrentUser { get => WindowsIdentity.GetCurrent(); }
+
+        public static User CurrentUser { get; set; }
+
+        //public static User CurrentUser { get => WindowsIdentity.GetCurrent(); }
         public static readonly string IMAGE_PATH = Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../images");
 
         public App()
@@ -44,8 +48,8 @@ namespace prbd_1819_g19
             return CurrentUser.Role == Role.Admin;
         }
 
-        public class Model
-        {
-        }
+        //public class Model
+        //{
+        //}
     }
 }

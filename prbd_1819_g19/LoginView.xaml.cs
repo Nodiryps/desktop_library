@@ -40,12 +40,26 @@ namespace prbd_1819_g19
         private void LoginAction()
         {
 
-            if (Validate())
+            if (Validate() && !HasErrors)
             { // si aucune erreurs
                 var member = App.Model.Users.Find(UserId()); // on recherche le membre 
                 App.CurrentUser = member; // le membre connecté devient le membre courant
-                ShowMainView(); // ouverture de la fenêtre principale
-                Close(); // fermeture de la fenêtre de login
+                
+                
+
+                if (member.Role == Role.Admin)
+                {
+
+                    ShowMainView(); // ouverture de la fenêtre principale
+                    Close(); // fermeture de la fenêtre de login
+                }
+
+                else
+                {
+                    ShowMainView(); // ouverture de la fenêtre principale
+                    //ShowUserView();
+                    Close(); // fermeture de la fenêtre de login
+                }
             }
         }
 
@@ -54,6 +68,13 @@ namespace prbd_1819_g19
             var mainView = new MainWindow();
             mainView.Show();
             Application.Current.MainWindow = mainView;
+        }
+
+        private static void ShowUserView()
+        {
+            var userView = new MainWindow();
+            userView.Show();
+            Application.Current.MainWindow = userView;
         }
 
         public override bool Validate()

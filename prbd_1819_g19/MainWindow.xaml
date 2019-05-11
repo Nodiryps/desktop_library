@@ -20,7 +20,7 @@
         </TabItem>
         <TabItem x:Name="catTab" Header="Categories">
             <ContentControl>
-                
+                <!--<localCat:CategoriesView/>-->
             </ContentControl>
         </TabItem>
         <TabItem x:Name="basketTab" Header="Basket">

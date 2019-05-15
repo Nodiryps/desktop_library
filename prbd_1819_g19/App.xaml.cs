@@ -25,6 +25,7 @@ namespace prbd_1819_g19
         MSG_DEL_CAT,
         MSG_DISPLAY_MEMBER,
         MSG_DISPLAY_CAT,
+        MSG_REFRESH_BOOKS
     }
 
     public partial class App : ApplicationBase

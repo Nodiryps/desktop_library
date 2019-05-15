@@ -23,9 +23,9 @@
                 <DataGridTextColumn Header="Rented By" Binding="{Binding Path=Recipient.Pseudo}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Cancel" Margin="0,0,712,19" VerticalAlignment="Bottom" Command="{Binding NewCommand}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
-        <Button Content="Save" Margin="0,0,632,19" VerticalAlignment="Bottom" Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
-        <Button Content="Delete" Margin="0,0,552,19" VerticalAlignment="Bottom" Command="{Binding RefreshCommand}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
+        <Button Content="Cancel" Margin="0,0,712,19" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
+        <Button Content="Save" Margin="0,0,632,19" VerticalAlignment="Bottom" Command="{Binding Save}" IsEnabled="True" Visibility="Visible" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
+        <Button Content="Delete" Margin="0,0,552,19" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
         <Grid Height="146" Margin="16,16,0,0" VerticalAlignment="Top" IsEnabled="{Binding SelectedMessage, Converter={f:NullToBoolValueConverter}}" HorizontalAlignment="Left" Width="774">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30*"/>
@@ -39,16 +39,16 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Content="ISBN :" VerticalAlignment="Center" Grid.Row="0" />
-            <TextBox Text="{Binding DateTime}" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Margin="5" />
+            <TextBox Text="{Binding ISBN}" IsReadOnly="False" Grid.Row="0" Grid.Column="1" Margin="5" />
             <Label Content="Title :" VerticalAlignment="Center" Grid.Row="1" />
-            <TextBox Text="{Binding DateTime}" IsReadOnly="True" Grid.Row="1" Grid.Column="1" Margin="5,1.667,5,7.667" />
+            <TextBox Text="{Binding Title}" IsReadOnly="False" Grid.Row="1" Grid.Column="1" Margin="5,1.667,5,7.667" />
 
             <Label Content="Author :" VerticalAlignment="Center" Grid.Row="2" />
-            <TextBox Text="{Binding DateTime}" IsReadOnly="True" Grid.Row="2" Grid.Column="2" Margin="5,1.667,5,7.667" />
+            <TextBox Text="{Binding Author}" IsReadOnly="False" Grid.Row="2" Grid.Column="2" Margin="5,1.667,5,7.667" />
 
             <Label Content="Editor :" VerticalAlignment="Center" Grid.Row="3" />
             <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Margin="5" >
-                <TextBox Text="{Binding Body, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" />
             </f:ValidatedField>
             <Label Content="Categories :" VerticalAlignment="Center" Grid.Row="4" />
             <Label Content="Essai" VerticalAlignment="Center" Grid.Row="4" Margin="31,1.333,624,2" Grid.Column="1" />

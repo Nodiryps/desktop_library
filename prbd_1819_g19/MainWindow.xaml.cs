@@ -78,7 +78,11 @@ namespace prbd_1819_g19
                 };
                 tabControl.Items.Add(tab);
                 Dispatcher.InvokeAsync(() => tab.Focus());
+
                 CloseAnglet(tab);
+                CloseTab();
+
+                App.NotifyColleagues(AppMessages.MSG_REFRESH_BOOKS);
 
             });
         }
@@ -149,7 +153,7 @@ namespace prbd_1819_g19
 
         private void AddTabCat(ObservableCollection<Category> list, bool isNew)
         {
-            var ctl = new CategoriesView(list, isNew);
+            var ctl = new CategoriesView();
             var tab = new TabItem()
             {
                 Header = "<categories>",

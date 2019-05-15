@@ -36,6 +36,8 @@ namespace prbd_1819_g19
                 App.NotifyColleagues(AppMessages.MSG_NEW_BOOK);
             });
 
+            RefreshBook();
+
             DisplayBookDetails = new RelayCommand<Book>(book =>
             {
                 App.NotifyColleagues(AppMessages.MSG_DISPLAY_MEMBER, book);
@@ -53,6 +55,8 @@ namespace prbd_1819_g19
 
           //  App.Register<Book>(this, AppMessages.MSG_MEMBER_CHANGED, member => { ApplyFilterAction(); });
         }
+
+
 
         public Category SelectedCat { get; set; }
 
@@ -110,7 +114,15 @@ namespace prbd_1819_g19
                 Books = new ObservableCollection<Book>(SelectedCat.Books);
         }
 
-        
+        private void RefreshBook()
+        {
+            App.Register(this, AppMessages.MSG_NEW_BOOK, () =>
+            {
+                Books = new ObservableCollection<Book>(App.Model.Books);
+
+            });
+        }
+
 
 
     }

@@ -196,14 +196,18 @@ namespace prbd_1819_g19
         {
             if (IsNew)
             {
-                // Un petit raccourci ;-)
-                Member.Password = Member.UserName;
-                App.Model.Users.Add(Member);
+
+
+
+                App.Model.Books.Add(Book);
+
                 IsNew = false;
             }
             //imageHelper.Confirm(Member.UserName);
             //PicturePath = imageHelper.CurrentFile;
             App.Model.SaveChanges();
+            //App.Messenger.NotifyColleagues(App.MSG_CLIENT_CHANGED, Book);
+
             //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
         }
 
@@ -218,12 +222,12 @@ namespace prbd_1819_g19
                 //Pseudo = null;
                 //Profile = null;
                 //PicturePath = imageHelper.CurrentFile;
-                RaisePropertyChanged(nameof(Member));
+                RaisePropertyChanged(nameof(Book));
             }
             else
             {
-                var change = (from c in App.Model.ChangeTracker.Entries<User>()
-                              where c.Entity == Member
+                var change = (from c in App.Model.ChangeTracker.Entries<Book>()
+                              where c.Entity == Book
                               select c).FirstOrDefault();
                 if (change != null)
                 {
@@ -238,12 +242,19 @@ namespace prbd_1819_g19
         {
             if (IsNew)
             {
-                //return !string.IsNullOrEmpty(Pseudo) && !HasErrors;
+                return IsOk(ISBN) && IsOk(Title) && IsOk(Author) && IsOk(Editor);
+
+
             }
-            var change = (from c in App.Model.ChangeTracker.Entries<User>()
-                          where c.Entity == Member
+            var change = (from c in App.Model.ChangeTracker.Entries<Book>()
+                          where c.Entity == Book
                           select c).FirstOrDefault();
             return change != null && change.State != EntityState.Unchanged;
+        }
+
+        private bool IsOk(string s)
+        {
+            return !string.IsNullOrEmpty(s) && !HasErrors;
         }
 
         private void FollowUnfollowAction()

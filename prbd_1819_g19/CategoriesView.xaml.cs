@@ -93,10 +93,10 @@ namespace prbd_1819_g19
         /// <summary>
         /// CONSTRUCT//////////////////////////////////////////////////////
         /// </summary>
-        public CategoriesView(ObservableCollection<Category> list, bool isnew)
+        public CategoriesView()
         {
-            isnew = isNew;
-            category = list; //pour rafraichir, en theorie
+            //isnew = isNew;
+            //category = list; //pour rafraichir, en theorie
 
             InitializeComponent();
             DataContext = this;
@@ -193,7 +193,7 @@ namespace prbd_1819_g19
         private void ButtonsMngmt()
         {
             DisableInput(false);
-            if (IsExisting)
+            if (CatExists())
             {
                 DisableUpdate(false);
                 DisableDelete(false);
@@ -204,24 +204,24 @@ namespace prbd_1819_g19
             }
         }
 
-        //private bool CatExists()
-        //{
-        //    foreach (Category c in App.Model.Categories)
-        //        return c.Name.ToUpper() == thisCat.ToUpper();
-        //    return false;
-        //}
+        private bool CatExists()
+        {
+            foreach (Category c in App.Model.Categories)
+                return c.Name.ToUpper() == thisCat.ToUpper();
+            return false;
+        }
 
         private bool IsCatNull(Category c)
         {
             return c == null;
         }
 
-        private List<int> NbBooksByCat()
+        private void  NbBooksByCat()
         {
-            List<int> list = new List<int>();
-            foreach (Category cat in App.Model.Categories)
-                list.Add(cat.Books.Count());
-            return list;
+            //List<int> list = new List<int>();
+            //foreach (Category cat in App.Model.Categories)
+            //    list.Add(cat.Books.Count());
+            //return list;
         }
 
         private void Reset()

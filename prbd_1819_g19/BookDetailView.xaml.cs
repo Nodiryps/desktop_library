@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Timers;
@@ -179,6 +180,7 @@ namespace prbd_1819_g19
             //PicturePath = imageHelper.CurrentFile;
         }
 
+
         public override void Dispose()
         {
             //#if DEBUG_USERCONTROLS_WITH_TIMER
@@ -211,17 +213,15 @@ namespace prbd_1819_g19
             //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
         }
 
+
         private void CancelAction()
         {
-            //if (imageHelper.IsTransitoryState)
-            //{
-            //    imageHelper.Cancel();
-            //}
             if (IsNew)
             {
-                //Pseudo = null;
-                //Profile = null;
-                //PicturePath = imageHelper.CurrentFile;
+                ISBN = null;
+                Title = null;
+                Author = null;
+                Editor = null;
                 RaisePropertyChanged(nameof(Book));
             }
             else
@@ -232,11 +232,19 @@ namespace prbd_1819_g19
                 if (change != null)
                 {
                     change.Reload();
-                    //RaisePropertyChanged(nameof(Profile));
-                    //RaisePropertyChanged(nameof(PicturePath));
+                    RaisePropertyChanged(nameof(ISBN));
+                    RaisePropertyChanged(nameof(Title));
+                    RaisePropertyChanged(nameof(Author));
+                    RaisePropertyChanged(nameof(Editor));
                 }
             }
         }
+
+
+        /// <summary>
+        /// ////////////////////////////////////////////
+        /// </summary>
+
 
         private bool CanSaveOrCancelAction()
         {

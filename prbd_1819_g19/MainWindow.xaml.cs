@@ -31,11 +31,12 @@ namespace prbd_1819_g19
             DataContext = this;
             WindowBase();
 
-            BookDetail();
+            //BookDetail();
             CloseTab();
             AddBookToBasket();
             NewBook();
             NewCategory();
+            DisplayBook();
 
             ////App.Register(this, AppMessages.MSG_NEW_MEMBER, () => {
             //    // crée une nouvelle instance pour un nouveau membre
@@ -60,7 +61,26 @@ namespace prbd_1819_g19
             //    (tabControl.SelectedItem as TabItem).Header = s;
             //});
 
-            
+
+        }
+
+        private void DisplayBook()
+        {
+            App.Register<Book>(this, AppMessages.MSG_DISPLAY_BOOK, book =>
+            {
+                if (book != null)
+                {
+                    AddTabBook(book, false);
+                    var tab = new TabItem()
+                    {
+                        Header = book.Title,
+                        Content = new BookDetailView(book, false)
+                    };
+                    tabControl.Items.Add(tab);
+                    Dispatcher.InvokeAsync(() => tab.Focus());
+                    CloseAnglet(tab);
+                }
+            });
         }
 
         private void NewBook()
@@ -84,25 +104,6 @@ namespace prbd_1819_g19
 
                 App.NotifyColleagues(AppMessages.MSG_REFRESH_BOOKS);
 
-            });
-        }
-
-        private void BookDetail()
-        {
-            App.Register<Book>(this, AppMessages.MSG_BOOK_DETAIL, book =>
-            {
-                if (book != null)
-                {
-                    AddTabBook(book, false);
-                    var tab = new TabItem()
-                    {
-                        Header = book.Title,
-                        Content = new BookDetailView(book, false)
-                    };
-                    tabControl.Items.Add(tab);
-                    Dispatcher.InvokeAsync(() => tab.Focus());
-                    CloseAnglet(tab);
-                }
             });
         }
 

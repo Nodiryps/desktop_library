@@ -40,8 +40,10 @@ namespace prbd_1819_g19
 
             DisplayBookDetails = new RelayCommand<Book>(book =>
             {
-                App.NotifyColleagues(AppMessages.MSG_DISPLAY_MEMBER, book);
+                App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book);
             });
+
+            //SpectacleDetails = new RelayCommand<Show>(s => { App.Messenger.NotifyColleagues(App.MSG_DISPLAY_BOOK, s); });
 
             CategoryFilter = new RelayCommand<Category>(cat=>
             {

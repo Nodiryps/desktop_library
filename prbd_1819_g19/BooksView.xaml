@@ -51,7 +51,7 @@
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding DisplayBookDetails}" 
-                                           CommandParameter="{Binding ElementName=listView, Path=SelectedItem}"/>
+                                           CommandParameter="{Binding SelectedItem, ElementName=listView}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ListView.ItemsPanel>

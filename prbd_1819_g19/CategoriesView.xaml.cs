@@ -25,20 +25,6 @@ namespace prbd_1819_g19
     {
         //public string SelectedCat { get; set; }
 
-        private bool isNew;
-        public bool IsNew
-        {
-            get { return isNew; }
-            set
-            {
-                isNew = value;
-                RaisePropertyChanged(nameof(IsNew));
-                RaisePropertyChanged(nameof(IsExisting));
-            }
-        }
-
-        public bool IsExisting { get => !isNew; }
-
         private ObservableCollection<Category> category;
         public ObservableCollection<Category> Category
         {
@@ -95,25 +81,20 @@ namespace prbd_1819_g19
         /// </summary>
         public CategoriesView()
         {
-            //isnew = isNew;
-            //category = list; //pour rafraichir, en theorie
-
             InitializeComponent();
             DataContext = this;
 
+            Category = new ObservableCollection<Category>(App.Model.Categories);
             DisableBtnsAndInput();
-            NbBooksByCat();
+            //NbBooksByCat();
             DisableCancel(false);
             CancelBtn();
             Display();
 
-            if (App.IsAdmin())
-            {
-                ButtonsMngmt();
-                AddBtn();
-                UpdateBtn();
-                DeleteBtn();
-            }
+            //ButtonsMngmt();
+            AddBtn();
+            UpdateBtn();
+            DeleteBtn();
         }
 
         public ICommand Add { get; set; }
@@ -126,6 +107,7 @@ namespace prbd_1819_g19
         {
             DisplayCat = new RelayCommand(() =>
             {
+                
                 ThisCat = SelectedCategory.Name;
                 if (App.IsAdmin())
                     DisableDelete(false);
@@ -170,6 +152,7 @@ namespace prbd_1819_g19
         private void AddCat()
         {
             App.Model.CreateCategory(ThisCat);
+            
         }
 
         private void UpdateCat()
@@ -184,7 +167,7 @@ namespace prbd_1819_g19
         private void DeleteCat()
         {
             var catToDel = (from cat in App.Model.Categories
-                         where cat.Name == selectedCategory.Name
+                         where cat.Name == ThisCat
                          select cat).FirstOrDefault();
             App.Model.Categories.Remove(catToDel);
             App.Model.SaveChanges();
@@ -207,8 +190,7 @@ namespace prbd_1819_g19
         private bool CatExists()
         {
             foreach (Category c in App.Model.Categories)
-                return true;
-                //return c.Name.ToUpper() == thisCat.ToUpper();
+                return c.Name.ToUpper().Equals(thisCat.ToUpper());
             return false;
         }
 
@@ -217,19 +199,20 @@ namespace prbd_1819_g19
             return c == null;
         }
 
-        private void  NbBooksByCat()
-        {
-            //List<int> list = new List<int>();
-            //foreach (Category cat in App.Model.Categories)
-            //    list.Add(cat.Books.Count());
-            //return list;
-        }
+        //private List<int>  NbBooksByCat()
+        //{
+        //    List<int> list = new List<int>();
+        //    foreach (Category cat in App.Model.Categories)
+        //        list.Add(cat.Books.Count());
+        //    return list;
+        //}
 
         private void Reset()
         {
             ThisCat = "";
             DisableBtnsAndInput();
             selectedCategory = null;
+            Category = new ObservableCollection<Category>(App.Model.Categories);
         }
 
         private void DisableBtnsAndInput()

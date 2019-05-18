@@ -35,7 +35,7 @@ namespace prbd_1819_g19
             CloseTab();
             AddBookToBasket();
             NewBook();
-            NewCategory();
+            //NewCategory();
             DisplayBook();
             ISBNChanged();
 
@@ -126,24 +126,24 @@ namespace prbd_1819_g19
             });
         }
 
-        private void NewCategory()
-        {
-            App.Register(this, AppMessages.MSG_ADD_CAT, () =>
-            {
-                var cat = App.Model.Categories.Create();
-                App.Model.Categories.Add(cat);
-                AddTabCat(new ObservableCollection<Category>(App.Model.Categories), true);
-            });
-        }
+        //private void NewCategory()
+        //{
+        //    App.Register(this, AppMessages.MSG_ADD_CAT, () =>
+        //    {
+        //        var cat = App.Model.Categories.Create();
+        //        App.Model.Categories.Add(cat);
+        //        AddTabCat(new ObservableCollection<Category>(App.Model.Categories), true);
+        //    });
+        //}
 
-        private void UpdateCategory()
-        {
-            App.Register<Category>(this, AppMessages.MSG_UPDATE_CAT, newCat =>
-            {
-                App.Model.Categories.Add(newCat);
-                AddTabCat(new ObservableCollection<Category>(App.Model.Categories), false);
-            });
-        }
+        //private void UpdateCategory()
+        //{
+        //    App.Register<Category>(this, AppMessages.MSG_UPDATE_CAT, newCat =>
+        //    {
+        //        App.Model.Categories.Add(newCat);
+        //        AddTabCat(new ObservableCollection<Category>(App.Model.Categories), false);
+        //    });
+        //}
 
         private void DeleteCategory()
         {

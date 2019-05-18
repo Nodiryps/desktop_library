@@ -88,6 +88,7 @@ namespace prbd_1819_g19
         public ICommand CategoryFilter { get; set; }
         public ICommand AddToBasket { get; set; }
 
+        
 
         private void ApplyFilterAction()
         {

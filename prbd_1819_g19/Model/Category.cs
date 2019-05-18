@@ -20,7 +20,7 @@ namespace prbd_1819_g19
 
         public void AddBook(Book book)
         {
-            if(Model.Books.Find(book.BookId) != null)
+            if(!Books.Contains(book))
                 Books.Add(book);
             
         }

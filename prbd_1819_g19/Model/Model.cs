@@ -129,6 +129,7 @@ namespace prbd_1819_g19 {
                 for (int i = 0; i < numCopies; ++i)
                 {
                     BookCopy copy = BookCopies.Create();
+                    copy.AcquisitionDate = DateTime.Now;
                     copy.Book = newBook;
                     newBook.Copies = new List<BookCopy>();
                     newBook.Copies.Add(copy);

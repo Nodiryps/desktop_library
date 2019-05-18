@@ -9,15 +9,13 @@ namespace prbd_1819_g19
 {
     public class Book : EntityBase<Model>
     {
-        [Key]
-        public int BookId { get; set; }
+        [Key] public int BookId { get; set; }
         public string Isbn { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
         public string Editor { get; set; }
         public string PicturePath { get; set; }
-        [NotMapped]
-        public string AbsolutePicturePath
+        [NotMapped] public string AbsolutePicturePath
         {
             get => PicturePath != null ? App.IMAGE_PATH + "\\" + PicturePath : null; 
         }
@@ -30,7 +28,11 @@ namespace prbd_1819_g19
         public void AddCategory(Category category)
         {
             if (!Categories.Contains(category))
+            {
                 Categories.Add(category);
+                category.Books.Add(this);
+            }
+                
         }
 
         public void AddCategories(Category[] tab)
@@ -38,7 +40,11 @@ namespace prbd_1819_g19
             if(tab.Length > 0)
                 foreach (Category category in tab)
                     if (!Categories.Contains(category))
+                    {
                         AddCategory(category);
+                        category.Books.Add(this);
+                    }
+                        
         }
 
         public void RemoveCategory(Category category)

@@ -1,4 +1,5 @@
-﻿using PRBD_Framework;
+﻿using Microsoft.Win32;
+using PRBD_Framework;
 using System;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
@@ -16,7 +17,7 @@ namespace prbd_1819_g19
     public partial class BookDetailView : UserControlBase
     {
         public User Member { get; set; }
-        //private ImageHelper imageHelper;
+        private ImageHelper imageHelper;
 
         private ObservableCollection<Category> cats;
         public ObservableCollection<Category> Cats
@@ -38,17 +39,20 @@ namespace prbd_1819_g19
         }
 
         public bool IsExisting { get => !isNew; }
-        
 
-        //public string Profile
-        //{
-        //    get { return Member.Profile; }
-        //    set
-        //    {
-        //        Member.Profile = value;
-        //        RaisePropertyChanged(nameof(Profile));
-        //    }
-        //}
+
+        public string PicturePath
+        {
+            get { return Book.AbsolutePicturePath; }
+            set
+            {
+                Book.PicturePath = value;
+                RaisePropertyChanged(nameof(PicturePath));
+            }
+        }
+
+
+
         private Book book;
         public Book Book
         {
@@ -63,16 +67,17 @@ namespace prbd_1819_g19
             {
                 book.Isbn = value;
                 RaisePropertyChanged(nameof(ISBN));
-                RaisePropertyChanged(nameof(Title));
+                //RaisePropertyChanged(nameof(Title));
+                App.NotifyColleagues(AppMessages.MSG_ISBN_CHANGED, string.IsNullOrEmpty(value) ? "<new book>" : value);
             }
         }
 
         public string Title
         {
-            get { return book.Title; }
+            get { return Book.Title; }
             set
             {
-                book.Title = value;
+                Book.Title = value;
                 RaisePropertyChanged(nameof(Title));
             }
         }
@@ -97,15 +102,7 @@ namespace prbd_1819_g19
             }
         }
 
-        public string PicturePath
-        {
-            get { return book.AbsolutePicturePath; }
-            set
-            {
-                book.PicturePath = value;
-                RaisePropertyChanged(nameof(PicturePath));
-            }
-        }
+
 
         public string AbsolutePicturePath
         {
@@ -132,14 +129,15 @@ namespace prbd_1819_g19
             Book = book;
             IsNew = isNew;
             Cats = new ObservableCollection<Category>(App.Model.Categories);
-            //imageHelper = new ImageHelper(App.IMAGE_PATH, Member.PicturePath);
+
+            imageHelper = new ImageHelper(App.IMAGE_PATH, Book.PicturePath);
 
             Save = new RelayCommand(SaveAction, CanSaveOrCancelAction);
             Cancel = new RelayCommand(CancelAction, CanSaveOrCancelAction);
             Delete = new RelayCommand(DeleteAction, () => !IsNew);
-            //LoadImage = new RelayCommand(LoadImageAction);
-            //ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
-            FollowUnfollow = new RelayCommand(FollowUnfollowAction);
+            LoadImage = new RelayCommand(LoadImageAction);
+            ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
+
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
             App.Register<string>(this, AppMessages.MSG_TIMER, s => {
@@ -153,75 +151,74 @@ namespace prbd_1819_g19
 
         private void DeleteAction()
         {
-            //this.CancelAction();
-            //if (File.Exists(PicturePath))
-            //{
-            //    File.Delete(PicturePath);
-            //}
-            //Member.Delete();
-            //App.Model.SaveChanges();
-            //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
-            //App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB, this);
+            this.CancelAction();
+            if (File.Exists(PicturePath))
+            {
+                File.Delete(PicturePath);
+            }
+            Book.Delete();
+            App.Model.SaveChanges();
+            App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
+            App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB, this);
         }
 
         private void LoadImageAction()
         {
-            //var fd = new OpenFileDialog();
-            //if (fd.ShowDialog() == true)
-            //{
-            //    imageHelper.Load(fd.FileName);
-            //    PicturePath = imageHelper.CurrentFile;
-            //}
+            var fd = new OpenFileDialog();
+            if (fd.ShowDialog() == true)
+            {
+                imageHelper.Load(fd.FileName);
+                PicturePath = imageHelper.CurrentFile;
+            }
         }
 
         private void ClearImageAction()
         {
-            //imageHelper.Clear();
-            //PicturePath = imageHelper.CurrentFile;
+            imageHelper.Clear();
+            PicturePath = imageHelper.CurrentFile;
         }
 
 
         public override void Dispose()
         {
-            //#if DEBUG_USERCONTROLS_WITH_TIMER
-            //            timer.Stop();
-            //#endif
-            //            base.Dispose();
-            //            if (imageHelper.IsTransitoryState)
-            //            {
-            //                imageHelper.Cancel();
-            //                PicturePath = imageHelper.CurrentFile;
-            //            }
+#if DEBUG_USERCONTROLS_WITH_TIMER
+            timer.Stop();
+#endif
+            base.Dispose();
+            if (imageHelper.IsTransitoryState)
+            {
+                imageHelper.Cancel();
+                PicturePath = imageHelper.CurrentFile;
+            }
         }
 
         private void SaveAction()
         {
             if (IsNew)
             {
-
-
-
                 App.Model.Books.Add(Book);
-
                 IsNew = false;
             }
-            //imageHelper.Confirm(Member.UserName);
-            //PicturePath = imageHelper.CurrentFile;
+            imageHelper.Confirm(Book.Title);
+            PicturePath = imageHelper.CurrentFile;
             App.Model.SaveChanges();
-            //App.Messenger.NotifyColleagues(App.MSG_CLIENT_CHANGED, Book);
-
-            //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
+            App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
         }
 
 
         private void CancelAction()
         {
+            if (imageHelper.IsTransitoryState)
+            {
+                imageHelper.Cancel();
+            }
             if (IsNew)
             {
                 ISBN = null;
                 Title = null;
                 Author = null;
                 Editor = null;
+                PicturePath = imageHelper.CurrentFile;
                 RaisePropertyChanged(nameof(Book));
             }
             else
@@ -236,6 +233,7 @@ namespace prbd_1819_g19
                     RaisePropertyChanged(nameof(Title));
                     RaisePropertyChanged(nameof(Author));
                     RaisePropertyChanged(nameof(Editor));
+                    RaisePropertyChanged(nameof(PicturePath));
                 }
             }
         }
@@ -251,8 +249,6 @@ namespace prbd_1819_g19
             if (IsNew)
             {
                 return IsOk(ISBN) && IsOk(Title) && IsOk(Author) && IsOk(Editor);
-
-
             }
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
                           where c.Entity == Book
@@ -265,13 +261,13 @@ namespace prbd_1819_g19
             return !string.IsNullOrEmpty(s) && !HasErrors;
         }
 
-        private void FollowUnfollowAction()
-        {
-            //App.CurrentUser.ToggleFollowUnfollow(Member);
-            App.Model.SaveChanges();
-            //RaisePropertyChanged(nameof(FollowUnfollowLabel));
-            //RaisePropertyChanged(nameof(FollowStatus));
-            //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
-        }
+        //private void FollowUnfollowAction()
+        //{
+        //    //App.CurrentUser.ToggleFollowUnfollow(Member);
+        //    App.Model.SaveChanges();
+        //    //RaisePropertyChanged(nameof(FollowUnfollowLabel));
+        //    //RaisePropertyChanged(nameof(FollowStatus));
+        //    //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
+        //}
     }
 }

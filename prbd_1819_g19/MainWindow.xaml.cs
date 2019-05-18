@@ -37,6 +37,7 @@ namespace prbd_1819_g19
             NewBook();
             NewCategory();
             DisplayBook();
+            ISBNChanged();
 
             ////App.Register(this, AppMessages.MSG_NEW_MEMBER, () => {
             //    // crée une nouvelle instance pour un nouveau membre
@@ -62,6 +63,13 @@ namespace prbd_1819_g19
             //});
 
 
+        }
+
+        private void ISBNChanged()
+        {
+            App.Register<string>(this, AppMessages.MSG_ISBN_CHANGED, (s) => {
+                (tabControl.SelectedItem as TabItem).Header = s;
+            });
         }
 
         private void DisplayBook()
@@ -113,7 +121,7 @@ namespace prbd_1819_g19
             {
                 User currUser = WindowsIdentity.GetCurrent();
                 //if (currUser.Basket != null)
-                //    currUser.AddToBasket(book);
+                    currUser.AddToBasket(book);
                 //else
                 //    currUser.CreateBasket();
             });

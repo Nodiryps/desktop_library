@@ -207,7 +207,8 @@ namespace prbd_1819_g19
         private bool CatExists()
         {
             foreach (Category c in App.Model.Categories)
-                return c.Name.ToUpper() == thisCat.ToUpper();
+                return true;
+                //return c.Name.ToUpper() == thisCat.ToUpper();
             return false;
         }
 

@@ -26,7 +26,9 @@ namespace prbd_1819_g19
         MSG_DISPLAY_MEMBER,
         MSG_DISPLAY_CAT,
         MSG_REFRESH_BOOKS,
-        MSG_DISPLAY_BOOK
+        MSG_DISPLAY_BOOK,
+        MSG_BOOK_CHANGED,
+        MSG_ISBN_CHANGED
     }
 
     public partial class App : ApplicationBase

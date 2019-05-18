@@ -55,7 +55,7 @@ namespace prbd_1819_g19
                 App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET);
             });
 
-          //  App.Register<Book>(this, AppMessages.MSG_MEMBER_CHANGED, member => { ApplyFilterAction(); });
+            App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { ApplyFilterAction(); }); ;
         }
 
 

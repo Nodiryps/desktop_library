@@ -43,17 +43,33 @@ namespace prbd_1819_g19
             return newRental;
         }
 
+        //public RentalItem AddToBasket(Book book)
+        //{
+        //    Rental newRental = CreateBasket();
+        //    newRental.User = this;
+
+        //    BookCopy copy = book.GetAvailableCopy();
+        //    RentalItem item = newRental.RentCopy(copy);
+
+        //    newRental.Items.Add(item);
+
+        //    return item;
+        //}
+
         public RentalItem AddToBasket(Book book)
         {
-            Rental newRental = CreateBasket();
-            newRental.User = this;
+            if (Basket == null)
+            {
+                CreateBasket();
+            }
 
+            RentalItem ri = App.Model.RentalItems.Create();
             BookCopy copy = book.GetAvailableCopy();
-            RentalItem item = newRental.RentCopy(copy);
-
-            newRental.Items.Add(item);
-
-            return item;
+            if (copy != null)
+            {
+                ri = Basket.RentCopy(copy);
+            }
+            return ri;
         }
 
         private bool IsBasketFull()

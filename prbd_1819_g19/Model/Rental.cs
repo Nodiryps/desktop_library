@@ -8,7 +8,7 @@ namespace prbd_1819_g19
 {
     public class Rental : EntityBase<Model>
     {
-        [Required]
+        [Key]
         public int RentalId { get; set; }
         public DateTime? RentalDate { get; set; }
         public int NumOpenItems
@@ -20,25 +20,21 @@ namespace prbd_1819_g19
         public virtual ICollection<RentalItem> Items { get; set; }
         public virtual User User { get; set; }
 
+        protected Rental(){}/////////////////////////////CONSTRUCT/////////////////////////////
+
         public RentalItem RentCopy(BookCopy copy)
         {
-            //var rentalItem = (
-            //                 from item in Model.BookCopies
-            //                 where copy.BookCopyId == item.
-            //                    && NumOpenItems > 0
-            //                 select item
-            //                 ).FirstOrDefault();
-
             RentalItem item = null;
             if (copy != null)
             {
                 item = Model.RentalItems.Create();
-                //item.BookCopy.BookCopyId = copy.BookCopyId;
+                item.BookCopy = copy;
                 item.ReturnDate = null;
+                item.Rental = this;
                 Items.Add(item);
+                copy.RentalItems.Add(item);
                 Model.SaveChanges();
             }
-            
             return item;
         }
 
@@ -49,11 +45,13 @@ namespace prbd_1819_g19
                                  && NumOpenItems > 0
                               select item).FirstOrDefault();
             Items.Remove(rentalItem);
+            Model.BookCopies.Remove(copy);
+            Model.SaveChanges();
         }
 
         public void RemoveItem(RentalItem item)
         {
-            if (!IsEmpty() && Items.Contains(item))
+            if (!ItemsIsEmpty() && Items.Contains(item))
                 Items.Remove(item);
         }
 
@@ -68,16 +66,17 @@ namespace prbd_1819_g19
                 Model.RentalItems.Add(item);
             RentalDate = DateTime.Now;
             Model.Rentals.Add(this);
+
             Model.SaveChanges();
         }
 
         public void Clear()
         {
-            if (!IsEmpty())
+            if (!ItemsIsEmpty())
                 Items.Clear();
         }
 
-        public bool IsEmpty()
+        public bool ItemsIsEmpty()
         {
             return Items.Count == 0;
         }
@@ -89,7 +88,7 @@ namespace prbd_1819_g19
 
         public override string ToString()
         {
-            return "rentalId: " + RentalId.ToString();
+            return RentalId.ToString();
         }
     }
 }

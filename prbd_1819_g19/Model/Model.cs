@@ -95,7 +95,7 @@ namespace prbd_1819_g19 {
 
         public void CreateTestData()
         {
-            new TestDatas(DbType.MsSQL);
+            new TestDatas(DbType.MsSQL).Run();
         }
 
         //birthdate = null et role = Member
@@ -119,16 +119,21 @@ namespace prbd_1819_g19 {
         public Book CreateBook(string isbn, string title, string author, string editor, int numCopies = 1)
         {
             Book newBook = null;
-            if (numCopies >= 1 && (isbn != "" || title != "" || author != "" || editor != ""))
+            if (numCopies > 0 && (isbn != "" || title != "" || author != "" || editor != ""))
             {
                 newBook = Books.Create();
                 newBook.Isbn = isbn; newBook.Title = title; newBook.Author = author; newBook.Editor = editor;
-                for(int i = 0; i < numCopies; ++i)
+
+                Books.Add(newBook);
+
+                for (int i = 0; i < numCopies; ++i)
                 {
-                    Books.Add(newBook);
                     BookCopy copy = BookCopies.Create();
                     copy.Book = newBook;
+                    newBook.Copies = new List<BookCopy>();
+                    newBook.Copies.Add(copy);
                     BookCopies.Add(copy);
+                    
                     SaveChanges();
                 }
             }
@@ -144,6 +149,7 @@ namespace prbd_1819_g19 {
                 newCat.Name = name;
                 newCat.Books = new List<Book>();
                 Categories.Add(newCat);
+
                 SaveChanges();
             }
             return newCat;
@@ -153,11 +159,6 @@ namespace prbd_1819_g19 {
         public List<Book> FindBooksByText(string key)
         {
             List<Book> list = new List<Book>();
-            //var q = from b in Model.Books
-            //where b.Author.Contains(key) || b.Title.Contains(key) || b.Editor.Contains(key) || b.Isbn.Contains(key)
-            //select b;
-            //foreach (var book in q)
-            //list.Add(book);
             foreach (var b in Books)
             {
                 if (b.Author.Contains(key))

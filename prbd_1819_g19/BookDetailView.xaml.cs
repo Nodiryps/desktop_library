@@ -67,7 +67,6 @@ namespace prbd_1819_g19
             {
                 book.Isbn = value;
                 RaisePropertyChanged(nameof(ISBN));
-                //RaisePropertyChanged(nameof(Title));
                 App.NotifyColleagues(AppMessages.MSG_ISBN_CHANGED, string.IsNullOrEmpty(value) ? "<new book>" : value);
             }
         }
@@ -115,7 +114,6 @@ namespace prbd_1819_g19
         public ICommand Delete { get; set; }
         public ICommand LoadImage { get; set; }
         public ICommand ClearImage { get; set; }
-        public ICommand FollowUnfollow { get; set; }
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
         private Timer timer = new Timer(1000);
@@ -238,12 +236,6 @@ namespace prbd_1819_g19
             }
         }
 
-
-        /// <summary>
-        /// ////////////////////////////////////////////
-        /// </summary>
-
-
         private bool CanSaveOrCancelAction()
         {
             if (IsNew)
@@ -260,14 +252,5 @@ namespace prbd_1819_g19
         {
             return !string.IsNullOrEmpty(s) && !HasErrors;
         }
-
-        //private void FollowUnfollowAction()
-        //{
-        //    //App.CurrentUser.ToggleFollowUnfollow(Member);
-        //    App.Model.SaveChanges();
-        //    //RaisePropertyChanged(nameof(FollowUnfollowLabel));
-        //    //RaisePropertyChanged(nameof(FollowStatus));
-        //    //App.NotifyColleagues(AppMessages.MSG_MEMBER_CHANGED, Member);
-        //}
     }
 }

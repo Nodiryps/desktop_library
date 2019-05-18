@@ -6,9 +6,12 @@ namespace prbd_1819_g19
 {
     public class Category : EntityBase<Model>
     {
+        [Key]
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public virtual ICollection<Book> Books { get; set; }
+
+        protected Category(){}/////////////////////////////CONSTRUCT/////////////////////////////
 
         public bool HasBook(Book book)
         {
@@ -39,7 +42,7 @@ namespace prbd_1819_g19
 
         public override string ToString()
         {
-            return Name.ToString();
+            return Name;
         }
     }
     

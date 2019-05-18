@@ -175,7 +175,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\unknown-user.jpg" />
+    <Resource Include="images\unknown-book.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="BasketView.xaml">
@@ -212,9 +212,6 @@
       <Project>{2e922430-eaac-4589-a8f4-f35fbb9799b8}</Project>
       <Name>PRBD_Framework</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\unknown_book.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -110,7 +110,6 @@ namespace prbd_1819_g19
                 CloseAnglet(tab);
                 CloseTab();
 
-                App.NotifyColleagues(AppMessages.MSG_REFRESH_BOOKS);
 
             });
         }
@@ -119,7 +118,7 @@ namespace prbd_1819_g19
         {
             App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
             {
-                User currUser = WindowsIdentity.GetCurrent();
+                User currUser = App.CurrentUser;
                 //if (currUser.Basket != null)
                     currUser.AddToBasket(book);
                 //else

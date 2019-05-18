@@ -25,7 +25,6 @@ namespace prbd_1819_g19
         MSG_DEL_CAT,
         MSG_DISPLAY_MEMBER,
         MSG_DISPLAY_CAT,
-        MSG_REFRESH_BOOKS,
         MSG_DISPLAY_BOOK,
         MSG_BOOK_CHANGED,
         MSG_ISBN_CHANGED
@@ -37,7 +36,6 @@ namespace prbd_1819_g19
 
         public static User CurrentUser { get; set; }
 
-        //public static User CurrentUser { get => WindowsIdentity.GetCurrent(); }
         public static readonly string IMAGE_PATH = Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../images");
 
         public App()
@@ -51,9 +49,5 @@ namespace prbd_1819_g19
         {
             return CurrentUser.Role == Role.Admin;
         }
-
-        //public class Model
-        //{
-        //}
     }
 }

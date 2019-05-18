@@ -10,7 +10,7 @@
       d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <BitmapImage x:Key="UnknownUser" UriSource="/images/unknown_book.png"/>
+        <BitmapImage x:Key="UnknownBook" UriSource="/images/unknown_book.png"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
 
@@ -96,7 +96,7 @@
         <Label Content="Date: " HorizontalAlignment="Left" Margin="452,217,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <ScrollBar HorizontalAlignment="Left" Margin="554,217,0,0" Grid.Row="1" VerticalAlignment="Top" Width="18"/>
         <ScrollBar HorizontalAlignment="Left" Margin="615,217,0,0" Grid.Row="1" VerticalAlignment="Top" Width="18" RenderTransformOrigin="3.665,0.444"/>
-        <Image x:Name="img" HorizontalAlignment="Left" Height="168" Margin="42,32,0,0" Grid.Row="1" VerticalAlignment="Top" Width="184" Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, FallbackValue={StaticResource UnknownUser}, TargetNullValue={StaticResource UnknownUser}}" 
+        <Image x:Name="img" HorizontalAlignment="Left" Height="168" Margin="42,32,0,0" Grid.Row="1" VerticalAlignment="Top" Width="184" Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" 
                    RenderOptions.BitmapScalingMode="Fant"/>
 
 

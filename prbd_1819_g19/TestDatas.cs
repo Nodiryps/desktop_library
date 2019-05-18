@@ -26,7 +26,6 @@ namespace prbd_1819_g19
         public TestDatas(DbType dbType)
         {
             this.dbType = dbType;
-            Run();
         }
 
         public void Run()
@@ -38,8 +37,8 @@ namespace prbd_1819_g19
                 CreateEntities(model);
                 testBooks();
                 testCategory();
-                //testBasket();
-                //testModel();
+                testBasket();
+                testModel();
             }
         }
 

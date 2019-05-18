@@ -9,7 +9,7 @@ namespace prbd_1819_g19
 {
     public class User : EntityBase<Model>
     {
-        [Required]
+        [Key]
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -27,106 +27,64 @@ namespace prbd_1819_g19
                     select rental).FirstOrDefault();
         }
 
+        protected User(){}////////////////////////////////////CONSTRUCT////////////////////////////////////
+
 
         public Rental CreateBasket()
         {
             Rental newRental = Model.Rentals.Create();
             newRental.User = this;
-            //Model.Rentals.Add(newRental);
+            Model.Rentals.Add(newRental);
             Rentals.Add(newRental);
 
-            //Console.WriteLine(newRental);
-            //Console.WriteLine(Rentals.Count);
-            //Console.Read();
             Model.SaveChanges();
-
             return newRental;
         }
-
-        //public RentalItem AddToBasket(Book book)
-        //{
-        //    Rental newRental = CreateBasket();
-        //    newRental.User = this;
-
-        //    BookCopy copy = book.GetAvailableCopy();
-        //    RentalItem item = newRental.RentCopy(copy);
-
-        //    newRental.Items.Add(item);
-
-        //    return item;
-        //}
-
+        
         public RentalItem AddToBasket(Book book)
         {
             if (Basket == null)
-            {
-                CreateBasket();
-            }
+                CreateBasket(); // si pas de rental.rentalDate à null, on en créé un nvx => rentalDate == null
 
-            RentalItem ri = App.Model.RentalItems.Create();
+            RentalItem ri = Model.RentalItems.Create();
             BookCopy copy = book.GetAvailableCopy();
-            if (copy != null)
-            {
-                ri = Basket.RentCopy(copy);
-            }
-            return ri;
-        }
 
-        private bool IsBasketFull()
-        {
-            return Basket.Items.Count == 5;
+            if (copy != null)
+                ri = Basket.RentCopy(copy);
+            return ri;
         }
 
         public void RemoveFromBasket(RentalItem item)
         {
-            Basket.RemoveItem(item);
+            if (Basket != null)
+                Basket.RemoveItem(item);
         }
 
         public void ClearBasket()
         {
-            Basket.Clear();
+            if (Basket != null)
+                Basket.Clear();
         }
 
         public void ConfirmBasket()
         {
-            MsgErrConfirmBasket();
-            Rental rental = Model.Rentals.Create();
-
-            foreach (RentalItem item in Basket.Items)
-            {
-                rental.RentalId = item.RentalItemId;
-                rental.RentalDate = DateTime.Now;
-            }
-            Model.Rentals.Add(rental);
-            Rentals.Add(rental);
-            Model.SaveChanges();
-        }
-
-        private void MsgErrConfirmBasket()
-        {
-            if (Basket.IsEmpty())
-                Console.WriteLine("!!! EMPTY Basket !!!");
-            if (Basket.IsFull())
-                Console.WriteLine("!!! Basket FULL !!!");
+            if (Basket != null)
+                Basket.Confirm();
         }
 
         public void Return(BookCopy copy)
         {
-            foreach (RentalItem item in Basket.Items)
+            RentalItem ri = copy.RentalItems.FirstOrDefault( rental => rental.ReturnDate == null );
+            if(ri != null)
             {
-                if (item.RentalItemId == copy.BookCopyId)
-                    item.ReturnDate = DateTime.Now;
+                ri.ReturnDate = DateTime.Now;
+                Model.SaveChanges();
             }
         }
 
         public override string ToString()
         {
-            return "username: " + UserName.ToString();
-        }
-
-        public static implicit operator User(WindowsIdentity v)
-        {
-            throw new NotImplementedException();
+            return UserName;
         }
     }
 }

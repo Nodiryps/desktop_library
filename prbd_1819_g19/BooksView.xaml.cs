@@ -36,7 +36,6 @@ namespace prbd_1819_g19
                 App.NotifyColleagues(AppMessages.MSG_NEW_BOOK);
             });
 
-            RefreshBook();
 
             DisplayBookDetails = new RelayCommand<Book>(book =>
             {
@@ -124,8 +123,5 @@ namespace prbd_1819_g19
 
             });
         }
-
-
-
     }
 }

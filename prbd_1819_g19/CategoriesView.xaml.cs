@@ -23,8 +23,6 @@ namespace prbd_1819_g19
     /// </summary>
     public partial class CategoriesView : UserControlBase
     {
-        //public string SelectedCat { get; set; }
-
         private ObservableCollection<Category> category;
         public ObservableCollection<Category> Category
         {
@@ -40,9 +38,198 @@ namespace prbd_1819_g19
         }
 
         public string thisCat;
-        public string ThisCat { get => thisCat; set => SetProperty<string>(ref thisCat, value, () => ButtonsMngmt()); }
+        public string ThisCat
+        {
+            get => thisCat;
+            set => SetProperty<string>(ref thisCat, value, () => Validate());
+        }
 
         private bool boolInput;
+        
+        /// <summary>
+        /// CONSTRUCT//////////////////////////////////////////////////////
+        /// </summary>
+        public CategoriesView()
+        {
+            ViewSettings();
+            SetCat();
+            Buttons();
+        }
+
+        private void ViewSettings()
+        {
+            InitializeComponent();
+            DataContext = this;
+            Category = new ObservableCollection<Category>(App.Model.Categories);
+            DisableBtnsAndInput();
+        }
+
+        private void Buttons()
+        {
+            if (App.IsUserLogged())
+            {
+                CancelBtn();
+                if (App.IsAdmin())
+                {
+                    EnableBtnsAndInput();
+                    AddBtn();
+                    UpdateBtn();
+                    DeleteBtn();
+                }
+            }
+        }
+
+        public ICommand Add { get; set; }
+        public ICommand Update { get; set; }
+        public ICommand Delete { get; set; }
+        public ICommand Cancel { get; set; }
+        public ICommand SetThisCat { get; set; }
+
+        private void SetCat()
+        {
+            SetThisCat = new RelayCommand(() =>
+            {
+                if(!IsNullOrEmpty(SelectedCategory.Name))
+                    ThisCat = SelectedCategory.Name;
+            });
+        }
+
+        private void AddBtn()
+        {
+            Add = new RelayCommand(AddCat,() =>
+            {
+                return AddBtnCondition();
+            });
+        }
+
+        private bool AddBtnCondition()
+        {
+            return !IsNullOrEmpty(ThisCat) && !IsNullOrEmpty(SelectedCategory.Name); 
+        }
+
+        private void UpdateBtn()
+        {
+            Update = new RelayCommand(UpdateCat, () =>
+            {
+                return !IsNullOrEmpty(SelectedCategory.Name);
+            });
+        }
+
+        private void DeleteBtn()
+        {
+             Delete = new RelayCommand(DeleteCat, () =>
+            {
+                return !IsNullOrEmpty(SelectedCategory.Name);
+            });
+        }
+
+        private void CancelBtn()
+        {
+            Reset();
+        }
+
+        private void AddCat()
+        {
+            App.Model.CreateCategory(ThisCat);
+            Reset();
+            App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
+        }
+
+        private void UpdateCat()
+        {
+            var catToUpdate = (from cat in App.Model.Categories
+                         where cat.Name == selectedCategory.Name
+                         select cat).FirstOrDefault();
+            catToUpdate.Name = ThisCat;
+            App.Model.SaveChanges();
+            Reset();
+            App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
+        }
+
+        private void DeleteCat()
+        {
+            var catToDel = (from cat in App.Model.Categories
+                         where cat.Name == ThisCat
+                         select cat).FirstOrDefault();
+            if (catToDel != null)
+                App.Model.Categories.Remove(catToDel);
+            else
+                AddError("DeleteCat", Properties.Resources.Error_Required);
+            App.Model.SaveChanges();
+            Reset();
+            App.NotifyColleagues(AppMessages.MSG_CAT_DEL);
+        }
+
+        private void CancelCat()
+        {
+            App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB);
+        }
+        
+        public override bool Validate()
+        {
+            ClearErrors();
+            if (IsNullOrEmpty(thisCat))
+                AddError("EditCategory", Properties.Resources.Error_Required);
+            else
+            {
+                if (ThisCatExists())
+                    AddError("EditCategory", Properties.Resources.Error_AlreadyExists);
+                 else
+                    AddError("EditCategory", Properties.Resources.Error_DoesNotExist);
+            }
+            RaiseErrors();
+            return !HasErrors;
+        }
+
+        private bool ThisCatExists()
+        {
+            //if(!IsNullOrEmpty(thisCat))
+            foreach (Category c in App.Model.Categories)
+                return c.Name.ToUpper().Equals(thisCat.ToUpper());
+            return false;
+        }
+
+        private bool IsNullOrEmpty(string cat)
+        {
+            return string.IsNullOrEmpty(cat) 
+                || string.IsNullOrWhiteSpace(cat);
+        }
+        
+        private void Reset()
+        {
+            ThisCat = "";
+            DisableBtnsAndInput();
+            selectedCategory = null;
+            Category = new ObservableCollection<Category>(App.Model.Categories);
+        }
+
+        private void DisableBtnsAndInput()
+        {
+            EnableAdd(false);
+            EnableUpdate(false);
+            EnableDelete(false);
+            EnableInput(false);
+        }
+
+        private void EnableBtnsAndInput()
+        {
+            EnableInput(true);
+
+            if (!IsNullOrEmpty(ThisCat))
+            {
+                if (!ThisCatExists())
+                {
+                    EnableAdd(true);
+                }
+                else
+                {
+                    EnableUpdate(true);
+                    EnableDelete(true);
+                }
+            }
+            
+        }
+
         public bool BoolInput
         {
             get => boolInput;
@@ -70,168 +257,12 @@ namespace prbd_1819_g19
             set => RaisePropertyChanged(nameof(boolDelete));
         }
 
-        private bool boolCancel;
-        public bool BoolCancel
-        {
-            get => boolCancel;
-            set => RaisePropertyChanged(nameof(boolCancel));
-        }
-        /// <summary>
-        /// CONSTRUCT//////////////////////////////////////////////////////
-        /// </summary>
-        public CategoriesView()
-        {
-            InitializeComponent();
-            DataContext = this;
+        private void EnableInput(bool b) {boolInput = b;}
 
-            Category = new ObservableCollection<Category>(App.Model.Categories);
-            DisableBtnsAndInput();
-            //NbBooksByCat();
-            DisableCancel(false);
-            CancelBtn();
-            Display();
+        private void EnableAdd(bool b) { boolAdd = b; }
 
-            //ButtonsMngmt();
-            AddBtn();
-            UpdateBtn();
-            DeleteBtn();
-        }
+        private void EnableUpdate(bool b) { boolUpdate = b; }
 
-        public ICommand Add { get; set; }
-        public ICommand Update { get; set; }
-        public ICommand Delete { get; set; }
-        public ICommand Cancel { get; set; }
-        public ICommand DisplayCat { get; set; }
-
-        private void Display()
-        {
-            DisplayCat = new RelayCommand(() =>
-            {
-                
-                ThisCat = SelectedCategory.Name;
-                if (App.IsAdmin())
-                    DisableDelete(false);
-            });
-        }
-
-        private void AddBtn()
-        {
-            Add = new RelayCommand(() =>
-            {
-                AddCat();
-                Reset();
-                App.NotifyColleagues(AppMessages.MSG_ADD_CAT);
-            });
-        }
-
-        private void UpdateBtn()
-        {
-            Update = new RelayCommand(() =>
-            {
-                UpdateCat();
-                Reset();
-                App.NotifyColleagues(AppMessages.MSG_UPDATE_CAT);
-            });
-        }
-
-        private void DeleteBtn()
-        {
-             Delete = new RelayCommand(() =>
-            {
-                DeleteCat();
-                Reset();
-                App.NotifyColleagues(AppMessages.MSG_DEL_CAT);
-            });
-        }
-
-        private void CancelBtn()
-        {
-            Cancel = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB); });
-        }
-
-        private void AddCat()
-        {
-            App.Model.CreateCategory(ThisCat);
-            
-        }
-
-        private void UpdateCat()
-        {
-            var catToUpdate = (from cat in App.Model.Categories
-                         where cat.Name == selectedCategory.Name
-                         select cat).FirstOrDefault();
-            catToUpdate.Name = ThisCat;
-            App.Model.SaveChanges();
-        }
-
-        private void DeleteCat()
-        {
-            var catToDel = (from cat in App.Model.Categories
-                         where cat.Name == ThisCat
-                         select cat).FirstOrDefault();
-            App.Model.Categories.Remove(catToDel);
-            App.Model.SaveChanges();
-        }
-
-        private void ButtonsMngmt()
-        {
-            DisableInput(false);
-            if (CatExists())
-            {
-                DisableUpdate(false);
-                DisableDelete(false);
-            }
-            else 
-            {
-                DisableAdd(false);
-            }
-        }
-
-        private bool CatExists()
-        {
-            foreach (Category c in App.Model.Categories)
-                return c.Name.ToUpper().Equals(thisCat.ToUpper());
-            return false;
-        }
-
-        private bool IsCatNull(Category c)
-        {
-            return c == null;
-        }
-
-        //private List<int>  NbBooksByCat()
-        //{
-        //    List<int> list = new List<int>();
-        //    foreach (Category cat in App.Model.Categories)
-        //        list.Add(cat.Books.Count());
-        //    return list;
-        //}
-
-        private void Reset()
-        {
-            ThisCat = "";
-            DisableBtnsAndInput();
-            selectedCategory = null;
-            Category = new ObservableCollection<Category>(App.Model.Categories);
-        }
-
-        private void DisableBtnsAndInput()
-        {
-            DisableAdd(true);
-            DisableUpdate(true);
-            DisableDelete(true);
-            DisableCancel(true);
-            DisableInput(true);
-        }
-
-        private void DisableInput(bool b) {boolInput = b;}
-
-        private void DisableAdd(bool b) { boolAdd = b; }
-
-        private void DisableUpdate(bool b) { boolUpdate = b; }
-
-        private void DisableDelete(bool b) { boolDelete = b; }
-
-        private void DisableCancel(bool b) { boolCancel = b; }
+        private void EnableDelete(bool b) { boolDelete = b; }
     }
 }

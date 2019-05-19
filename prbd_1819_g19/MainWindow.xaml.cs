@@ -126,37 +126,13 @@ namespace prbd_1819_g19
             });
         }
 
-        //private void NewCategory()
-        //{
-        //    App.Register(this, AppMessages.MSG_ADD_CAT, () =>
-        //    {
-        //        var cat = App.Model.Categories.Create();
-        //        App.Model.Categories.Add(cat);
-        //        AddTabCat(new ObservableCollection<Category>(App.Model.Categories), true);
-        //    });
-        //}
-
-        //private void UpdateCategory()
-        //{
-        //    App.Register<Category>(this, AppMessages.MSG_UPDATE_CAT, newCat =>
-        //    {
-        //        App.Model.Categories.Add(newCat);
-        //        AddTabCat(new ObservableCollection<Category>(App.Model.Categories), false);
-        //    });
-        //}
-
         private void DeleteCategory()
         {
-            App.Register<Category>(this, AppMessages.MSG_DEL_CAT, catToDel =>
+            App.Register<Category>(this, AppMessages.MSG_CAT_DEL, catToDel =>
             {
                 App.Model.Categories.Remove(catToDel);
                 AddTabCat(new ObservableCollection<Category>(App.Model.Categories), false);
             });
-        }
-
-        private void CancelCategory()
-        {
-            CloseTab();
         }
 
         private void AddTabCat(ObservableCollection<Category> list, bool isNew)

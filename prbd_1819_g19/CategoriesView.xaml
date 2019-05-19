@@ -9,23 +9,23 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d" 
         d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <Grid>
         <DataGrid x:Name="dataGrid" Margin="0,0,0,250" SelectedItem="{Binding SelectedCategory}" 
                   ItemsSource="{Binding Category}" IsEnabled="{Binding ReadMode}" 
                   AutoGenerateColumns="False" IsReadOnly="True"  SelectionMode="Single">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding DisplayCat}" 
+                    <i:InvokeCommandAction Command="{Binding SetThisCat}" 
                                            CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItem}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Category" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="#Books" Binding="{Binding Books.Count}"/>
             </DataGrid.Columns>
-            
+
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
@@ -38,9 +38,11 @@
             </DataGrid.RowStyle>
         </DataGrid>
 
-        <TextBox HorizontalAlignment="Left" Height="20" Margin="0,220,0,0" TextWrapping="Wrap"  
-                 Text="{Binding CurrentCat, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding BoolInput}"  
-                 VerticalAlignment="Top" Width="305"/>
+        <f:ValidatedField HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="305" Margin="0,220,0,0">
+            <TextBox TextWrapping="Wrap" Text="{Binding ThisCat, UpdateSourceTrigger=PropertyChanged}" 
+                     IsEnabled="{Binding BoolInput}" Margin="10,0,0,0" />
+        </f:ValidatedField>
+
         <Button Content="Add" HorizontalAlignment="Left" Margin="314,219,0,0" VerticalAlignment="Top" Width="50" 
                 Command="{Binding Add}" IsEnabled="{Binding BoolAdd, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Content="Update" HorizontalAlignment="Left" Margin="373,219,0,0" VerticalAlignment="Top" Width="50" 
@@ -48,6 +50,6 @@
         <Button Content="Delete" HorizontalAlignment="Left" Margin="432,219,0,0" VerticalAlignment="Top" Width="50" 
                 Command="{Binding Delete}" IsEnabled="{Binding BoolDelete, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="501,219,0,0" VerticalAlignment="Top" Width="50" 
-                Command="{Binding Cancel}" IsEnabled="{Binding BoolCancel, UpdateSourceTrigger=PropertyChanged}"/>
+                Command="{Binding Cancel}" IsEnabled="True"/>
     </Grid>
 </f:UserControlBase>

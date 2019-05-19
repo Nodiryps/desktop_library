@@ -20,14 +20,13 @@ namespace prbd_1819_g19
         MSG_CLOSE_TAB,
         MSG_BOOK_DETAIL,
         MSG_ADD_BOOK_TO_BASKET,
-        MSG_ADD_CAT,
-        MSG_UPDATE_CAT,
-        MSG_DEL_CAT,
         MSG_DISPLAY_MEMBER,
         MSG_DISPLAY_CAT,
         MSG_DISPLAY_BOOK,
         MSG_BOOK_CHANGED,
-        MSG_ISBN_CHANGED
+        MSG_ISBN_CHANGED,
+        MSG_CAT_CHANGED,
+        MSG_CAT_DEL
     }
 
     public partial class App : ApplicationBase
@@ -48,6 +47,11 @@ namespace prbd_1819_g19
         public static bool IsAdmin()
         {
             return CurrentUser.Role == Role.Admin;
+        }
+
+        public static bool IsUserLogged()
+        {
+            return CurrentUser != null;
         }
     }
 }

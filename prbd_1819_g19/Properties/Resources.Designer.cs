@@ -61,6 +61,15 @@ namespace prbd_1819_g19.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à already exists.
+        /// </summary>
+        public static string Error_AlreadyExists {
+            get {
+                return ResourceManager.GetString("Error_AlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à does not exist.
         /// </summary>
         public static string Error_DoesNotExist {

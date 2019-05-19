@@ -44,8 +44,6 @@ namespace prbd_1819_g19
             { // si aucune erreurs
                 var member = App.Model.Users.Find(UserId()); // on recherche le membre 
                 App.CurrentUser = member; // le membre connecté devient le membre courant
-                
-                
 
                 if (member.Role == Role.Admin)
                 {
@@ -53,7 +51,6 @@ namespace prbd_1819_g19
                     ShowMainView(); // ouverture de la fenêtre principale
                     Close(); // fermeture de la fenêtre de login
                 }
-
                 else
                 {
                     ShowMainView(); // ouverture de la fenêtre principale

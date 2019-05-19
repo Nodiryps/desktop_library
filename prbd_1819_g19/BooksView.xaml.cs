@@ -18,43 +18,22 @@ namespace prbd_1819_g19
         public BooksView()
         {
             InitializeComponent();
-            if (DesignerProperties.GetIsInDesignMode(this))
-                return;
+            //if (DesignerProperties.GetIsInDesignMode(this))
+            //    return;
 
             DataContext = this;
 
             Books = new ObservableCollection<Book>(App.Model.Books);
             Categories = new ObservableCollection<Category>(App.Model.Categories);
 
-            ClearFilter = new RelayCommand(() =>
-            {
-                Filter = "";
-            });
+            ClearFilter = new RelayCommand(() => { Filter = ""; });
+            NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); });
+            DisplayBookDetails = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book); });
+            CategoryFilter = new RelayCommand<Category>(cat=> { ApplyComboBoxFilter(); });
+            AddToBasket = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET); });
 
-            NewBooks = new RelayCommand(() =>
-            {
-                App.NotifyColleagues(AppMessages.MSG_NEW_BOOK);
-            });
-
-
-            DisplayBookDetails = new RelayCommand<Book>(book =>
-            {
-                App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book);
-            });
-
-            //SpectacleDetails = new RelayCommand<Show>(s => { App.Messenger.NotifyColleagues(App.MSG_DISPLAY_BOOK, s); });
-
-            CategoryFilter = new RelayCommand<Category>(cat=>
-            {
-                ApplyComboBoxFilter();
-            });
-
-            AddToBasket = new RelayCommand<Book>(book => 
-            {
-                App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET);
-            });
-
-            App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { ApplyFilterAction(); }); ;
+            App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { ApplyFilterAction(); });
+            App.Register(this, AppMessages.MSG_CAT_CHANGED, () => { Categories = new ObservableCollection<Category>(App.Model.Categories); });
         }
 
 
@@ -123,6 +102,14 @@ namespace prbd_1819_g19
                 Books = new ObservableCollection<Book>(App.Model.Books);
 
             });
+        }
+
+        private void RefreshCategories()
+        {
+            App.Register(this, AppMessages.MSG_CAT_CHANGED, () =>
+             {
+                 Categories = new ObservableCollection<Category>(App.Model.Categories);
+             });
         }
     }
 }

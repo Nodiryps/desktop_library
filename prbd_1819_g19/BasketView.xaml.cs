@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,78 @@ namespace prbd_1819_g19
         public BasketView()
         {
             InitializeComponent();
+            DataContext = this;
+            Items = new ObservableCollection<RentalItem>();
+            Users = new ObservableCollection<User>(App.Model.Users);
+            addBook();
+
+            //ConfirmBtn();
+            }
+
+        public User SelectedUser;
+
+        private ObservableCollection<User> users;
+        public ObservableCollection<User> Users
+        {
+            get => users;
+            set => SetProperty<ObservableCollection<User>>(ref users, value, () => { });
         }
+
+        private ObservableCollection<RentalItem> items;
+        public ObservableCollection<RentalItem> Items
+        {
+            get => items;
+            set => SetProperty<ObservableCollection<RentalItem>>(ref items, value, () => { });
+        }
+        
+        public void addBook() {
+            foreach(var b in App.Model.RentalItems)
+            {
+                Items.Add(b);
+            }
+        }
+       
+
+        
+
+        public ICommand Confirm { get; set; }
+        public ICommand Clear { get; set; }
+        public ICommand Delete { get; set; }
+
+        private void ConfirmBtn()
+        {
+            Confirm = new RelayCommand(ConfirmRental);
+        }
+
+        private void ConfirmRental()
+        {
+           // App.CurrentUser.Basket.Confirm();
+        }
+
+        //
+
+        private void ClearBtn()
+        {
+            Clear = new RelayCommand(ClearRental);
+        }
+
+        private void ClearRental()
+        {
+           // App.CurrentUser.Basket.Confirm();
+        }
+
+        //
+
+        private void DeleteBtn()
+        {
+            Delete = new RelayCommand(DeleteRental);
+        }
+
+        private void DeleteRental()
+        {
+            //App.CurrentUser.Basket.RemoveItem();
+        }
+
+
     }
 }

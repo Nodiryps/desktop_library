@@ -10,7 +10,7 @@ namespace prbd_1819_g19
         [Key]
         public int BookCopyId { get; set; }
         public DateTime? AcquisitionDate { get; set; }
-        public virtual Book RentedBy { get; }
+        public virtual User RentedBy { get; }
         public virtual Book Book { get; set; }
         public virtual ICollection<RentalItem> RentalItems { get; set; }
 
@@ -18,7 +18,7 @@ namespace prbd_1819_g19
 
         public override string ToString()
         {
-            return Book.Title.ToString() + " (copy)";
+            return Book.Title.ToString();
         }
     }
 }

@@ -13,12 +13,12 @@
             <RowDefinition Height="59*"/>
             <RowDefinition Height="61*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding MessagesView}" Margin="14,76,10,96.667" 
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Items}" Margin="14,76,10,10" 
                       SelectedItem="{Binding SelectedMessage}" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding ReadMode}" SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Title" Binding="{Binding Path=DateTime, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}" SortDirection="Descending"/>
-                <DataGridTextColumn Header="Author" Binding="{Binding Path=Author.Pseudo}" />
-                <DataGridTextColumn Header="Actions" Binding="{Binding Path=Author.Pseudo}" />
+                <DataGridTextColumn Header="Title" Binding="{Binding BookCopy}" SortDirection="Descending"/>
+                <!--<DataGridTextColumn Header="Author" Binding="{Binding Path=Author.Pseudo}" />
+                <DataGridTextColumn Header="Actions" Binding="{Binding Path=Author.Pseudo}" />-->
             </DataGrid.Columns>
         </DataGrid>
 
@@ -33,7 +33,7 @@
 
             <Label Content="This Basket is for :" VerticalAlignment="Center" Grid.Row="1" />
             <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Margin="5" >
-                <ComboBox ItemsSource="{Binding Members}" DisplayMemberPath="Pseudo" SelectedItem="{Binding Author}" Margin="41,0,0,0" />
+                <ComboBox ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" Margin="41,0,0,0" />
             </f:ValidatedField>
 
         </Grid>

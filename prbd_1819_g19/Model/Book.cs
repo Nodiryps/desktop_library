@@ -30,7 +30,6 @@ namespace prbd_1819_g19
             if (!Categories.Contains(category))
             {
                 Categories.Add(category);
-                category.Books.Add(this);
             }
                 
         }
@@ -42,7 +41,6 @@ namespace prbd_1819_g19
                     if (!Categories.Contains(category))
                     {
                         AddCategory(category);
-                        category.Books.Add(this);
                     }
                         
         }

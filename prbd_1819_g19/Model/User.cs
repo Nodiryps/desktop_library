@@ -51,6 +51,7 @@ namespace prbd_1819_g19
 
             if (copy != null)
                 ri = Basket.RentCopy(copy);
+            Model.SaveChanges();
             return ri;
         }
 

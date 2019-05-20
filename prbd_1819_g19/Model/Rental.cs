@@ -33,7 +33,7 @@ namespace prbd_1819_g19
                 item.Rental = this;
                 Items.Add(item);
                 copy.RentalItems.Add(item);
-                Model.SaveChanges();
+                App.Model.SaveChanges();
             }
             return item;
         }
@@ -62,12 +62,12 @@ namespace prbd_1819_g19
 
         public void Confirm()
         {
-            foreach (var item in Items)
-                Model.RentalItems.Add(item);
-            RentalDate = DateTime.Now;
-            Model.Rentals.Add(this);
+            //foreach (var item in Items)
+            //    Model.RentalItems.Add(item);
+            //RentalDate = DateTime.Now;
+            //Model.Rentals.Add(this);
 
-            Model.SaveChanges();
+            //Model.SaveChanges();
         }
 
         public void Clear()

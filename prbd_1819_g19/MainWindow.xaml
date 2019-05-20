@@ -11,23 +11,33 @@
         
         mc:Ignorable="d"
         Title="My Social Network" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Menu>
+            <MenuItem Header="File" Command="{Binding File}" CommandParameter="TestDataGridReadOnly"></MenuItem>
+            <MenuItem Header="Logout" Command="{Binding Logout}" CommandParameter="TestDataGridReadOnly"></MenuItem>
+        </Menu>
+        <TabControl x:Name="tabControl" Margin="10,30,10,10" Grid.Row="0">
+            <TabItem x:Name="booksTab" Header="Books">
+                <ContentControl>
+                    <localBooks:BooksView/>
+                </ContentControl>
+            </TabItem>
+            <TabItem x:Name="catTab" Header="Categories">
+                <ContentControl>
+                    <localCat:CategoriesView/>
+                </ContentControl>
+            </TabItem>
+            <TabItem x:Name="basketTab" Header="Basket">
+                <ContentControl>
+                    <localBasket:BasketView/>
+                </ContentControl>
+            </TabItem>
+            <!--<TabItem x:Name="RentalTab" Header="Rentals">
+                <ContentControl>
+                    <localBasket:RentalsView/>
+                </ContentControl>
+            </TabItem>-->
 
-    <TabControl x:Name="tabControl" Margin="10" Grid.Row="1">
-        <TabItem x:Name="booksTab" Header="Books">
-            <ContentControl>
-                <localBooks:BooksView/>
-            </ContentControl>
-        </TabItem>
-        <TabItem x:Name="catTab" Header="Categories">
-            <ContentControl>
-                <localCat:CategoriesView/>
-            </ContentControl>
-        </TabItem>
-        <TabItem x:Name="basketTab" Header="Basket">
-            <ContentControl>
-                <localBasket:BasketView/>
-            </ContentControl>
-        </TabItem>
-
-    </TabControl>
+        </TabControl>
+    </Grid>
 </f:WindowBase>

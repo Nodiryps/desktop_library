@@ -24,13 +24,14 @@ namespace prbd_1819_g19
     public partial class MainWindow : WindowBase
     {
         public ICommand SandBox { get; set; }
+        public ICommand Logout { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
             WindowBase();
-
+            LogOut();
             //BookDetail();
             CloseTab();
             AddBookToBasket();
@@ -63,6 +64,15 @@ namespace prbd_1819_g19
             //});
 
 
+        }
+
+        private void LogOut()
+        {
+            Logout = new RelayCommand(() => {
+                App.CurrentUser = null;
+                new LoginView().Show();
+                Close();
+            });
         }
 
         private void ISBNChanged()

@@ -72,6 +72,7 @@ namespace prbd_1819_g19
                 if (App.IsAdmin())
                 {
                     EnableBtnsAndInput();
+                    
                     AddBtn();
                     UpdateBtn();
                     DeleteBtn();
@@ -104,14 +105,16 @@ namespace prbd_1819_g19
 
         private bool AddBtnCondition()
         {
-            return !IsNullOrEmpty(ThisCat) && !IsNullOrEmpty(SelectedCategory.Name); 
+            //return IsNullOrEmpty(ThisCat) && IsNullOrEmpty(SelectedCategory.Name); 
+            return true;
         }
 
         private void UpdateBtn()
         {
             Update = new RelayCommand(UpdateCat, () =>
             {
-                return !IsNullOrEmpty(SelectedCategory.Name);
+                //return IsNullOrEmpty(SelectedCategory.Name);
+                return true;
             });
         }
 
@@ -119,7 +122,9 @@ namespace prbd_1819_g19
         {
              Delete = new RelayCommand(DeleteCat, () =>
             {
-                return !IsNullOrEmpty(SelectedCategory.Name);
+                //return IsNullOrEmpty(SelectedCategory.Name);
+                return true;
+
             });
         }
 
@@ -215,19 +220,22 @@ namespace prbd_1819_g19
         {
             EnableInput(true);
 
-            if (!IsNullOrEmpty(ThisCat))
-            {
-                if (!ThisCatExists())
-                {
-                    EnableAdd(true);
-                }
-                else
-                {
-                    EnableUpdate(true);
-                    EnableDelete(true);
-                }
-            }
-            
+            //if (!IsNullOrEmpty(ThisCat))
+            //{
+                //if (ThisCatExists())
+                //{
+                //    EnableAdd(true);
+                //}
+                //else
+                //{
+                //    EnableUpdate(true);
+                //    EnableDelete(true);
+                //}
+            EnableAdd(true);
+            EnableUpdate(true);
+            EnableDelete(true);
+            //}
+
         }
 
         public bool BoolInput

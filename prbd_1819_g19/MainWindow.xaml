@@ -7,6 +7,7 @@
         xmlns:localBooks="clr-namespace:prbd_1819_g19"
         xmlns:localCat="clr-namespace:prbd_1819_g19"
         xmlns:localBasket="clr-namespace:prbd_1819_g19"
+        xmlns:localRent="clr-namespace:prbd_1819_g19"
         xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
         
         mc:Ignorable="d"
@@ -32,11 +33,11 @@
                     <localBasket:BasketView/>
                 </ContentControl>
             </TabItem>
-            <!--<TabItem x:Name="RentalTab" Header="Rentals">
+            <TabItem x:Name="RentalTab" Header="Rentals">
                 <ContentControl>
-                    <localBasket:RentalsView/>
+                    <localRent:Rentals/>
                 </ContentControl>
-            </TabItem>-->
+            </TabItem>
 
         </TabControl>
     </Grid>

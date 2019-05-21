@@ -13,21 +13,20 @@
             <RowDefinition Height="51*"/>
             <RowDefinition Height="44*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding MessagesView}" Margin="10,10,10,123" 
-                      SelectedItem="{Binding SelectedMessage}" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding ReadMode}" SelectionMode="Single">
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Rentalz}" Margin="10,10,10,123" 
+                      SelectedItem="{Binding SelectedRental}" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding ReadMode}" SelectionMode="Single">
             <DataGrid.Columns>
-                
-                <DataGridTextColumn Header="Rental Date" Binding="{Binding Path=DateTime, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}" SortDirection="Descending"/>
-                <DataGridTextColumn Header="User" Binding="{Binding Path=Author.Pseudo}" />
-                <DataGridTextColumn Header="#Items" Binding="{Binding Path=Author.Pseudo}" />
-                <DataGridTextColumn Header="#Open" Binding="{Binding Path=Author.Pseudo}" />
+                <DataGridTextColumn Header="Rental Date" Binding="{Binding RentalDate, StringFormat=\{0:dd/MM/yyyy\}}"/>
+                <DataGridTextColumn Header="User" Binding="{Binding User}" />
+                <DataGridTextColumn Header="#Items" Binding="{Binding Items.Count}" />
+                <DataGridTextColumn Header="#Open" Binding="{Binding NumOpenItems}" />
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="dataGrid2" ItemsSource="{Binding MessagesView}" Margin="10,241,10,171" 
+        <DataGrid x:Name="dataGrid2" ItemsSource="{Binding Items}" Margin="10,241,10,171" 
                       SelectedItem="{Binding SelectedMessage}" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding ReadMode}" SelectionMode="Single" Grid.RowSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Book" Binding="{Binding Path=DateTime, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}" SortDirection="Descending"/>
-                <DataGridTextColumn Header="Return Date" Binding="{Binding Path=Author.Pseudo}" />
+                <DataGridTextColumn Header="Book" Binding="{Binding BookCopy}" />
+                <DataGridTextColumn Header="Return Date" Binding="{Binding ReturnDate, StringFormat=\{0:dd/MM/yyyy\}}" SortDirection="Descending"/>
                 <DataGridTextColumn Header="Actions" Binding="{Binding Path=Author.Pseudo}" />
             </DataGrid.Columns>
         </DataGrid>

@@ -118,7 +118,7 @@ namespace prbd_1819_g19
             });
         }
 
-        private void DeleteBtn()
+       private void DeleteBtn()
         {
              Delete = new RelayCommand(DeleteCat, () =>
             {
@@ -126,7 +126,7 @@ namespace prbd_1819_g19
                 return true;
 
             });
-        }
+        } 
 
         private void CancelBtn()
         {

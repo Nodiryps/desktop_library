@@ -116,7 +116,7 @@ namespace prbd_1819_g19 {
             return newUser;
         }
 
-        public Book CreateBook(string isbn, string title, string author, string editor, int numCopies = 1)
+        public Book CreateBook(string isbn, string title, string author, string editor, int numCopies = 100)
         {
             Book newBook = null;
             if (numCopies > 0 && (isbn != "" || title != "" || author != "" || editor != ""))

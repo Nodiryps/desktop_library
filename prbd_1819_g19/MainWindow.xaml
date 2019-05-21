@@ -11,13 +11,17 @@
         xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
         
         mc:Ignorable="d"
-        Title="My Social Network" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+        Title="My Social Network" Height="714" Width="1086.5" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Menu>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="357*"/>
+            <RowDefinition Height="212*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.RowSpan="2">
             <MenuItem Header="File" Command="{Binding File}" CommandParameter="TestDataGridReadOnly"></MenuItem>
             <MenuItem Header="Logout" Command="{Binding Logout}" CommandParameter="TestDataGridReadOnly"></MenuItem>
         </Menu>
-        <TabControl x:Name="tabControl" Margin="10,30,10,10" Grid.Row="0">
+        <TabControl x:Name="tabControl" Margin="10,30,10,10" Grid.Row="0" Grid.RowSpan="2">
             <TabItem x:Name="booksTab" Header="Books">
                 <ContentControl>
                     <localBooks:BooksView/>

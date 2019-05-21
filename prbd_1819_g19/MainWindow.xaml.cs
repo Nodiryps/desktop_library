@@ -34,7 +34,6 @@ namespace prbd_1819_g19
             LogOut();
             //BookDetail();
             CloseTab();
-            AddBookToBasket();
             NewBook();
             //NewCategory();
             DisplayBook();
@@ -124,17 +123,7 @@ namespace prbd_1819_g19
             });
         }
 
-        private void AddBookToBasket()
-        {
-            App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
-            {
-                User currUser = App.CurrentUser;
-                //if (currUser.Basket != null)
-                    currUser.AddToBasket(book);
-                //else
-                //    currUser.CreateBasket();
-            });
-        }
+       
 
         private void DeleteCategory()
         {

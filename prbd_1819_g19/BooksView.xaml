@@ -81,7 +81,8 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                            <Button Content="Add to Basket" x:Name="btnAddToBasket" Command="{Binding AddToBasket}" CommandParameter="{Binding}" Margin="5"/>
+                            <Button Name="add" Content="Add to Basket" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.AddToBasket}"
+                                CommandParameter="{Binding}" Margin="5"/>
                         </StackPanel>
                     </Border>
 

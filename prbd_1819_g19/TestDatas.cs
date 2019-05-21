@@ -75,21 +75,21 @@ namespace prbd_1819_g19
                             title: "Java for Dummies",
                             author: "Duchmol",
                             editor: "EPFC",
-                            numCopies: 1);
+                            numCopies: 50);
             book1.PicturePath = "123.jpg";
             book2 = model.CreateBook(
                 isbn: "456",
                 title: "Le Seigneur des Anneaux",
                 author: "Tolkien",
                 editor: "Bourgeois",
-                numCopies: 1);
+                numCopies: 50);
             book2.PicturePath = "456.jpg";
             book3 = model.CreateBook(
                 isbn: "789",
                 title: "Les misérables",
                 author: "Victor Hugo",
                 editor: "XO",
-                numCopies: 1);
+                numCopies: 50);
             book3.PicturePath = "789.jpg";
             books.AddRange(new Book[] { book1, book2, book3 });
         }

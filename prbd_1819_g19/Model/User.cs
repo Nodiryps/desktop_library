@@ -35,7 +35,7 @@ namespace prbd_1819_g19
             Rental newRental = Model.Rentals.Create();
             newRental.User = this;
             Model.Rentals.Add(newRental);
-            Rentals.Add(newRental);
+            //Rentals.Add(newRental);
 
             Model.SaveChanges();
             return newRental;
@@ -50,8 +50,8 @@ namespace prbd_1819_g19
             BookCopy copy = book.GetAvailableCopy();
 
             if (copy != null)
-                ri = Basket.RentCopy(copy);
-            Model.SaveChanges();
+                Basket.RentCopy(copy);
+                Model.SaveChanges();
             return ri;
         }
 

@@ -24,22 +24,46 @@ namespace prbd_1819_g19
     {
         public BasketView()
         {
+           
             InitializeComponent();
             DataContext = this;
             Items = new ObservableCollection<RentalItem>();
             Users = new ObservableCollection<User>(App.Model.Users);
             addBook();
+            Delete = new RelayCommand(DeleteRental, () =>{ return true; });
+            UserFilter = new RelayCommand<RentalItem>(r => { selectByUser(); });
+            AddBookToBasket();
 
             //ConfirmBtn();
-            }
+        }
 
-        public User SelectedUser;
+        public ICommand UserFilter { get; set; }
+
+        public User selectedUser;
+        public User SelectedUser
+        {
+
+            get => selectedUser;
+            set => SetProperty<User>(ref selectedUser, value);
+        }
+
 
         private ObservableCollection<User> users;
         public ObservableCollection<User> Users
         {
             get => users;
-            set => SetProperty<ObservableCollection<User>>(ref users, value, () => { });
+            set => SetProperty<ObservableCollection<User>>(ref users, value, () => {});
+        }
+
+        
+
+
+
+        public RentalItem selectedItem;
+        public RentalItem SelectedItem
+        {
+            get => selectedItem;
+            set => SetProperty<RentalItem>(ref selectedItem, value);
         }
 
         private ObservableCollection<RentalItem> items;
@@ -53,7 +77,60 @@ namespace prbd_1819_g19
             foreach(var b in App.Model.RentalItems)
             {
                 Items.Add(b);
+               
+                
             }
+        }
+
+        private void AddBookToBasket()
+        {
+            App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
+            {
+                
+                User currUser = App.CurrentUser;
+                //if (currUser.Basket != null)
+                 currUser.AddToBasket(book);
+
+               
+               
+                //else
+                //    currUser.CreateBasket();
+            });
+            
+        }
+
+        public void  selectByUser() {
+            
+            var res = new ObservableCollection<RentalItem>();
+
+            if (SelectedUser != null)
+            {
+                var v = (from r in App.Model.RentalItems
+                         where SelectedUser.UserId == r.Rental.User.UserId
+                         select r);
+                if (v != null)
+                {
+                    foreach (var b in v)
+                    {
+                       res.Add(b);
+
+
+                    }
+
+                    Items = res;
+                }
+
+
+                App.Model.SaveChanges();
+            }
+
+                
+           // Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+
+
+        
+
+
         }
        
 
@@ -87,14 +164,44 @@ namespace prbd_1819_g19
 
         //
 
-        private void DeleteBtn()
-        {
-            Delete = new RelayCommand(DeleteRental);
-        }
+
+        //private void DeleteBtn()
+        //{
+        //     Console.Write("DSFDSJFSDLKF");
+
+        //    Delete = new RelayCommand(DeleteRental, () =>
+        //    {
+               
+        //        //return IsNullOrEmpty(SelectedCategory.Name);
+        //        return true;
+
+        //    });
+        //}
 
         private void DeleteRental()
         {
-            //App.CurrentUser.Basket.RemoveItem();
+            var v = (from r in App.Model.RentalItems
+                     
+                            where selectedItem.RentalItemId == r.RentalItemId
+                            select r).FirstOrDefault();
+            
+            if (v != null)
+                App.Model.RentalItems.Remove(v);
+            else
+                AddError("DeleteCat", Properties.Resources.Error_Required);
+            App.Model.SaveChanges();
+            
+            Reset();
+            //App.NotifyColleagues(AppMessages.MSG_CAT_DEL);
+
+
+        }
+
+        private void Reset()
+        {
+         
+            selectedItem = null;
+            Items = new ObservableCollection<RentalItem>(App.Model.RentalItems);
         }
 
 

@@ -75,21 +75,21 @@ namespace prbd_1819_g19
                             title: "Java for Dummies",
                             author: "Duchmol",
                             editor: "EPFC",
-                            numCopies: 50);
+                            numCopies: 1);
             book1.PicturePath = "123.jpg";
             book2 = model.CreateBook(
                 isbn: "456",
                 title: "Le Seigneur des Anneaux",
                 author: "Tolkien",
                 editor: "Bourgeois",
-                numCopies: 50);
+                numCopies: 1);
             book2.PicturePath = "456.jpg";
             book3 = model.CreateBook(
                 isbn: "789",
                 title: "Les misérables",
                 author: "Victor Hugo",
                 editor: "XO",
-                numCopies: 50);
+                numCopies: 1);
             book3.PicturePath = "789.jpg";
             books.AddRange(new Book[] { book1, book2, book3 });
         }
@@ -114,6 +114,10 @@ namespace prbd_1819_g19
         private void testBookCopies()
         {
             Console.WriteLine($"Ajout de 3 copies à book3");
+            //Les deux lignes suivantes ne doivent pas rester la
+            book1.AddCopies(3, new DateTime(2018, 12, 31, 17, 30, 0));
+            book2.AddCopies(3, new DateTime(2018, 12, 31, 17, 30, 0));
+            //
             book3.AddCopies(3, new DateTime(2018, 12, 31, 17, 30, 0));
             printList<BookCopy>("book3.Copies", book3.Copies);
             Debug.Assert(book3.NumAvailableCopies == 4);

@@ -81,6 +81,8 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
+                            <TextBlock FontSize="10" Width="80" TextAlignment="Center" Text="Copies: " />
+                            <TextBlock FontSize="10" Width="80" TextAlignment="Center" Text="{Binding NumAvailableCopies}" />
                             <Button Name="add" Content="Add to Basket" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.AddToBasket}"
                                 CommandParameter="{Binding}" Margin="5"/>
                         </StackPanel>

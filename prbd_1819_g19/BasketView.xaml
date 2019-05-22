@@ -63,7 +63,7 @@
             </f:ValidatedField>
 
         </Grid>
-        <Button Content="Confirm" Margin="0,0,698,63" VerticalAlignment="Bottom" Command="{Binding ConfirmCommand}" HorizontalAlignment="Right" Width="75" Grid.Row="1" Height="19"/>
-        <Button Content="Clear" Margin="0,0,604,63" VerticalAlignment="Bottom" Command="{Binding ClearCommand}" HorizontalAlignment="Right" Width="75" Grid.Row="1" Height="20"/>
+        <Button Content="Confirm" Margin="0,0,698,63" VerticalAlignment="Bottom" Command="{Binding Confirm}" HorizontalAlignment="Right" Width="75" Grid.Row="1" Height="19"/>
+        <Button Content="Clear" Margin="0,0,604,63" VerticalAlignment="Bottom" Command="{Binding Clear}" HorizontalAlignment="Right" Width="75" Grid.Row="1" Height="20"/>
     </Grid>
 </f:UserControlBase>

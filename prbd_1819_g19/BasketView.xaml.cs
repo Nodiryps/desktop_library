@@ -29,9 +29,11 @@ namespace prbd_1819_g19
             DataContext = this;
             Items = new ObservableCollection<RentalItem>();
             Users = new ObservableCollection<User>(App.Model.Users);
-            addBook();
+            AddBook();
             Delete = new RelayCommand(DeleteRental, () =>{ return true; });
-            UserFilter = new RelayCommand<RentalItem>(r => { selectByUser(); });
+            Clear = new RelayCommand(ClearRental, () => { return true; });
+            Confirm = new RelayCommand(ConfirmRental, () => { return true; });
+            UserFilter = new RelayCommand<RentalItem>(r => { SelectByUser(); });
             AddBookToBasket();
 
             //ConfirmBtn();
@@ -73,13 +75,33 @@ namespace prbd_1819_g19
             set => SetProperty<ObservableCollection<RentalItem>>(ref items, value, () => { });
         }
         
-        public void addBook() {
-            foreach(var b in App.Model.RentalItems)
+        private void AddBook() {
+                    
+            //Si l'utilisateur courant n'est pas Admin
+                    if (App.CurrentUser.Role != 0)
+                    {
+                    var res = new ObservableCollection<RentalItem>();
+                    var v = (from r in App.Model.RentalItems
+                                 where App.CurrentUser.UserId == r.Rental.User.UserId
+                                 select r);
+                        if (v != null)
+                        {
+                            foreach (var c in v)
+                            {
+                                res.Add(c);
+                            }
+                            Items = res;
+                        }
+                    }
+            //Si l'utilisateur courant est un Admin
+            else
             {
-                Items.Add(b);
-               
-                
-            }
+                    foreach (var b in App.Model.RentalItems)
+                    {
+                    Items.Add(b);
+                    }
+                }
+            App.Model.SaveChanges();
         }
 
         private void AddBookToBasket()
@@ -99,38 +121,36 @@ namespace prbd_1819_g19
             
         }
 
-        public void  selectByUser() {
-            
-            var res = new ObservableCollection<RentalItem>();
+        public void  SelectByUser()
+        {
+            //Fonctionnalité uniquement pour l'admin
 
-            if (SelectedUser != null)
-            {
-                var v = (from r in App.Model.RentalItems
-                         where SelectedUser.UserId == r.Rental.User.UserId
-                         select r);
-                if (v != null)
+            //if(App.CurrentUser.Role == 0)
+            //{
+                var res = new ObservableCollection<RentalItem>();
+
+                if (SelectedUser != null)
                 {
-                    foreach (var b in v)
+                    var v = (from r in App.Model.RentalItems
+                             where SelectedUser.UserId == r.Rental.User.UserId
+                             select r);
+                    if (v != null)
                     {
-                       res.Add(b);
+                        foreach (var b in v)
+                        {
+                            res.Add(b);
 
 
+                        }
+
+                        Items = res;
                     }
 
-                    Items = res;
+
+                    App.Model.SaveChanges();
                 }
 
-
-                App.Model.SaveChanges();
-            }
-
-                
-           // Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
-
-
-        
-
-
+            //}
         }
        
 
@@ -147,19 +167,21 @@ namespace prbd_1819_g19
 
         private void ConfirmRental()
         {
-           // App.CurrentUser.Basket.Confirm();
+           App.CurrentUser.Basket.Confirm();
         }
 
         //
 
-        private void ClearBtn()
-        {
-            Clear = new RelayCommand(ClearRental);
-        }
+        //private void ClearBtn()
+        //{
+        //    Clear = new RelayCommand(ClearRental);
+        //}
 
         private void ClearRental()
         {
-           // App.CurrentUser.Basket.Confirm();
+            if(App.CurrentUser.Role != 0)
+            Items.Clear();
+            App.CurrentUser.ClearBasket();
         }
 
         //
@@ -192,8 +214,6 @@ namespace prbd_1819_g19
             App.Model.SaveChanges();
             
             Reset();
-            //App.NotifyColleagues(AppMessages.MSG_CAT_DEL);
-
 
         }
 
@@ -203,7 +223,5 @@ namespace prbd_1819_g19
             selectedItem = null;
             Items = new ObservableCollection<RentalItem>(App.Model.RentalItems);
         }
-
-
     }
 }

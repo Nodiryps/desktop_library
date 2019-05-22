@@ -106,11 +106,11 @@ namespace prbd_1819_g19.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Negatif Number !!!!!!!!!!!!!!!!!.
+        ///   Recherche une chaîne localisée semblable à must be positive.
         /// </summary>
-        public static string Error_NombreNegatif {
+        public static string Error_NbCopiesNotValid {
             get {
-                return ResourceManager.GetString("Error_NombreNegatif", resourceCulture);
+                return ResourceManager.GetString("Error_NbCopiesNotValid", resourceCulture);
             }
         }
         

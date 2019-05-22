@@ -99,8 +99,8 @@
                    RenderOptions.BitmapScalingMode="Fant"/>
 
         <Button Content="Delete" Margin="0,0,552,19" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
-        <Label Content="Quantité" VerticalAlignment="Center" Grid.Row="1" Margin="515,246,224,14" RenderTransformOrigin="1.169,3.423" />
-        <TextBox Text="{Binding Quantité}" Grid.Row="1" VerticalAlignment="Center" Margin="576,246,194,14" RenderTransformOrigin="0.507,0.577" Height="26"/>
+        <Label Content="Quantity" VerticalAlignment="Center" Grid.Row="1" Margin="515,246,224,14" RenderTransformOrigin="1.169,3.423" />
+        <TextBox Text="{Binding Quantity}" Grid.Row="1" VerticalAlignment="Center" Margin="576,246,194,14" RenderTransformOrigin="0.507,0.577" Height="26"/>
         <Label Content="Date: " HorizontalAlignment="Left" Margin="515,217,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
         <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="571,219,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <Button Content="AddCopy" Margin="0,0,90,18" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>

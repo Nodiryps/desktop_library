@@ -33,13 +33,17 @@ namespace prbd_1819_g19
             Delete = new RelayCommand(DeleteRental, () => { return true; });
             Clear = new RelayCommand(ClearRental, () => { return true; });
             ConfirmBasket();
-             UserFilter = new RelayCommand<RentalItem>(r => { SelectByUser(); });
+            App.Register(this, AppMessages.MSG_BASKET_CHANGED, () => { Items = new ObservableCollection<RentalItem>(App.Model.RentalItems); });
+            UserFilter = new RelayCommand<RentalItem>(r => { SelectByUser(); });
             AddBookToBasket();
 
             //ConfirmBtn();
         }
 
         public ICommand UserFilter { get; set; }
+        public ICommand Confirm { get; set; }
+        public ICommand Clear { get; set; }
+        public ICommand Delete { get; set; }
 
         public User selectedUser;
         public User SelectedUser
@@ -49,15 +53,10 @@ namespace prbd_1819_g19
             set => SetProperty<User>(ref selectedUser, value);
         }
 
-
-
         public string IsAdmin
         {
             get { return HiddenShow(App.IsAdmin()); }
         }
-
-
-
 
         private String HiddenShow(bool valeur)
         {
@@ -67,8 +66,6 @@ namespace prbd_1819_g19
                 return "show";
         }
 
-
-
         private ObservableCollection<User> users;
         public ObservableCollection<User> Users
         {
@@ -76,15 +73,10 @@ namespace prbd_1819_g19
             set => SetProperty<ObservableCollection<User>>(ref users, value, () => { });
         }
 
-
         public User GetUserCurrent()
         {
             return App.CurrentUser;
         }
-
-
-
-
 
         public RentalItem selectedItem;
         public RentalItem SelectedItem
@@ -100,8 +92,8 @@ namespace prbd_1819_g19
             set => SetProperty<ObservableCollection<RentalItem>>(ref items, value, () => { });
         }
 
-        private void AddBook() {
-
+        private void AddBook()
+        {
             //Si l'utilisateur courant n'est pas Admin
             if (App.CurrentUser.Role != 0)
             {
@@ -131,69 +123,45 @@ namespace prbd_1819_g19
 
         private void ConfirmBasket()
         {
-
             Confirm = new RelayCommand(ConfirmRental, () => { return true; });
 
             App.NotifyColleagues(AppMessages.MSG_CONFIRM_BASKET, items);
+            App.NotifyColleagues(AppMessages.MSG_BASKET_CHANGED, items);
         }
 
         private void AddBookToBasket()
         {
             App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
             {
-                
+
                 User currUser = App.CurrentUser;
                 //if (currUser.Basket != null)
-                 currUser.AddToBasket(book);
-                 SelectByUser();
-
-
-
+                currUser.AddToBasket(book);
+                SelectByUser();
                 //else
                 //    currUser.CreateBasket();
             });
-            
+
         }
 
-        public void  SelectByUser()
+        public void SelectByUser()
         {
-            //Fonctionnalité uniquement pour l'admin
-
-            //if(App.CurrentUser.Role == 0)
-            //{
-                var res = new ObservableCollection<RentalItem>();
-
+            var res = new ObservableCollection<RentalItem>();
             if (SelectedUser == null)
                 selectedUser = App.CurrentUser;
-                
-                    var v = (from r in App.Model.RentalItems
-                             where SelectedUser.UserId == r.Rental.User.UserId
-                             select r);
-
-                    if (v != null)
-                    {
-                        foreach (var b in v)
-                        {
-                            res.Add(b);
-
-
-                        }
-
-                    Items = res;
-                    }
-
-                    App.Model.SaveChanges();
-                
-
-            //}
+            var v = (from r in App.Model.RentalItems
+                     where SelectedUser.UserId == r.Rental.User.UserId
+                     select r);
+            if (v != null)
+            {
+                foreach (var b in v)
+                {
+                    res.Add(b);
+                }
+                Items = res;
+            }
+            App.Model.SaveChanges();
         }
-       
-
-        
-
-        public ICommand Confirm { get; set; }
-        public ICommand Clear { get; set; }
-        public ICommand Delete { get; set; }
 
         private void ConfirmBtn()
         {
@@ -204,14 +172,7 @@ namespace prbd_1819_g19
         {
             App.CurrentUser.Basket.Confirm();
             ClearRental();
-         
-            
-           
-
-
         }
-
-        //
 
         //private void ClearBtn()
         //{
@@ -220,15 +181,10 @@ namespace prbd_1819_g19
 
         private void ClearRental()
         {
-            if(App.CurrentUser.Role != 0)
-            Items.Clear();
+            if (App.CurrentUser.Role != 0)
+                Items.Clear();
             App.CurrentUser.ClearBasket();
-           
-           
         }
-
-        //
-
 
         //private void DeleteBtn()
         //{
@@ -236,7 +192,7 @@ namespace prbd_1819_g19
 
         //    Delete = new RelayCommand(DeleteRental, () =>
         //    {
-               
+
         //        //return IsNullOrEmpty(SelectedCategory.Name);
         //        return true;
 
@@ -246,23 +202,21 @@ namespace prbd_1819_g19
         private void DeleteRental()
         {
             var v = (from r in App.Model.RentalItems
-                     
-                            where selectedItem.RentalItemId == r.RentalItemId
-                            select r).FirstOrDefault();
-            
+
+                     where selectedItem.RentalItemId == r.RentalItemId
+                     select r).FirstOrDefault();
+
             if (v != null)
                 App.Model.RentalItems.Remove(v);
             else
                 AddError("DeleteCat", Properties.Resources.Error_Required);
             App.Model.SaveChanges();
-            
-            Reset();
 
+            Reset();
         }
 
         private void Reset()
         {
-         
             selectedItem = null;
             Items = new ObservableCollection<RentalItem>(App.Model.RentalItems);
         }

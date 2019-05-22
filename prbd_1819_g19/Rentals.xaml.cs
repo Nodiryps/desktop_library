@@ -29,10 +29,14 @@ namespace prbd_1819_g19
             DataContext = this;
             Rentalz = new ObservableCollection<Rental>();
             Items = new ObservableCollection<RentalItem>();
-            addRentals();
-            App.Register<RentalItem>(this, AppMessages.MSG_CONFIRM_BASKET, rental => { Items = new ObservableCollection<RentalItem>(App.Model.RentalItems); FillRentalz(); });
+            AddRentals();
+            App.Register<RentalItem>(this, AppMessages.MSG_CONFIRM_BASKET, rental => 
+            {
+                Items = new ObservableCollection<RentalItem>(App.Model.RentalItems);
+                FillRentalz();
+            });
 
-            //addBook();
+            //AddBook();
 
         }
 
@@ -60,31 +64,33 @@ namespace prbd_1819_g19
         }
 
 
-        public void addBook()
+        public void AddBook()
         {
-            foreach (var b in SelectedRental.Items)
+            foreach (var item in SelectedRental.Items)
             {
-                Items.Add(b);
-
+                if(item.Rental.RentalDate != null)
+                    Items.Add(item);
             }
         }
 
        private void FillRentalz()
         {
 
-            foreach( RentalItem ri in Items)
+            foreach(RentalItem ri in Items)
             {
-                Rentalz.Add(ri.Rental);
+                if (ri.Rental.RentalDate != null)
+                    Rentalz.Add(ri.Rental);
 
             }
 
         }
 
-        public void addRentals()
+        public void AddRentals()
         {
             foreach (var r in App.Model.Rentals)
             {
-                Rentalz.Add(r);
+                if (r.RentalDate != null)
+                    Rentalz.Add(r);
                 
             }
         }

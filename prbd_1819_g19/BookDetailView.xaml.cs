@@ -26,15 +26,13 @@ namespace prbd_1819_g19
             set => SetProperty<ObservableCollection<Category>>(ref cats, value);
         }
 
-        private int quantité;
-        public int Quantité
+        private int quantity;
+        public int Quantity
         {
-            get { return quantité; }
-            set { quantité = value;
-               RaisePropertyChanged(nameof(Quantité));
+            get { return quantity; }
+            set { quantity = value;
+               RaisePropertyChanged(nameof(Quantity));
             }
-
-
         }
 
 
@@ -86,8 +84,8 @@ namespace prbd_1819_g19
         private void ValidateQuantite()
         {
             ClearErrors();
-            if (Quantité < 0)
-                AddError("Quantité", Properties.Resources.Error_NombreNegatif);
+            if (Quantity < 0)
+                AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
             RaiseErrors();
         }
 
@@ -110,7 +108,7 @@ namespace prbd_1819_g19
                 RaisePropertyChanged(nameof(Author));
             }
         }
-        private DateTime selectedDate;
+        private DateTime selectedDate = DateTime.Now;
         public DateTime SelectedDate
         {
             get { return selectedDate; }
@@ -167,7 +165,7 @@ namespace prbd_1819_g19
             Delete = new RelayCommand(DeleteAction, () => !IsNew);
             LoadImage = new RelayCommand(LoadImageAction);
             ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
-            AddCopy = new RelayCommand(addCopyBook);
+            AddCopy = new RelayCommand(AddCopyBook);
 
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
@@ -180,19 +178,15 @@ namespace prbd_1819_g19
 #endif
         }
 
-        private void addCopyBook()
+        private void AddCopyBook()
         {
-
-
             if (selectedDate == null)
             {
                 selectedDate = DateTime.Now;
             }
-            book.AddCopies(Quantité,selectedDate);
+            book.AddCopies(Quantity,selectedDate);
             App.Model.SaveChanges();
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
-
-
         }
 
         private void DeleteAction()

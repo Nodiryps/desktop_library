@@ -9,7 +9,8 @@ namespace prbd_1819_g19
         [Key]
         public int CategoryId { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<Book> Books { get; set; }
+        public virtual ICollection<Book> Books { get; set; } = new HashSet<Book>();
+
 
         protected Category(){}/////////////////////////////CONSTRUCT/////////////////////////////
 

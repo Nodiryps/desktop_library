@@ -106,6 +106,15 @@ namespace prbd_1819_g19.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Negatif Number !!!!!!!!!!!!!!!!!.
+        /// </summary>
+        public static string Error_NombreNegatif {
+            get {
+                return ResourceManager.GetString("Error_NombreNegatif", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à not available.
         /// </summary>
         public static string Error_NotAvailable {

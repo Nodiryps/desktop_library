@@ -30,10 +30,13 @@ namespace prbd_1819_g19
             Rentalz = new ObservableCollection<Rental>();
             Items = new ObservableCollection<RentalItem>();
             addRentals();
+            App.Register<RentalItem>(this, AppMessages.MSG_CONFIRM_BASKET, rental => { Items = new ObservableCollection<RentalItem>(App.Model.RentalItems); FillRentalz(); });
+
             //addBook();
 
-
         }
+
+
 
         private ObservableCollection<Rental> rentalz;
         public ObservableCollection<Rental> Rentalz
@@ -64,6 +67,17 @@ namespace prbd_1819_g19
                 Items.Add(b);
 
             }
+        }
+
+       private void FillRentalz()
+        {
+
+            foreach( RentalItem ri in Items)
+            {
+                Rentalz.Add(ri.Rental);
+
+            }
+
         }
 
         public void addRentals()

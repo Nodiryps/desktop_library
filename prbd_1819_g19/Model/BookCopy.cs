@@ -12,7 +12,7 @@ namespace prbd_1819_g19
         public DateTime? AcquisitionDate { get; set; }
         public virtual User RentedBy { get; }
         public virtual Book Book { get; set; }
-        public virtual ICollection<RentalItem> RentalItems { get; set; }
+        public virtual ICollection<RentalItem> RentalItems { get; set; }= new HashSet<RentalItem>();
 
         protected BookCopy(){}/////////////////////////////CONSTRUCT/////////////////////////////
 

@@ -116,29 +116,17 @@ namespace prbd_1819_g19 {
             return newUser;
         }
 
-        public Book CreateBook(string isbn, string title, string author, string editor, int numCopies = 100)
+        public Book CreateBook(string isbn, string title, string author, string editor, int numCopies )
         {
-            Book newBook = null;
-            if (numCopies > 0 && (isbn != "" || title != "" || author != "" || editor != ""))
-            {
-                newBook = Books.Create();
+       
+
+                Book newBook = Books.Create();
                 newBook.Isbn = isbn; newBook.Title = title; newBook.Author = author; newBook.Editor = editor;
-
                 Books.Add(newBook);
+                newBook.AddCopies(numCopies, DateTime.Now);
+                SaveChanges();
+                return newBook;
 
-                for (int i = 0; i < numCopies; ++i)
-                {
-                    BookCopy copy = BookCopies.Create();
-                    copy.AcquisitionDate = DateTime.Now;
-                    copy.Book = newBook;
-                    newBook.Copies = new List<BookCopy>();
-                    newBook.Copies.Add(copy);
-                    BookCopies.Add(copy);
-                    
-                    SaveChanges();
-                }
-            }
-            return newBook;
         }
 
         public Category CreateCategory(string name)

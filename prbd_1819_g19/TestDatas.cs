@@ -114,10 +114,6 @@ namespace prbd_1819_g19
         private void testBookCopies()
         {
             Console.WriteLine($"Ajout de 3 copies à book3");
-            //Les deux lignes suivantes ne doivent pas rester la
-            book1.AddCopies(3, new DateTime(2018, 12, 31, 17, 30, 0));
-            book2.AddCopies(3, new DateTime(2018, 12, 31, 17, 30, 0));
-            //
             book3.AddCopies(3, new DateTime(2018, 12, 31, 17, 30, 0));
             printList<BookCopy>("book3.Copies", book3.Copies);
             Debug.Assert(book3.NumAvailableCopies == 4);

@@ -19,7 +19,7 @@ namespace prbd_1819_g19
         public Role Role { get; set; }
         public virtual RentalItem[] ActiveRentalItem { get; }
         public int Age { get => DateTime.Now.Year - BirthDate.Value.Year; }
-        public virtual ICollection<Rental> Rentals { get; set; }
+        public virtual ICollection<Rental> Rentals { get; set; } = new HashSet<Rental>();
         public Rental Basket
         {
             get => (from rental in Model.Rentals

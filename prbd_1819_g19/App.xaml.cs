@@ -26,7 +26,8 @@ namespace prbd_1819_g19
         MSG_BOOK_CHANGED,
         MSG_ISBN_CHANGED,
         MSG_CAT_CHANGED,
-        MSG_CAT_DEL
+        MSG_CAT_DEL,
+        MSG_CONFIRM_BASKET
     }
 
     public partial class App : ApplicationBase

@@ -132,6 +132,9 @@
   <data name="Error_MustMatchPassword" xml:space="preserve">
     <value>must match password</value>
   </data>
+  <data name="Error_NombreNegatif" xml:space="preserve">
+    <value>Negatif Number !!!!!!!!!!!!!!!!!</value>
+  </data>
   <data name="Error_NotAvailable" xml:space="preserve">
     <value>not available</value>
   </data>

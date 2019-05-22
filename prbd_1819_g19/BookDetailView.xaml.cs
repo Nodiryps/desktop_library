@@ -26,6 +26,18 @@ namespace prbd_1819_g19
             set => SetProperty<ObservableCollection<Category>>(ref cats, value);
         }
 
+        private int quantité;
+        public int Quantité
+        {
+            get { return quantité; }
+            set { quantité = value;
+               RaisePropertyChanged(nameof(Quantité));
+            }
+
+
+        }
+
+
         private bool isNew;
         public bool IsNew
         {
@@ -71,6 +83,14 @@ namespace prbd_1819_g19
             }
         }
 
+        private void ValidateQuantite()
+        {
+            ClearErrors();
+            if (Quantité < 0)
+                AddError("Quantité", Properties.Resources.Error_NombreNegatif);
+            RaiseErrors();
+        }
+
         public string Title
         {
             get { return Book.Title; }
@@ -90,6 +110,17 @@ namespace prbd_1819_g19
                 RaisePropertyChanged(nameof(Author));
             }
         }
+        private DateTime selectedDate;
+        public DateTime SelectedDate
+        {
+            get { return selectedDate; }
+            set
+            {
+                selectedDate = value;
+                RaisePropertyChanged(nameof(SelectedDate));
+            }
+        }
+
 
         public string Editor
         {
@@ -114,6 +145,7 @@ namespace prbd_1819_g19
         public ICommand Delete { get; set; }
         public ICommand LoadImage { get; set; }
         public ICommand ClearImage { get; set; }
+        public ICommand AddCopy { get; set; }
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
         private Timer timer = new Timer(1000);
@@ -135,6 +167,7 @@ namespace prbd_1819_g19
             Delete = new RelayCommand(DeleteAction, () => !IsNew);
             LoadImage = new RelayCommand(LoadImageAction);
             ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
+            AddCopy = new RelayCommand(addCopyBook);
 
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
@@ -145,6 +178,21 @@ namespace prbd_1819_g19
             timer.Elapsed += (o, e) => { App.NotifyColleagues(AppMessages.MSG_TIMER, $"Timer from {Member.Pseudo}"); };
             timer.Start();
 #endif
+        }
+
+        private void addCopyBook()
+        {
+
+
+            if (selectedDate == null)
+            {
+                selectedDate = DateTime.Now;
+            }
+            book.AddCopies(Quantité,selectedDate);
+            App.Model.SaveChanges();
+            App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
+
+
         }
 
         private void DeleteAction()
@@ -195,6 +243,7 @@ namespace prbd_1819_g19
             if (IsNew)
             {
                 App.Model.Books.Add(Book);
+
                 IsNew = false;
             }
             imageHelper.Confirm(Book.Title);

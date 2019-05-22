@@ -17,13 +17,18 @@ namespace prbd_1819_g19
         public string PicturePath { get; set; }
         [NotMapped] public string AbsolutePicturePath
         {
-            get => PicturePath != null ? App.IMAGE_PATH + "\\" + PicturePath : null; 
+            get => PicturePath != null ? App.IMAGE_PATH + "\\" + PicturePath : null;
         }
-        public int NumAvailableCopies { get => Copies.Count(); }
-        public virtual ICollection<Category> Categories { get; set; }
-        public virtual ICollection<BookCopy> Copies { get; set; }
-
-        protected Book(){}/////////////////////////////CONSTRUCT/////////////////////////////
+        public int NumAvailableCopies { get {return (from c in Model.BookCopies
+                                                     where c.Book.BookId == BookId
+                                                     &&(from ri in c.RentalItems
+                                                        where ri.ReturnDate == null
+                                                        select ri).Count() == 0
+                                                     select c).Count();
+            } }
+        public virtual ICollection<Category> Categories { get; set; } = new HashSet<Category>();
+        public virtual ICollection<BookCopy> Copies { get; set; } = new HashSet<BookCopy>();
+        protected Book() { }/////////////////////////////CONSTRUCT/////////////////////////////
 
         public void AddCategory(Category category)
         {
@@ -31,7 +36,7 @@ namespace prbd_1819_g19
             {
                 Categories.Add(category);
             }
-                
+
         }
 
         public void AddCategories(Category[] tab)
@@ -55,14 +60,15 @@ namespace prbd_1819_g19
         {
             for (int i = 0; i < quantity; ++i)
             {
-                BookCopy copy = Model.BookCopies.Create();
+
+                var copy = Model.BookCopies.Create();
                 copy.Book = this;
                 copy.AcquisitionDate = date;
                 Copies.Add(copy);
-
-                Model.BookCopies.Add(copy);
                 Model.SaveChanges();
+
             }
+                
         }
 
         public BookCopy GetAvailableCopy()
@@ -78,6 +84,7 @@ namespace prbd_1819_g19
             ).FirstOrDefault();
 
         }
+
 
         public void DeleteCopy(BookCopy copy)
         {

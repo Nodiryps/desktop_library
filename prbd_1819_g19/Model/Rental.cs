@@ -17,7 +17,7 @@ namespace prbd_1819_g19
                     where item.ReturnDate == null
                     select item).Count();
         }
-        public virtual ICollection<RentalItem> Items { get; set; }
+        public virtual ICollection<RentalItem> Items { get; set; } = new HashSet<RentalItem>();
         public virtual User User { get; set; }
 
         protected Rental(){}/////////////////////////////CONSTRUCT/////////////////////////////
@@ -62,12 +62,20 @@ namespace prbd_1819_g19
 
         public void Confirm()
         {
+
+            RentalDate = DateTime.Now;
             //foreach (var item in Items)
+            //{
             //    Model.RentalItems.Add(item);
+            //    item.Rental.RentalDate = DateTime.Now;
+
+                
+            //}
+                
             //RentalDate = DateTime.Now;
             //Model.Rentals.Add(this);
-
-            //Model.SaveChanges();
+        
+            Model.SaveChanges();
         }
 
         public void Clear()

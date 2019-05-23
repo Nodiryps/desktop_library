@@ -18,16 +18,13 @@
 
     <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="82*"/>
-            <RowDefinition Height="143*"/>
-        </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding MessagesView}" Margin="434,8,10,86" 
-                      SelectedItem="{Binding SelectedMessage}" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding ReadMode}" SelectionMode="Single" Grid.Row="1">
+
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="320,220,10,130" AutoGenerateColumns="False" IsReadOnly="True" 
+                 IsEnabled="{Binding ReadMode}" SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Path=DateTime, StringFormat=\{0:dd/MM/yyyy HH:mm:ss\}}" SortDirection="Descending"/>
-                <DataGridTextColumn Header="Acquisition Date" Binding="{Binding Path=Author.Pseudo}" />
-                <DataGridTextColumn Header="Rented By" Binding="{Binding Path=Recipient.Pseudo}" />
+                <DataGridTextColumn Header="ID" Binding="{Binding BookCopyId}" SortDirection="Descending"/>
+                <DataGridTextColumn Header="Acquisition Date" Binding="{Binding AcquisitionDate}" />
+                <DataGridTextColumn Header="Rented By" Binding="{Binding RentedBy.UserName}" />
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Cancel" Margin="0,0,712,19" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
@@ -58,52 +55,22 @@
                 <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" />
             </f:ValidatedField>
             <Label Content="Categories :" VerticalAlignment="Center" Grid.Row="4" Margin="0,41,0,-38" />
-            <Label Content="Essai" VerticalAlignment="Center" Grid.Row="4" Margin="31,41,624,-38" Grid.Column="1" />
-            <CheckBox IsChecked="{Binding IsPrivate}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Margin="10,45,663,-29" RenderTransformOrigin="0.3,-1.696"/>
-            <Label Content="Essai" VerticalAlignment="Center" Grid.Row="4" Margin="120,41,535,-38" Grid.Column="1" />
-            <CheckBox IsChecked="{Binding IsPrivate}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Margin="84,46,589,-30" RenderTransformOrigin="0.3,-1.696"/>
-
-
-
 
         </Grid>
-        <Button x:Name="btnLoad" Content="Load" Margin="0,0,455,195" VerticalAlignment="Bottom" Command="{Binding LoadImage}" HorizontalAlignment="Right" Width="75" Height="26" RenderTransformOrigin="0.5,0.5" Grid.Row="1"/>
-        <Button x:Name="btnClear" Content="Clear" Margin="0,0,455,154" VerticalAlignment="Bottom" Command="{Binding ClearImage}" HorizontalAlignment="Right" Width="75" Height="21" Grid.Row="1"/>
+        <Button x:Name="btnLoad" Content="Load" Margin="0,0,540,189" VerticalAlignment="Bottom" Command="{Binding LoadImage}" HorizontalAlignment="Right" Width="79" Height="21" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="btnClear" Content="Clear" Margin="0,0,540,153" VerticalAlignment="Bottom" Command="{Binding ClearImage}" HorizontalAlignment="Right" Width="79" Height="21"/>
 
-        <Label Content="Informatique" VerticalAlignment="Center" Grid.Row="1" Margin="310,182,417,78" />
-        <CheckBox IsChecked="{Binding IsPrivate}" Grid.Row="1" VerticalAlignment="Center" Margin="289,186,490,86" RenderTransformOrigin="0.3,-1.696"/>
-        <Label Content="Littérature" VerticalAlignment="Center" Grid.Row="1" Margin="310,155,424,105" />
-        <CheckBox IsChecked="{Binding IsPrivate}" Grid.Row="1" VerticalAlignment="Center" Margin="289,159,490,113" RenderTransformOrigin="0.3,-1.696"/>
-        <Label Content="Roman" VerticalAlignment="Center" Grid.Row="1" Margin="310,209,439,51" />
-        <CheckBox IsChecked="{Binding IsPrivate}" Grid.Row="1" VerticalAlignment="Center" Margin="289,213,490,59" RenderTransformOrigin="0.3,-1.696"/>
-        <Label Content="Science Fcition" VerticalAlignment="Center" Grid.Row="1" Margin="310,243,402,17" RenderTransformOrigin="0.5,0.5" >
-            <Label.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.193"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Label.RenderTransform>
-        </Label>
-        <!--<ListBox ItemsSource="{Binding Cats}" Margin="235,11,30,240" Grid.Row="1">
-
-            <CheckBox Content="{Binding Name}"></CheckBox>
-        </ListBox>-->
-
-        <CheckBox IsChecked="{Binding IsPrivate}" Grid.Row="1" VerticalAlignment="Center" Margin="289,247,490,25" RenderTransformOrigin="0.3,-1.696"/>
-
-        <ScrollBar HorizontalAlignment="Left" Margin="554,217,0,0" Grid.Row="1" VerticalAlignment="Top" Width="18"/>
-        <ScrollBar HorizontalAlignment="Left" Margin="615,217,0,0" Grid.Row="1" VerticalAlignment="Top" Width="18" RenderTransformOrigin="3.665,0.444"/>
-        <Image x:Name="img" HorizontalAlignment="Left" Height="168" Margin="42,32,0,0" Grid.Row="1" VerticalAlignment="Top" Width="184" Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" 
-                   RenderOptions.BitmapScalingMode="Fant"/>
+        <Image x:Name="img" HorizontalAlignment="Left" Height="157" Margin="40,240,0,0" VerticalAlignment="Top" Width="120" RenderOptions.BitmapScalingMode="Fant"
+               Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, 
+                    FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}"/>
 
         <Button Content="Delete" Margin="0,0,552,19" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
-        <Label Content="Quantity" VerticalAlignment="Center" Grid.Row="1" Margin="515,246,224,14" RenderTransformOrigin="1.169,3.423" />
-        <TextBox Text="{Binding Quantity}" Grid.Row="1" VerticalAlignment="Center" Margin="576,246,194,14" RenderTransformOrigin="0.507,0.577" Height="26"/>
-        <Label Content="Date: " HorizontalAlignment="Left" Margin="515,217,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
-        <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="571,219,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-        <Button Content="AddCopy" Margin="0,0,90,18" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
+        <Label Content="Quantity:" VerticalAlignment="Center" Margin="569,389,170,35" RenderTransformOrigin="1.169,3.423" />
+        <TextBox Text="{Binding Quantity}" VerticalAlignment="Center" Margin="640,391,110,35" RenderTransformOrigin="0.507,0.577" Height="24"/>
+
+        <Label Content="Date: " HorizontalAlignment="Left" Margin="320,389,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
+        <Button Content="AddCopy" Margin="0,0,15,39" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="75" Height="20"/>
+        <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="376,391,0,0" VerticalAlignment="Top" Width="114"/>
 
 
     </Grid>

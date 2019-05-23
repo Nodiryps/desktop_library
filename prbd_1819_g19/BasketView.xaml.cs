@@ -163,7 +163,8 @@ namespace prbd_1819_g19
             else
                 AddError("DeleteCat", Properties.Resources.Error_Required);
             App.Model.SaveChanges();
-
+            Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+            App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
             Reset();
         }
 

@@ -26,6 +26,13 @@ namespace prbd_1819_g19
             set => SetProperty<ObservableCollection<Category>>(ref cats, value);
         }
 
+        private ObservableCollection<BookCopy> copies;
+        public ObservableCollection<BookCopy> Copies
+        {
+            get => copies;
+            set => SetProperty<ObservableCollection<BookCopy>>(ref copies, value);
+        }
+
         private int quantity;
         public int Quantity
         {
@@ -149,7 +156,7 @@ namespace prbd_1819_g19
         private Timer timer = new Timer(1000);
 #endif
 
-        public BookDetailView(Book book, bool isNew)
+        public BookDetailView(Book book, bool isNew)/////////////////////////////////////////////////////////
         {
             InitializeComponent();
 
@@ -157,7 +164,10 @@ namespace prbd_1819_g19
             Book = book;
             IsNew = isNew;
             Cats = new ObservableCollection<Category>(App.Model.Categories);
-
+            if(App.CurrentUser.Role == Role.Admin)
+            {
+                Copies = new ObservableCollection<BookCopy>(book.Copies);
+            }
             imageHelper = new ImageHelper(App.IMAGE_PATH, Book.PicturePath);
 
             Save = new RelayCommand(SaveAction, CanSaveOrCancelAction);
@@ -185,6 +195,7 @@ namespace prbd_1819_g19
                 selectedDate = DateTime.Now;
             }
             book.AddCopies(Quantity,selectedDate);
+            Copies = new ObservableCollection<BookCopy>(book.Copies);
             App.Model.SaveChanges();
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
         }

@@ -62,19 +62,7 @@ namespace prbd_1819_g19
 
         public void Confirm()
         {
-
             RentalDate = DateTime.Now;
-            //foreach (var item in Items)
-            //{
-            //    Model.RentalItems.Add(item);
-            //    item.Rental.RentalDate = DateTime.Now;
-
-                
-            //}
-                
-            //RentalDate = DateTime.Now;
-            //Model.Rentals.Add(this);
-        
             Model.SaveChanges();
         }
 

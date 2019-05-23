@@ -43,7 +43,8 @@
 
             <Label Visibility="{Binding IsAdmin }" Content="This Basket is for :" VerticalAlignment="Center" Grid.Row="1" />
             <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Margin="5" >
-                <ComboBox Name="ComboBox" ItemsSource="{Binding Users}" Visibility="{Binding IsAdmin }" SelectedItem="{Binding SelectedUser}" SelectedValue="{Binding SelectedUser}" Margin="41,0,0,0">
+                <ComboBox Name="ComboBox" ItemsSource="{Binding Users}" Visibility="{Binding IsAdmin }" 
+                          SelectedItem="{Binding SelectedUser}" Margin="41,0,0,0">
                     <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction  Command="{Binding UserFilter}"  CommandParameter="{Binding ElementName=ComboBox, Path=SelectedUser}" />

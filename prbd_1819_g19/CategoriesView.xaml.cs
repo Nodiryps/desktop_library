@@ -225,8 +225,8 @@ namespace prbd_1819_g19
                     EnableDelete();
                 }
                 EnableAdd();
-            EnableUpdate();
-            EnableDelete();
+                EnableUpdate();
+                EnableDelete();
             }
 
         }

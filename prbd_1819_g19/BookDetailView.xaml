@@ -55,6 +55,20 @@
                 <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" />
             </f:ValidatedField>
             <Label Content="Categories :" VerticalAlignment="Center" Grid.Row="4" Margin="0,41,0,-38" />
+            <ListView x:Name="CategoriesList" ItemsSource="{Binding CheckboxList, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,38,5,-38" Grid.Row="4">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <CheckBox Content="{Binding Category}" IsChecked="{Binding HasIt}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
         </Grid>
         <Button x:Name="btnLoad" Content="Load" Margin="0,0,540,189" VerticalAlignment="Bottom" Command="{Binding LoadImage}" HorizontalAlignment="Right" Width="79" Height="21" RenderTransformOrigin="0.5,0.5"/>

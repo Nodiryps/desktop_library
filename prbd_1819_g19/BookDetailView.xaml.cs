@@ -19,6 +19,74 @@ namespace prbd_1819_g19
         public User Member { get; set; }
         private ImageHelper imageHelper;
 
+        private ObservableCollection<CategoriesCheckboxList> checkboxList;
+        public ObservableCollection<CategoriesCheckboxList> CheckboxList
+        {
+            get => checkboxList;
+            set => SetProperty<ObservableCollection<CategoriesCheckboxList>>(ref checkboxList, value);
+        }
+
+        private void FillCHeckboxList()
+        {
+               
+            if (book.Categories.Count() == 0)
+            {
+                AddBookCatUnchecked();
+            }
+            else {
+                AddBookCatChecked();
+                AddCheckboxListRest();
+            }
+            
+                
+        }
+
+        private void AddCheckboxListRest()
+        {
+            foreach(var catCheck in checkboxList)
+                foreach (Category cat in Cats)
+                    if (!ListContains(catCheck, cat))
+                        CheckboxList.Add(new CategoriesCheckboxList(cat, false));
+        }
+
+        private void AddBookCatChecked()
+        {
+            foreach (Category cat in book.Categories)
+                checkboxList.Add(new CategoriesCheckboxList(cat, true));
+
+        }
+
+        private void AddBookCatUnchecked()
+        {
+            foreach (Category cat in Cats)
+                checkboxList.Add(new CategoriesCheckboxList(cat, false));
+
+        }
+
+        private bool ListContains(CategoriesCheckboxList catlist, Category cat)
+        {
+            foreach(var c in checkboxList)
+                return catlist.Category.Name.Equals(cat.Name);
+            return false;
+        }
+
+        private bool IsEmpty()
+        {
+            return checkboxList.Count() <= 0;
+        }
+
+        public partial class CategoriesCheckboxList////////////////////////////////////INNER CLASS
+        {
+            
+            public Category Category { get; set; }
+            public bool HasIt { get; set; }
+
+            public CategoriesCheckboxList(Category c, bool b)/////////////CONSTRUCT
+            {
+                Category = c; HasIt = b;
+            }
+        }
+
         private ObservableCollection<Category> cats;
         public ObservableCollection<Category> Cats
         {
@@ -156,10 +224,9 @@ namespace prbd_1819_g19
         private Timer timer = new Timer(1000);
 #endif
 
-        public BookDetailView(Book book, bool isNew)/////////////////////////////////////////////////////////
+        public BookDetailView(Book book, bool isNew)/////////////////////////////////////////////////////////CONSTRUCT
         {
             InitializeComponent();
-
             DataContext = this;
             Book = book;
             IsNew = isNew;
@@ -168,6 +235,7 @@ namespace prbd_1819_g19
             {
                 Copies = new ObservableCollection<BookCopy>(book.Copies);
             }
+            FillCHeckboxList();
             imageHelper = new ImageHelper(App.IMAGE_PATH, Book.PicturePath);
 
             Save = new RelayCommand(SaveAction, CanSaveOrCancelAction);

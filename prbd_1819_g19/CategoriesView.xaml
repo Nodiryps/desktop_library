@@ -12,7 +12,7 @@
 
     <Grid>
         <DataGrid x:Name="dataGrid" Margin="0,0,0,250" SelectedItem="{Binding SelectedCategory}" 
-                  ItemsSource="{Binding Category}" IsEnabled="{Binding ReadMode}" 
+                  ItemsSource="{Binding Category}" IsEnabled="{Binding BoolTable}" 
                   AutoGenerateColumns="False" IsReadOnly="True"  SelectionMode="Single">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

@@ -44,7 +44,7 @@ namespace prbd_1819_g19
             set => SetProperty<string>(ref thisCat, value, () => Validate());
         }
 
-        private bool boolInput;
+        
         
         /// <summary>
         /// CONSTRUCT//////////////////////////////////////////////////////
@@ -61,7 +61,6 @@ namespace prbd_1819_g19
             InitializeComponent();
             DataContext = this;
             Category = new ObservableCollection<Category>(App.Model.Categories);
-            DisableBtnsAndInput();
         }
 
         private void Buttons()
@@ -71,6 +70,7 @@ namespace prbd_1819_g19
                 CancelBtn();
                 if (App.IsAdmin())
                 {
+                    EnableTable();
                     EnableBtnsAndInput();
                     
                     AddBtn();
@@ -203,74 +203,77 @@ namespace prbd_1819_g19
         private void Reset()
         {
             ThisCat = "";
-            DisableBtnsAndInput();
             selectedCategory = null;
             Category = new ObservableCollection<Category>(App.Model.Categories);
         }
 
-        private void DisableBtnsAndInput()
-        {
-            EnableAdd(false);
-            EnableUpdate(false);
-            EnableDelete(false);
-            EnableInput(false);
-        }
+        
 
         private void EnableBtnsAndInput()
         {
-            EnableInput(true);
+            EnableInput();
 
-            //if (!IsNullOrEmpty(ThisCat))
-            //{
-                //if (ThisCatExists())
-                //{
-                //    EnableAdd(true);
-                //}
-                //else
-                //{
-                //    EnableUpdate(true);
-                //    EnableDelete(true);
-                //}
-            EnableAdd(true);
-            EnableUpdate(true);
-            EnableDelete(true);
-            //}
+            if (!IsNullOrEmpty(ThisCat))
+            {
+                if (ThisCatExists())
+                {
+                    EnableAdd();
+                }
+                else
+                {
+                    EnableUpdate();
+                    EnableDelete();
+                }
+                EnableAdd();
+            EnableUpdate();
+            EnableDelete();
+            }
 
         }
 
+        private bool boolInput = false;
         public bool BoolInput
         {
             get => boolInput;
             set => RaisePropertyChanged(nameof(boolInput));
         }
 
-        private bool boolAdd;
+        private bool boolTable = false;
+        public bool BoolTable
+        {
+            get => boolTable;
+            set => RaisePropertyChanged(nameof(boolTable));
+        }
+
+        private bool boolAdd = false;
         public bool BoolAdd
         {
             get => boolAdd;
             set => RaisePropertyChanged(nameof(boolAdd));
         }
 
-        private bool boolUpdate;
+        private bool boolUpdate = false;
         public bool BoolUpdate
         {
             get => boolUpdate;
             set => RaisePropertyChanged(nameof(boolUpdate));
         }
 
-        private bool boolDelete;
+        private bool boolDelete = false;
         public bool BoolDelete
         {
             get => boolDelete;
             set => RaisePropertyChanged(nameof(boolDelete));
         }
 
-        private void EnableInput(bool b) {boolInput = b;}
+        private void EnableInput() {boolInput = true;}
 
-        private void EnableAdd(bool b) { boolAdd = b; }
+        private void EnableAdd() { boolAdd = true; }
 
-        private void EnableUpdate(bool b) { boolUpdate = b; }
+        private void EnableUpdate() { boolUpdate = true; }
 
-        private void EnableDelete(bool b) { boolDelete = b; }
+        private void EnableDelete() { boolDelete = true; }
+
+        private void EnableTable() { boolTable = true; }
     }
 }

@@ -164,7 +164,7 @@ namespace prbd_1819_g19
             Book = book;
             IsNew = isNew;
             Cats = new ObservableCollection<Category>(App.Model.Categories);
-            if(App.CurrentUser.Role == Role.Admin)
+            if(App.IsAdmin())
             {
                 Copies = new ObservableCollection<BookCopy>(book.Copies);
             }

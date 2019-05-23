@@ -13,7 +13,7 @@ namespace prbd_1819_g19
         public DateTime? RentalDate { get; set; }
         public int NumOpenItems
         {
-            get => (from item in Model.RentalItems
+            get => (from item in Items
                     where item.ReturnDate == null
                     select item).Count();
         }

@@ -5,16 +5,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:prbd_1819_g19"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="51*"/>
-            <RowDefinition Height="44*"/>
-        </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Rentalz}" Margin="10,10,10,123" 
+
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Rentalz}" Margin="40,55,440,120" 
                       SelectedItem="{Binding SelectedRental}" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding ReadMode}" SelectionMode="Single">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding SetRental}" 
+                                           CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Rental Date" Binding="{Binding RentalDate, StringFormat=\{0:dd/MM/yyyy\}}"/>
                 <DataGridTextColumn Header="User" Binding="{Binding User}" />
@@ -22,12 +27,23 @@
                 <DataGridTextColumn Header="#Open" Binding="{Binding NumOpenItems}" />
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="dataGrid2" ItemsSource="{Binding Items}" Margin="10,241,10,171" 
-                      SelectedItem="{Binding SelectedMessage}" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding ReadMode}" SelectionMode="Single" Grid.RowSpan="2">
+        <DataGrid x:Name="dataGrid2" ItemsSource="{Binding Items}" Margin="440,55,40,120" 
+                  SelectedItem="{Binding SelectedMessage}" AutoGenerateColumns="False" IsReadOnly="True" 
+                  IsEnabled="{Binding EnableTable}" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Book" Binding="{Binding BookCopy}" />
                 <DataGridTextColumn Header="Return Date" Binding="{Binding ReturnDate, StringFormat=\{0:dd/MM/yyyy\}}" SortDirection="Descending"/>
-                <DataGridTextColumn Header="Actions" Binding="{Binding Path=Author.Pseudo}" />
+                <DataGridTemplateColumn Header="Actions" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Return" Command="{Binding ElementName=dataGrid2, Path=DataContext.ReturnBtn}" CommandParameter="{Binding}"></Button>
+                                <Button Content="Delete" Command="{Binding ElementName=dataGrid2, Path=DataContext.DeleteBtn}" CommandParameter="{Binding}"></Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

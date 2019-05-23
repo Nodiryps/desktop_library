@@ -27,6 +27,11 @@ namespace prbd_1819_g19
         {
             InitializeComponent();
             DataContext = this;
+            EnableTable = true;
+            if (App.IsAdmin())
+            {
+                enableTable = true;
+            }
             Rentalz = new ObservableCollection<Rental>();
             Items = new ObservableCollection<RentalItem>();
             AddRentals();
@@ -35,11 +40,19 @@ namespace prbd_1819_g19
                 Items = new ObservableCollection<RentalItem>(App.Model.RentalItems);
                 FillRentalz();
             });
+            SetRental = new RelayCommand<Rental>(rental => {
+                Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
+            });
 
+            Return();
+            Delete();
             //AddBook();
 
         }
 
+        public ICommand SetRental { get; set; }
+        public ICommand ReturnBtn { get; set; }
+        public ICommand DeleteBtn { get; set; }
 
 
         private ObservableCollection<Rental> rentalz;
@@ -63,14 +76,33 @@ namespace prbd_1819_g19
             set => SetProperty<Rental>(ref selectedRental, value);
         }
 
-
-        public void AddBook()
+        private bool enableTable = false;
+        public bool EnableTable
         {
-            foreach (var item in SelectedRental.Items)
-            {
-                if(item.Rental.RentalDate != null)
-                    Items.Add(item);
-            }
+            get => enableTable;
+            set => RaisePropertyChanged(nameof(enableTable));
+        }
+
+        private void Return()
+        {
+            ReturnBtn = new RelayCommand<RentalItem>(ri => {
+                ri.DoReturn();
+                RefreshView();
+            });
+        }
+
+        private void Delete()
+        {
+            DeleteBtn = new RelayCommand<RentalItem>(ri => {
+                SelectedRental.RemoveItem(ri);
+                RefreshView();
+            });
+        }
+
+        private void RefreshView()
+        {
+            Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
+            Rentalz = new ObservableCollection<Rental>(App.Model.Rentals);
         }
 
        private void FillRentalz()

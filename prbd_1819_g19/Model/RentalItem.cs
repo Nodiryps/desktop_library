@@ -17,7 +17,7 @@ namespace prbd_1819_g19
         public void DoReturn()
         {
             ReturnDate = DateTime.Now;
-            Rental.RemoveItem(this);
+            //Rental.RemoveItem(this);
         }
 
         public void CancelReturn()

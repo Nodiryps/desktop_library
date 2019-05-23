@@ -31,9 +31,9 @@ namespace prbd_1819_g19
             Delete = new RelayCommand(DeleteRental, () => { return true; });
             Clear = new RelayCommand(ClearBasket);
             ConfirmBasket();
-            App.Register(this, AppMessages.MSG_BASKET_CHANGED, () => {
-                Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
-            });
+            //App.Register(this, AppMessages.MSG_BASKET_CHANGED, () => {
+            //    Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+            //});
             UsersComboBox();
             AddBookToBasket();
 

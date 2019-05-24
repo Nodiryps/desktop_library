@@ -30,6 +30,7 @@ namespace prbd_1819_g19
             CategoryFilter = new RelayCommand<Category>(cat=> { ApplyComboBoxFilter(); });
             AddToBasket = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET,book); });
             LinkCat = new RelayCommand<Category>(cat => { App.NotifyColleagues(AppMessages.MSG_LINK_CAT, cat); });
+            ClearComboBox = new RelayCommand(() => { Categories = new ObservableCollection<Category>(); Categories = new ObservableCollection<Category>(App.Model.Categories);});
 
             App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
             App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
@@ -63,6 +64,7 @@ namespace prbd_1819_g19
         }
 
         public ICommand ClearFilter { get; set; }
+        public ICommand ClearComboBox { get; set; }
         public ICommand NewBooks { get; set; }
         public ICommand DisplayBookDetails { get; set; }
         public ICommand CategoryFilter { get; set; }
@@ -92,7 +94,11 @@ namespace prbd_1819_g19
 
         private void ApplyComboBoxFilter()
         {
+            if(SelectedCat != null)
                 Books = new ObservableCollection<Book>(SelectedCat.Books);
+            else
+                Books = new ObservableCollection<Book>(App.Model.Books);
+
         }
 
         private void RefreshBook()

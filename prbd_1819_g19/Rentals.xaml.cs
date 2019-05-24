@@ -35,12 +35,13 @@ namespace prbd_1819_g19
             Rentalz = new ObservableCollection<Rental>();
             Items = new ObservableCollection<RentalItem>();
             AddRentals();
+            //RefreshView();
             App.Register<RentalItem>(this, AppMessages.MSG_CONFIRM_BASKET, rental => 
             {
-                Items = new ObservableCollection<RentalItem>(App.Model.RentalItems);
-                FillRentalz();
+                //RefreshView();
             });
-            SetRental = new RelayCommand<Rental>(rental => {
+            SetRental = new RelayCommand<Rental>(rental => { //Pour remplir le lableau de droite
+                if(SelectedRental != null)
                 Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
             });
 

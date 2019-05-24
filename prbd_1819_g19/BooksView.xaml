@@ -32,17 +32,19 @@
 
             <Label Content="Filter:" Margin="5,0,687,-10"/>
             <TextBox Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" FontSize="14" Margin="55,0,60,-5" />
-            <Button Content="Clear" Command="{Binding ClearFilter}" Margin="725,0,10,-5" />
+            <Button Content="Clear" Command="{Binding ClearFilter}" Margin="725,0,10,-5" RenderTransformOrigin="0.522,0.57" />
 
             <Label Content="Categories:" Margin="5,35,667,-50"/>
-            <ComboBox x:Name="ComboBox"  HorizontalAlignment="Left" Margin="90,37,0,-44" VerticalAlignment="Top" Width="680" 
-                  ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Height="27">
+            <ComboBox x:Name="ComboBox"  HorizontalAlignment="Left" Margin="90,37,0,-44" VerticalAlignment="Top" Width="630" 
+                  ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="27">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction  Command="{Binding CategoryFilter}" CommandParameter="{Binding ElementName=ComboBox, Path=SelectedCat}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
+            <Button Content="Clear" Command="{Binding ClearFilter}" Margin="725,0,10,-5" RenderTransformOrigin="0.522,0.57" />
+            <Button Content="All" Command="{Binding ClearComboBox}" Margin="725,37,10,-42" RenderTransformOrigin="0.522,0.57" />
         </Grid>
 
         <ListView x:Name="listView" ItemsSource="{Binding Books}" Grid.Row="2" BorderBrush="Transparent" 
@@ -78,9 +80,9 @@
                                             </TextBlock>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
-                                
+
                                 <!--<i:Interaction.Triggers>-->
-                                    <!--<i:EventTrigger EventName="MouseDoubleClick">
+                                <!--<i:EventTrigger EventName="MouseDoubleClick">
                                         <i:InvokeCommandAction Command="{Binding LinkCat}" 
                                            CommandParameter="{Binding SelectedItem, ElementName=listViewCat}"/>
                                     </i:EventTrigger>

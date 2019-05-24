@@ -132,7 +132,7 @@ namespace prbd_1819_g19 {
         public Category CreateCategory(string name)
         {
             Category newCat = null;
-            if (Categories.Find(GetCat(name)) == null)
+            if (Categories.Find(GetCatId(name)) == null)
             {
                 newCat = Categories.Create();
                 newCat.Name = name;
@@ -144,7 +144,7 @@ namespace prbd_1819_g19 {
             return newCat;
         }
 
-        private int GetCat(string catName)
+        private int GetCatId(string catName)
         {
             return (from c in Categories
                     where c.Name == catName

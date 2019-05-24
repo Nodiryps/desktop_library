@@ -41,34 +41,40 @@ namespace prbd_1819_g19
 
         private void AddCheckboxListRest()
         {
-            foreach (var catCheck in checkboxList.ToList())
+            //foreach (var catCheck in CheckboxList.ToList())
                 foreach (Category cat in Cats)
-                    if (ListContains(catCheck, cat))
-                        CheckboxList.Add(new CategoriesCheckboxList(cat, false));
+            {
+                if (!book.Categories.Contains(cat))
+                    CheckboxList.Add(new CategoriesCheckboxList(cat, false));
+            }
+
+
+                   // }
+                        
         }
 
         private void AddBookCatChecked()
         {
             foreach (Category cat in book.Categories)
-                checkboxList.Add(new CategoriesCheckboxList(cat, true));
+                CheckboxList.Add(new CategoriesCheckboxList(cat, true));
         }
 
         private void AddBookCatUnchecked()
         {
             foreach (Category cat in Cats)
-                checkboxList.Add(new CategoriesCheckboxList(cat, false));
+                CheckboxList.Add(new CategoriesCheckboxList(cat, false));
         }
 
         private bool ListContains(CategoriesCheckboxList catlist, Category cat)
         {
-            foreach(var c in checkboxList)
+            foreach(var c in CheckboxList)
                 return catlist.Category.Name.Equals(cat.Name);
             return false;
         }
 
         private bool IsEmpty()
         {
-            return checkboxList.Count() <= 0;
+            return CheckboxList.Count() <= 0;
         }
 
         public partial class CategoriesCheckboxList////////////////////////////////////INNER CLASS
@@ -76,6 +82,7 @@ namespace prbd_1819_g19
             
             public Category Category { get; set; }
             public bool HasIt { get; set; }
+
 
             public CategoriesCheckboxList(Category c, bool b)/////////////CONSTRUCT
             {
@@ -366,6 +373,14 @@ namespace prbd_1819_g19
                           select c).FirstOrDefault();
             return change != null && change.State != EntityState.Unchanged;
         }
+        //private bool IsCatChecked()
+        //{
+        //    //return true;
+        //    foreach(var v in CheckboxList)
+        //    {
+        //        return v.HasIt;
+        //    }
+        //}
 
         private bool IsOk(string s)
         {

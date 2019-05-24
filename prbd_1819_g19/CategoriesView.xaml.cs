@@ -111,15 +111,20 @@ namespace prbd_1819_g19
 
         private void UpdateCat()
         {
-            var catToUpdate = (from cat in App.Model.Categories
-                         where cat.Name == selectedCategory.Name
-                         select cat).FirstOrDefault();
-            if (catToUpdate != null)
+            if(SelectedCategory != null)
             {
-                catToUpdate.Name = ThisCat;
-                App.Model.SaveChanges();
-                
+                var catToUpdate = (from cat in App.Model.Categories
+                                   where cat.Name == SelectedCategory.Name
+                                   select cat).FirstOrDefault();
+                if (catToUpdate != null)
+                {
+                    catToUpdate.Name = ThisCat;
+                    App.Model.SaveChanges();
+                    //category = new ObservableCollection<Category>(App.Model.Categories);
+                }
+                //category = new ObservableCollection<Category>(App.Model.Categories);
             }
+
             Reset();
             App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
         }
@@ -175,8 +180,8 @@ namespace prbd_1819_g19
         private void Reset()
         {
             ThisCat = "";
-            selectedCategory = null;
-            category = new ObservableCollection<Category>(App.Model.Categories);
+            SelectedCategory = null;
+            Category = new ObservableCollection<Category>(App.Model.Categories);
         }
 
         private void EnableBtnsAndInput()

@@ -42,8 +42,18 @@ namespace prbd_1819_g19
 
         private void ClearBasket()
         {
+            foreach (var v in SelectedUser.Basket.Items.ToList())
+            {
+                if (v != null)
+                    App.Model.RentalItems.Remove(v);
+                else
+                    AddError("DeleteCat", Properties.Resources.Error_Required);
+                App.Model.SaveChanges();
+            }
             SelectedUser.ClearBasket();
-            Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+            Items = new ObservableCollection<RentalItem>();
+            App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
+
         }
 
         public ICommand UserFilter { get; set; }
@@ -114,7 +124,7 @@ namespace prbd_1819_g19
             Confirm = new RelayCommand(ConfirmRental, () => { return true; });
 
             App.NotifyColleagues(AppMessages.MSG_CONFIRM_BASKET, items);
-            App.NotifyColleagues(AppMessages.MSG_BASKET_CHANGED, items);
+            //App.NotifyColleagues(AppMessages.MSG_BASKET_CHANGED, items);
         }
 
         private void AddBookToBasket()

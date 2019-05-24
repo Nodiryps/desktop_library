@@ -37,36 +37,26 @@ namespace prbd_1819_g19
                 AddBookCatChecked();
                 AddCheckboxListRest();
             }
-            
-                
         }
 
         private void AddCheckboxListRest()
         {
             foreach (var catCheck in checkboxList.ToList())
                 foreach (Category cat in Cats)
-                    if (!ListContains(catCheck, cat))
+                    if (ListContains(catCheck, cat))
                         CheckboxList.Add(new CategoriesCheckboxList(cat, false));
         }
 
         private void AddBookCatChecked()
         {
-            
             foreach (Category cat in book.Categories)
                 checkboxList.Add(new CategoriesCheckboxList(cat, true));
-            Console.WriteLine("Coucou111XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-            //Console.ReadLine();
-
         }
 
         private void AddBookCatUnchecked()
         {
-            
             foreach (Category cat in Cats)
                 checkboxList.Add(new CategoriesCheckboxList(cat, false));
-            Console.WriteLine("Coucou222XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-            //Console.ReadLine();
-
         }
 
         private bool ListContains(CategoriesCheckboxList catlist, Category cat)

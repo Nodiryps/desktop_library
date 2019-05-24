@@ -24,7 +24,8 @@ namespace prbd_1819_g19
             Categories = new ObservableCollection<Category>(App.Model.Categories);
 
             ClearFilter = new RelayCommand(() => { Filter = ""; });
-            NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); });
+            if(App.IsAdmin())
+                NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); });
             DisplayBookDetails = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book); });
             CategoryFilter = new RelayCommand<Category>(cat=> { ApplyComboBoxFilter(); });
             AddToBasket = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET,book); });

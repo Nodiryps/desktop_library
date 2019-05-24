@@ -54,6 +54,7 @@ namespace prbd_1819_g19
         public ICommand ReturnBtn { get; set; }
         public ICommand DeleteBtn { get; set; }
 
+        private bool boolClicked = false;
 
         private ObservableCollection<Rental> rentalz;
         public ObservableCollection<Rental> Rentalz
@@ -86,15 +87,27 @@ namespace prbd_1819_g19
         private void Return()
         {
             ReturnBtn = new RelayCommand<RentalItem>(ri => {
-                ri.DoReturn();
-                RefreshView();
+                if(ri.ReturnDate == null)
+                {
+                    boolClicked = true;
+                    ri.DoReturn();
+                    RefreshView();
+                }
+                else
+                {
+                    ri.ReturnDate = null;
+                    boolClicked = false;
+                    RefreshView();
+                }
+                
             });
         }
 
         private void Delete()
         {
             DeleteBtn = new RelayCommand<RentalItem>(ri => {
-                SelectedRental.RemoveItem(ri);
+                if(ri.ReturnDate != null)
+                    SelectedRental.RemoveItem(ri);
                 RefreshView();
             });
         }
@@ -102,12 +115,15 @@ namespace prbd_1819_g19
         private void RefreshView()
         {
             Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
-            Rentalz = new ObservableCollection<Rental>(App.Model.Rentals);
+            var tmp = new ObservableCollection<Rental>();
+            foreach (var r in App.Model.Rentals)
+                if (r.RentalDate != null && r.Items.Count() > 0)
+                    tmp.Add(r);
+            Rentalz = new ObservableCollection<Rental>(tmp);
         }
 
        private void FillRentalz()
         {
-
             foreach(RentalItem ri in Items)
             {
                 if (ri.Rental.RentalDate != null)

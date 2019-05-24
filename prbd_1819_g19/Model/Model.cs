@@ -132,7 +132,7 @@ namespace prbd_1819_g19 {
         public Category CreateCategory(string name)
         {
             Category newCat = null;
-            if (name != "")
+            if (Categories.Find(GetCat(name)) == null)
             {
                 newCat = Categories.Create();
                 newCat.Name = name;
@@ -142,7 +142,13 @@ namespace prbd_1819_g19 {
                 SaveChanges();
             }
             return newCat;
-                
+        }
+
+        private int GetCat(string catName)
+        {
+            return (from c in Categories
+                    where c.Name == catName
+                    select c.CategoryId).FirstOrDefault();
         }
 
         public List<Book> FindBooksByText(string key)

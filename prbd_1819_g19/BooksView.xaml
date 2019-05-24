@@ -44,12 +44,6 @@
                 </i:Interaction.Triggers>
             </ComboBox>
         </Grid>
-        <!--<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0,10,10">
-            <RadioButton IsChecked="{Binding FolloweesSelected}">Followees</RadioButton>
-            <RadioButton IsChecked="{Binding FollowersSelected}" Margin="10,0,0,0">Followers</RadioButton>
-            <RadioButton IsChecked="{Binding AllSelected}" Margin="10,0,0,0">All</RadioButton>
-        </StackPanel>-->
-
 
         <ListView x:Name="listView" ItemsSource="{Binding Books}" Grid.Row="2" BorderBrush="Transparent" 
                   SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,20,0,0" Grid.ColumnSpan="3">
@@ -74,12 +68,23 @@
                             <TextBlock FontSize="10" Width="80" TextAlignment="Center" Text="{Binding Editor}" />
                             <Image Margin="5" Width="55" Height="80" Source="{Binding AbsolutePicturePath,Converter={f:UriToCachedImageConverter}, 
                                     TargetNullValue={StaticResource UnknownBook}}" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" />
-                            <ListView ItemsSource="{Binding Categories}">
+                            <ListView x:Name="listViewCat" ItemsSource="{Binding Categories}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding}" x:Name="linkCat"/>
+                                        <TextBlock>
+                                        <Hyperlink Command="{Binding ElementName=root, Path=LinkCat}" CommandParameter="{Binding}">
+                                            <TextBlock Text="{Binding}" x:Name="linkCat"/>
+                                        </Hyperlink>
+                                            </TextBlock>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
+                                
+                                <!--<i:Interaction.Triggers>-->
+                                    <!--<i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding LinkCat}" 
+                                           CommandParameter="{Binding SelectedItem, ElementName=listViewCat}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>-->
                             </ListView>
                             <TextBlock FontSize="10" Width="80" TextAlignment="Center" Text="Copies: " />
                             <TextBlock FontSize="10" Width="80" TextAlignment="Center" Text="{Binding NumAvailableCopies}" />

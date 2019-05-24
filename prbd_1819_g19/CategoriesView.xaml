@@ -44,11 +44,14 @@
         </f:ValidatedField>
 
         <Button Content="Add" HorizontalAlignment="Left" Margin="314,219,0,0" VerticalAlignment="Top" Width="50" 
-                Command="{Binding Add}" IsEnabled="{Binding BoolAdd, UpdateSourceTrigger=PropertyChanged}"/>
+                Command="{Binding Add}" IsEnabled="true"/>
+        <!--{Binding true, UpdateSourceTrigger=PropertyChanged}-->
         <Button Content="Update" HorizontalAlignment="Left" Margin="373,219,0,0" VerticalAlignment="Top" Width="50" 
-                Command="{Binding Update}" IsEnabled="{Binding BoolUpdate, UpdateSourceTrigger=PropertyChanged}"/>
+                Command="{Binding Update}" IsEnabled="true"/>
+        <!--{Binding BoolUpdate, UpdateSourceTrigger=PropertyChanged}-->
         <Button Content="Delete" HorizontalAlignment="Left" Margin="432,219,0,0" VerticalAlignment="Top" Width="50" 
-                Command="{Binding Delete}" IsEnabled="{Binding BoolDelete, UpdateSourceTrigger=PropertyChanged}"/>
+                Command="{Binding Delete}" IsEnabled="true"/>
+        <!--{Binding BoolDelete, UpdateSourceTrigger=PropertyChanged}-->
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="501,219,0,0" VerticalAlignment="Top" Width="50" 
                 Command="{Binding Cancel}" IsEnabled="True"/>
     </Grid>

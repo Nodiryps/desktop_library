@@ -29,7 +29,10 @@ namespace prbd_1819_g19
         MSG_BASKET_CHANGED,
         MSG_CAT_DEL,
         MSG_CONFIRM_BASKET,
-        MSG_NBCOPIES_CHANGED
+        MSG_NBCOPIES_CHANGED,
+        MSG_LINK_CAT,
+        MSG_FILL_CAT_INPUT
+
     }
 
     public partial class App : ApplicationBase

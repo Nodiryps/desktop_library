@@ -52,8 +52,10 @@ namespace prbd_1819_g19
         public CategoriesView()
         {
             ViewSettings();
+            App.Register<Category>(this, AppMessages.MSG_FILL_CAT_INPUT, cat => { SelectedCategory = cat; });
             SetCat();
             Buttons();
+            
         }
 
         private void ViewSettings()
@@ -65,19 +67,17 @@ namespace prbd_1819_g19
 
         private void Buttons()
         {
-            if (App.IsUserLogged())
+            if (App.IsAdmin())
             {
-                CancelBtn();
-                if (App.IsAdmin())
-                {
-                    EnableTable();
-                    EnableBtnsAndInput();
-                    
-                    AddBtn();
-                    UpdateBtn();
-                    DeleteBtn();
-                }
+                EnableTable();
+                EnableBtnsAndInput();
+
+                Add = new RelayCommand(AddCat);
+                Update = new RelayCommand(UpdateCat);
+                Delete = new RelayCommand(DeleteCat);
+                Cancel = new RelayCommand(CancelCat);
             }
+            
         }
 
         public ICommand Add { get; set; }
@@ -90,52 +90,21 @@ namespace prbd_1819_g19
         {
             SetThisCat = new RelayCommand(() =>
             {
-                if(!IsNullOrEmpty(SelectedCategory.Name))
+                if (SelectedCategory != null)
                     ThisCat = SelectedCategory.Name;
             });
         }
-
-        private void AddBtn()
-        {
-            Add = new RelayCommand(AddCat,() =>
-            {
-                return AddBtnCondition();
-            });
-        }
-
-        private bool AddBtnCondition()
-        {
-            //return IsNullOrEmpty(ThisCat) && IsNullOrEmpty(SelectedCategory.Name); 
-            return true;
-        }
-
-        private void UpdateBtn()
-        {
-            Update = new RelayCommand(UpdateCat, () =>
-            {
-                //return IsNullOrEmpty(SelectedCategory.Name);
-                return true;
-            });
-        }
-
-       private void DeleteBtn()
-        {
-             Delete = new RelayCommand(DeleteCat, () =>
-            {
-                //return IsNullOrEmpty(SelectedCategory.Name);
-                return true;
-
-            });
-        } 
-
-        private void CancelBtn()
-        {
-            Reset();
-        }
-
+        
         private void AddCat()
         {
-            App.Model.CreateCategory(ThisCat);
+            var catToAdd = (from cat in App.Model.Categories
+                               where cat.Name != ThisCat
+                               select cat).FirstOrDefault();
+            if (catToAdd != null)
+            {
+                App.Model.CreateCategory(ThisCat);
+                
+            }
             Reset();
             App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
         }
@@ -145,8 +114,12 @@ namespace prbd_1819_g19
             var catToUpdate = (from cat in App.Model.Categories
                          where cat.Name == selectedCategory.Name
                          select cat).FirstOrDefault();
-            catToUpdate.Name = ThisCat;
-            App.Model.SaveChanges();
+            if (catToUpdate != null)
+            {
+                catToUpdate.Name = ThisCat;
+                App.Model.SaveChanges();
+                
+            }
             Reset();
             App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
         }
@@ -167,7 +140,7 @@ namespace prbd_1819_g19
 
         private void CancelCat()
         {
-            App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB);
+            Reset();
         }
         
         public override bool Validate()
@@ -188,9 +161,8 @@ namespace prbd_1819_g19
 
         private bool ThisCatExists()
         {
-            //if(!IsNullOrEmpty(thisCat))
-            foreach (Category c in App.Model.Categories)
-                return c.Name.ToUpper().Equals(thisCat.ToUpper());
+            foreach (var c in Category)
+                return c.Name.ToUpper().Equals(ThisCat.ToUpper());
             return false;
         }
 
@@ -204,10 +176,8 @@ namespace prbd_1819_g19
         {
             ThisCat = "";
             selectedCategory = null;
-            Category = new ObservableCollection<Category>(App.Model.Categories);
+            category = new ObservableCollection<Category>(App.Model.Categories);
         }
-
-        
 
         private void EnableBtnsAndInput()
         {

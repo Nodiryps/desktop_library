@@ -15,12 +15,9 @@ namespace prbd_1819_g19
     public partial class BooksView : UserControlBase
     {
 
-        public BooksView()
+        public BooksView()//////////////////////////////////////CONSTRUCT
         {
             InitializeComponent();
-            //if (DesignerProperties.GetIsInDesignMode(this))
-            //    return;
-
             DataContext = this;
 
             Books = new ObservableCollection<Book>(App.Model.Books);
@@ -31,7 +28,8 @@ namespace prbd_1819_g19
             DisplayBookDetails = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book); });
             CategoryFilter = new RelayCommand<Category>(cat=> { ApplyComboBoxFilter(); });
             AddToBasket = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET,book); });
-          
+            LinkCat = new RelayCommand<Category>(cat => { App.NotifyColleagues(AppMessages.MSG_LINK_CAT, cat); });
+
             App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
             App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
             App.Register(this, AppMessages.MSG_CAT_CHANGED, () => { Categories = new ObservableCollection<Category>(App.Model.Categories); });
@@ -68,8 +66,7 @@ namespace prbd_1819_g19
         public ICommand DisplayBookDetails { get; set; }
         public ICommand CategoryFilter { get; set; }
         public ICommand AddToBasket { get; set; }
-
-        
+        public ICommand LinkCat { get; set; }
 
         private void ApplyFilterAction()
         {

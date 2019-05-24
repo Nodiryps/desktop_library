@@ -32,37 +32,11 @@ namespace prbd_1819_g19
             DataContext = this;
             WindowBase();
             LogOut();
-            //BookDetail();
             CloseTab();
             NewBook();
-            //NewCategory();
             DisplayBook();
             ISBNChanged();
-
-            ////App.Register(this, AppMessages.MSG_NEW_MEMBER, () => {
-            //    // crée une nouvelle instance pour un nouveau membre
-            //    var member = App.Model.Users.Create();
-            //    App.Model.Users.Add(member);
-            //    // crée dynamiquement un nouvel onglet avec le titre "<new member>"
-            //  //  AddTab(member, true);
-            //});
-
-            //App.Register<User>(this, AppMessages.MSG_DISPLAY_MEMBER, member => {
-            //    if (member != null)
-            //    {
-            //    //    var tab = (from TabItem t in tabControl.Items where (string)t.Header == member.UserName select t).FirstOrDefault();
-            //    //    if (tab == null)
-            //    //       // AddTab(member, false);
-            //    //    else
-            //    //        Dispatcher.InvokeAsync(() => tab.Focus());
-            //    //}
-            //}};
-
-            //App.Register<string>(this, AppMessages.MSG_PSEUDO_CHANGED, (s) => {
-            //    (tabControl.SelectedItem as TabItem).Header = s;
-            //});
-
-
+            App.Register<Category>(this, AppMessages.MSG_LINK_CAT, cat => { catTab.Focus(); App.NotifyColleagues(AppMessages.MSG_FILL_CAT_INPUT, cat);  });
         }
 
         private void LogOut()

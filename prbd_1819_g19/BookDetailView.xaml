@@ -55,7 +55,7 @@
                 <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" />
             </f:ValidatedField>
             <Label Content="Categories :" VerticalAlignment="Center" Grid.Row="4" Margin="0,41,0,-38" />
-            <ListView x:Name="CategoriesList" ItemsSource="{Binding CheckboxList, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,38,5,-38" Grid.Row="4">
+            <ListView x:Name="CategoriesList" ItemsSource="{Binding CheckboxList, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,38.333,5,-53" Grid.Row="4">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel></WrapPanel>

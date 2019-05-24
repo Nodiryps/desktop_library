@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using PRBD_Framework;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Drawing.Imaging;
@@ -332,6 +333,10 @@ namespace prbd_1819_g19
         {
             if (IsNew)
             {
+                //ArraySegment<CategoriesCheckboxList> checkBox = new ArraySegment<CategoriesCheckboxList>();
+                book.Categories = new ObservableCollection<Category>();
+                foreach(var v in ListCheckboxes())
+                    book.AddCategory(v);
                 App.Model.Books.Add(Book);
 
                 IsNew = false;
@@ -342,6 +347,15 @@ namespace prbd_1819_g19
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
         }
 
+        private List<Category> ListCheckboxes()
+        {
+            List<Category> list = new List<Category>();
+            for (var i = 0; i < checkboxList.Count(); ++i)
+                foreach (var checkBox in CheckboxList)
+                    if (checkBox.HasIt)
+                        list.Add(checkBox.Category);
+            return list;
+        }
 
         private void CancelAction()
         {

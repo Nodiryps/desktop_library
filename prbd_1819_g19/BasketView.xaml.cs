@@ -74,7 +74,7 @@ namespace prbd_1819_g19
             get { return HiddenShow(App.IsAdmin()); }
         }
 
-        private String HiddenShow(bool valeur)
+        private string HiddenShow(bool valeur)
         {
             if (!valeur)
                 return "hidden";

@@ -10,7 +10,7 @@
       d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <BitmapImage x:Key="UnknownBook" UriSource="/images/unknown_book.png"/>
+        <BitmapImage x:Key="UnknownBook" UriSource="/images/unknown-book.png"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
 
@@ -24,11 +24,11 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding BookCopyId}" SortDirection="Descending"/>
                 <DataGridTextColumn Header="Acquisition Date" Binding="{Binding AcquisitionDate}" />
-                <DataGridTextColumn Header="Rented By" Binding="{Binding RentedBy.UserName}" />
+                <DataGridTextColumn Header="Rented By" Binding="{Binding RentedBy}" />
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Cancel" Margin="0,0,712,19" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
-        <Button Content="Save" Margin="0,0,632,19" VerticalAlignment="Bottom" Command="{Binding Save}" IsEnabled="True" Visibility="Visible" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
+        <Button Content="Save" Margin="0,0,632,19" VerticalAlignment="Bottom" Command="{Binding Save}" IsEnabled="True" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
         <Button Content="Delete" Margin="0,0,552,19" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
         <Grid Height="146" Margin="16,16,0,0" VerticalAlignment="Top" IsEnabled="{Binding SelectedMessage, Converter={f:NullToBoolValueConverter}}" HorizontalAlignment="Left" Width="774">
             <Grid.RowDefinitions>
@@ -83,7 +83,7 @@
         <TextBox Text="{Binding Quantity}" VerticalAlignment="Center" Margin="640,391,110,35" RenderTransformOrigin="0.507,0.577" Height="24"/>
 
         <Label Content="Date: " HorizontalAlignment="Left" Margin="320,389,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
-        <Button Content="AddCopy" Margin="0,0,15,39" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="75" Height="20"/>
+        <Button Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,15,39" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="75" Height="20"/>
         <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="376,391,0,0" VerticalAlignment="Top" Width="114"/>
 
 

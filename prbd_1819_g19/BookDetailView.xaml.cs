@@ -104,15 +104,6 @@ namespace prbd_1819_g19
             set => SetProperty<ObservableCollection<BookCopy>>(ref copies, value);
         }
 
-        private int quantity;
-        public int Quantity
-        {
-            get { return quantity; }
-            set { quantity = value;
-               RaisePropertyChanged(nameof(Quantity));
-            }
-        }
-
 
         private bool isNew;
         public bool IsNew
@@ -159,13 +150,23 @@ namespace prbd_1819_g19
             }
         }
 
-        private void ValidateQuantite()
+        private int quantity;
+        public int Quantity
         {
-            ClearErrors();
-            if (Quantity < 0)
-                AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
-            RaiseErrors();
+            get { return quantity; }
+            set {
+                quantity = value;
+               RaisePropertyChanged(nameof(Quantity));
+            }
         }
+
+        //private void ValidateQuantite()
+        //{
+        //    ClearErrors();
+        //    if (Quantity < 0)
+        //        AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
+        //    RaiseErrors();
+        //}
 
         public string Title
         {
@@ -186,6 +187,7 @@ namespace prbd_1819_g19
                 RaisePropertyChanged(nameof(Author));
             }
         }
+
         private DateTime selectedDate = DateTime.Now;
         public DateTime SelectedDate
         {
@@ -197,7 +199,6 @@ namespace prbd_1819_g19
             }
         }
 
-
         public string Editor
         {
             get { return book.Editor; }
@@ -207,14 +208,25 @@ namespace prbd_1819_g19
                 RaisePropertyChanged(nameof(Editor));
             }
         }
-
-
-
+        
         public string AbsolutePicturePath
         {
             get { return book.AbsolutePicturePath; }
             set { }
-        }        
+        }
+
+        public string AddCopyVisible
+        {
+            get => HiddenShow(); 
+        }
+
+        private string HiddenShow()
+        {
+            if (IsNew)
+                return "hidden";
+            else
+                return "show";
+        }
 
         public ICommand Save { get; set; }
         public ICommand Cancel { get; set; }
@@ -248,6 +260,7 @@ namespace prbd_1819_g19
             LoadImage = new RelayCommand(LoadImageAction);
             ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
             AddCopy = new RelayCommand(AddCopyBook);
+            
 
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
@@ -361,18 +374,19 @@ namespace prbd_1819_g19
                 }
             }
         }
-
+        
         private bool CanSaveOrCancelAction()
         {
             if (IsNew)
             {
-                return IsOk(ISBN) && IsOk(Title) && IsOk(Author) && IsOk(Editor);
+                return App.IsAdmin() && IsOk(ISBN) && IsOk(Title) && IsOk(Author) && IsOk(Editor) && Quantity >= 1;
             }
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
                           where c.Entity == Book
                           select c).FirstOrDefault();
             return change != null && change.State != EntityState.Unchanged;
         }
+
         //private bool IsCatChecked()
         //{
         //    //return true;

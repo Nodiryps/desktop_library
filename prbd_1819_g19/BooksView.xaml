@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" x:Name="root">
     <UserControl.Resources>
-        <BitmapImage x:Key="UnknownBook" UriSource="images/unknown-book.jpg"/>
+        <BitmapImage x:Key="UnknownBook" UriSource="images/unknown-book.png"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>

@@ -131,8 +131,8 @@
     <Compile Include="BookDetailView.xaml.cs">
       <DependentUpon>BookDetailView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Rentals.xaml.cs">
-      <DependentUpon>Rentals.xaml</DependentUpon>
+    <Compile Include="RentalView.xaml.cs">
+      <DependentUpon>RentalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TestDatas.cs" />
   </ItemGroup>
@@ -175,9 +175,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\unknown-book.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="BasketView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -202,7 +199,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Rentals.xaml">
+    <Page Include="RentalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -212,6 +209,54 @@
       <Project>{2e922430-eaac-4589-a8f4-f35fbb9799b8}</Project>
       <Name>PRBD_Framework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imgBackup\001.jpg" />
+    <Resource Include="imgBackup\002.jpg" />
+    <Resource Include="imgBackup\003.jpg" />
+    <Resource Include="imgBackup\004.jpg" />
+    <Resource Include="imgBackup\005.jpg" />
+    <Resource Include="imgBackup\006.jpg" />
+    <Resource Include="imgBackup\741.jpg" />
+    <Resource Include="imgBackup\789.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\unknown-book.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\001.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\002.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\003.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\004.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\005.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\006.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\741.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\789.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imgBackup\unknown-book.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\123.jpg" />
+    <Resource Include="images\456.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imgBackup\123.jpg" />
+    <Resource Include="imgBackup\456.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

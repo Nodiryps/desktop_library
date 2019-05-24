@@ -28,6 +28,7 @@ namespace prbd_1819_g19
             if (copy != null)
             {
                 item = Model.RentalItems.Create();
+                
                 item.BookCopy = copy;
                 item.ReturnDate = null;
                 item.Rental = this;

@@ -17,10 +17,10 @@ namespace prbd_1819_g19
         private User admin, ben, bruno;
         private List<User> users = new List<User>();
 
-        private Category catInformatique, catScienceFiction, catRoman, catLitterature, catEssai;
+        private Category catInformatique, catScienceFiction, catRoman, catLitterature, catEssai, catFantastique;
         private List<Category> categories = new List<Category>();
 
-        private Book book1, book2, book3;
+        private Book book1, book2, book3, book4, book5, book6, book7, book8, book9, book10;
         private List<Book> books = new List<Book>();
 
         public TestDatas(DbType dbType)
@@ -65,17 +65,18 @@ namespace prbd_1819_g19
             catRoman = model.CreateCategory("Roman");
             catLitterature = model.CreateCategory("Littérature");
             catEssai = model.CreateCategory("Essai");
-            categories.AddRange(new Category[] { catInformatique, catScienceFiction, catRoman, catLitterature, catEssai });
+            catFantastique = model.CreateCategory("Fantastique");
+            categories.AddRange(new Category[] { catInformatique, catScienceFiction, catRoman, catLitterature, catEssai, catFantastique });
         }
 
         private void CreateBooks()
         {
             book1 = model.CreateBook(
-                            isbn: "123",
-                            title: "Java for Dummies",
-                            author: "Duchmol",
-                            editor: "EPFC",
-                            numCopies: 1);
+                isbn: "123",
+                title: "Java for Dummies",
+                author: "Duchmol",
+                editor: "EPFC",
+                numCopies: 1);
             book1.PicturePath = "123.jpg";
             book2 = model.CreateBook(
                 isbn: "456",
@@ -91,7 +92,64 @@ namespace prbd_1819_g19
                 editor: "XO",
                 numCopies: 1);
             book3.PicturePath = "789.jpg";
-            books.AddRange(new Book[] { book1, book2, book3 });
+
+            book4 = model.CreateBook(
+                isbn: "741",
+                title: "Harry Potter 1",
+                author: "J.K. Rowling",
+                editor: "XO",
+                numCopies: 10);
+            book4.PicturePath = "741.jpg";
+
+            book5 = model.CreateBook(
+                isbn: "001",
+                title: "Harry Potter 2",
+               author: "J.K. Rowling",
+                editor: "XO",
+                numCopies: 10);
+            book5.PicturePath = "001.jpg";
+
+            book6 = model.CreateBook(
+                isbn: "002",
+                title: "Harry Potter 2",
+               author: "J.K. Rowling",
+                editor: "XO",
+                numCopies: 10);
+            book6.PicturePath = "002.jpg";
+
+            book7 = model.CreateBook(
+                isbn: "003",
+                title: "Harry Potter 3",
+               author: "J.K. Rowling",
+                editor: "XO",
+                numCopies: 5);
+            book7.PicturePath = "003.jpg";
+
+            book8 = model.CreateBook(
+                isbn: "004",
+                title: "Harry Potter 4",
+               author: "J.K. Rowling",
+                editor: "XO",
+                numCopies: 10);
+            book8.PicturePath = "004.jpg";
+
+            book9 = model.CreateBook(
+                isbn: "005",
+                title: "Harry Potter 5",
+               author: "J.K. Rowling",
+                editor: "XO",
+                numCopies: 7);
+            book9.PicturePath = "005.jpg";
+
+            book10 = model.CreateBook(
+                isbn: "006",
+                title: "Harry Potter 6",
+                author: "J.K. Rowling",
+                editor: "XO",
+                numCopies: 9);
+            book10.PicturePath = "006.jpg";
+
+            books.AddRange(new Book[] { book1, book2, book3, book4, book5, book6, book7, book8, book9, book10 });
         }
 
         private void testBooks()
@@ -100,6 +158,14 @@ namespace prbd_1819_g19
                 book1.AddCategory(catInformatique);
                 book2.AddCategories(new Category[] { catRoman, catScienceFiction });
                 book3.AddCategories(new Category[] { catRoman, catLitterature });
+                book4.AddCategories(new Category[] { catRoman, catFantastique });
+                book5.AddCategories(new Category[] { catRoman, catFantastique });
+                book6.AddCategories(new Category[] { catEssai, catFantastique });
+                book7.AddCategories(new Category[] { catInformatique, catFantastique });
+                book8.AddCategories(new Category[] { catRoman, catFantastique });
+                book9.AddCategories(new Category[] { catRoman, catLitterature });
+                book10.AddCategories(new Category[] { catScienceFiction, catFantastique, catInformatique });
+
                 printList("Books", books);
                 Console.WriteLine($"book1.RemoveCategory(catInformatique) : suppression de {catInformatique}");
                 book1.RemoveCategory(catInformatique);

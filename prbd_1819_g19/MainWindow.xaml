@@ -11,7 +11,7 @@
         xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
         
         mc:Ignorable="d"
-        Title="My Social Network" Height="560" Width="840" WindowStartupLocation="CenterScreen">
+        Title="Bibilihotek" Height="560" Width="840" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="357*"/>
@@ -39,7 +39,7 @@
             </TabItem>
             <TabItem x:Name="RentalTab" Header="Rentals">
                 <ContentControl>
-                    <localRent:Rentals/>
+                    <localRent:RentalView/>
                 </ContentControl>
             </TabItem>
 

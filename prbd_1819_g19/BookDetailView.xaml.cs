@@ -3,6 +3,7 @@ using PRBD_Framework;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Drawing.Imaging;
 using System.IO;
@@ -20,11 +21,11 @@ namespace prbd_1819_g19
         public User Member { get; set; }
         private ImageHelper imageHelper;
 
-        private ObservableCollection<CategoriesCheckboxList> checkboxList;
-        public ObservableCollection<CategoriesCheckboxList> CheckboxList
+        private ObservableCollection<CategoriesCheckboxList<Category>> checkboxList;
+        public ObservableCollection<CategoriesCheckboxList<Category>> CheckboxList
         {
             get => checkboxList;
-            set => SetProperty<ObservableCollection<CategoriesCheckboxList>>(ref checkboxList, value);
+            set => SetProperty<ObservableCollection<CategoriesCheckboxList<Category>>>(ref checkboxList, value);
         }
 
         private void FillCHeckboxList()
@@ -42,35 +43,21 @@ namespace prbd_1819_g19
 
         private void AddCheckboxListRest()
         {
-            //foreach (var catCheck in CheckboxList.ToList())
-                foreach (Category cat in Cats)
-            {
+            foreach (Category cat in Cats)
                 if (!book.Categories.Contains(cat))
-                    CheckboxList.Add(new CategoriesCheckboxList(cat, false));
-            }
-
-
-                   // }
-                        
+                    CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, false));
         }
 
         private void AddBookCatChecked()
         {
             foreach (Category cat in book.Categories)
-                CheckboxList.Add(new CategoriesCheckboxList(cat, true));
+                CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, true));
         }
 
         private void AddBookCatUnchecked()
         {
             foreach (Category cat in Cats)
-                CheckboxList.Add(new CategoriesCheckboxList(cat, false));
-        }
-
-        private bool ListContains(CategoriesCheckboxList catlist, Category cat)
-        {
-            foreach(var c in CheckboxList)
-                return catlist.Category.Name.Equals(cat.Name);
-            return false;
+                CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, false));
         }
 
         private bool IsEmpty()
@@ -78,16 +65,41 @@ namespace prbd_1819_g19
             return CheckboxList.Count() <= 0;
         }
 
-        public partial class CategoriesCheckboxList////////////////////////////////////INNER CLASS
+        public class CategoriesCheckboxList<T> : INotifyPropertyChanged      ////////////////////////////////////INNER CLASS
         {
-            
-            public Category Category { get; set; }
-            public bool HasIt { get; set; }
+            public event PropertyChangedEventHandler PropertyChanged;
 
+            private bool isChecked;
+            private T item;
 
-            public CategoriesCheckboxList(Category c, bool b)/////////////CONSTRUCT
+            public CategoriesCheckboxList()
+            { }
+
+            public CategoriesCheckboxList(T item, bool isChecked = false)
             {
-                Category = c; HasIt = b;
+                this.item = item;
+                this.isChecked = isChecked;
+            }
+
+            public T Item
+            {
+                get { return item; }
+                set
+                {
+                    item = value;
+                    if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Item"));
+                }
+            }
+
+
+            public bool IsChecked
+            {
+                get { return isChecked; }
+                set
+                {
+                    isChecked = value;
+                    if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsChecked"));
+                }
             }
         }
 
@@ -247,7 +259,7 @@ namespace prbd_1819_g19
             Book = book;
             IsNew = isNew;
             Cats = new ObservableCollection<Category>(App.Model.Categories);
-            CheckboxList = new ObservableCollection<CategoriesCheckboxList>();
+            CheckboxList = new ObservableCollection<CategoriesCheckboxList<Category>>();
             if (App.IsAdmin())
             {
                 Copies = new ObservableCollection<BookCopy>(book.Copies);
@@ -334,9 +346,8 @@ namespace prbd_1819_g19
             if (IsNew)
             {
                 //ArraySegment<CategoriesCheckboxList> checkBox = new ArraySegment<CategoriesCheckboxList>();
-                book.Categories = new ObservableCollection<Category>();
-                foreach(var v in ListCheckboxes())
-                    book.AddCategory(v);
+                
+                AddCatCheckBox();
                 App.Model.Books.Add(Book);
 
                 IsNew = false;
@@ -347,13 +358,21 @@ namespace prbd_1819_g19
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
         }
 
+        private void AddCatCheckBox()
+        {
+            book.Categories = new ObservableCollection<Category>();
+            foreach (var v in ListCheckboxes())
+                book.AddCategory(v);
+            book.Categories = new ObservableCollection<Category>(App.Model.Categories);
+        }
+
         private List<Category> ListCheckboxes()
         {
             List<Category> list = new List<Category>();
-            for (var i = 0; i < checkboxList.Count(); ++i)
+            //for (var i = 0; i < checkboxList.Count(); ++i)
                 foreach (var checkBox in CheckboxList)
-                    if (checkBox.HasIt)
-                        list.Add(checkBox.Category);
+                    if (checkBox.IsChecked)
+                        list.Add(checkBox.Item);
             return list;
         }
 
@@ -393,7 +412,7 @@ namespace prbd_1819_g19
         {
             if (IsNew)
             {
-                return App.IsAdmin() && IsOk(ISBN) && IsOk(Title) && IsOk(Author) && IsOk(Editor) && Quantity >= 1;
+                return App.IsAdmin() && CheckBoxesCondition() && IsOk(ISBN) && IsOk(Title) && IsOk(Author) && IsOk(Editor) && Quantity >= 1;
             }
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
                           where c.Entity == Book
@@ -401,18 +420,19 @@ namespace prbd_1819_g19
             return change != null && change.State != EntityState.Unchanged;
         }
 
-        //private bool IsCatChecked()
-        //{
-        //    //return true;
-        //    foreach(var v in CheckboxList)
-        //    {
-        //        return v.HasIt;
-        //    }
-        //}
-
         private bool IsOk(string s)
         {
             return !string.IsNullOrEmpty(s) && !HasErrors;
+        }
+
+        private bool CheckBoxesCondition()
+        {
+            var cpt = 0;
+            var listSize = checkboxList.Count();
+            foreach (var v in checkboxList)
+                if (v.IsChecked)
+                    ++cpt;
+            return cpt > listSize;
         }
     }
 }

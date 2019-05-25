@@ -19,7 +19,7 @@
     <Grid>
 
 
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="320,220,10,130" AutoGenerateColumns="False" IsReadOnly="True" 
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="320,283,15,60" AutoGenerateColumns="False" IsReadOnly="True" 
                  IsEnabled="{Binding ReadMode}" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding BookCopyId}" SortDirection="Descending"/>
@@ -54,8 +54,17 @@
             <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Margin="5" >
                 <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" />
             </f:ValidatedField>
-            <Label Content="Categories :" VerticalAlignment="Center" Grid.Row="4" Margin="0,41,0,-38" />
-            <ListView x:Name="CategoriesList" ItemsSource="{Binding CheckboxList, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,38.333,5,-53" Grid.Row="4">
+            <Grid>
+                <Label Content="Categories :" VerticalAlignment="Center" Margin="386,142,-398,-143" Height="30" />
+                <ListBox ItemsSource="{Binding CheckboxList}" Margin="465,145,-615,-195" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+            <!--<ListView x:Name="CategoriesList" ItemsSource="{Binding CheckboxList, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,38.333,5,-53" Grid.Row="4">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel></WrapPanel>
@@ -64,27 +73,27 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <CheckBox Content="{Binding Category}" IsChecked="{Binding HasIt}"/>
+                            <CheckBox Content="{Binding Category}" IsChecked="{Binding HasIt, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
+            </ListView>-->
 
         </Grid>
-        <Button x:Name="btnLoad" Content="Load" Margin="0,0,540,189" VerticalAlignment="Bottom" Command="{Binding LoadImage}" HorizontalAlignment="Right" Width="79" Height="21" RenderTransformOrigin="0.5,0.5"/>
-        <Button x:Name="btnClear" Content="Clear" Margin="0,0,540,153" VerticalAlignment="Bottom" Command="{Binding ClearImage}" HorizontalAlignment="Right" Width="79" Height="21"/>
+        <Button x:Name="btnLoad" Content="Load" Margin="0,0,480,268" VerticalAlignment="Bottom" Command="{Binding LoadImage}" HorizontalAlignment="Right" Width="67" Height="21" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="btnClear" Content="Clear" Margin="0,0,480,234" VerticalAlignment="Bottom" Command="{Binding ClearImage}" HorizontalAlignment="Right" Width="67" Height="21"/>
 
-        <Image x:Name="img" HorizontalAlignment="Left" Height="157" Margin="40,240,0,0" VerticalAlignment="Top" Width="120" RenderOptions.BitmapScalingMode="Fant"
+        <Image x:Name="img" HorizontalAlignment="Left" Height="195" Margin="47,162,0,0" VerticalAlignment="Top" Width="191" RenderOptions.BitmapScalingMode="Fant"
                Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, 
                     FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}"/>
 
         <Button Content="Delete" Margin="0,0,552,19" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" Grid.Row="1"/>
-        <Label Content="Quantity:" VerticalAlignment="Center" Margin="569,389,170,35" RenderTransformOrigin="1.169,3.423" />
-        <TextBox Text="{Binding Quantity}" VerticalAlignment="Center" Margin="640,391,110,35" RenderTransformOrigin="0.507,0.577" Height="24"/>
+        <Label Content="Quantity:" VerticalAlignment="Center" Margin="600,405,139,19" RenderTransformOrigin="1.169,3.423" />
+        <TextBox Text="{Binding Quantity}" VerticalAlignment="Center" Margin="663,407,100,19" RenderTransformOrigin="0.507,0.577" Height="24"/>
 
-        <Label Content="Date: " HorizontalAlignment="Left" Margin="320,389,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
-        <Button Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,15,39" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="75" Height="20"/>
-        <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="376,391,0,0" VerticalAlignment="Top" Width="114"/>
+        <Label Content="Date: " HorizontalAlignment="Left" Margin="420,405,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
+        <Button Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,15,19" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="75" Height="24"/>
+        <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="464,407,0,0" VerticalAlignment="Top" Width="114"/>
 
 
     </Grid>

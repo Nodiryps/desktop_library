@@ -116,49 +116,25 @@ namespace prbd_1819_g19
 
         private void ConfirmBasket()
         {
-
             Console.WriteLine("ConfirmBasket");
             Confirm = new RelayCommand(ConfirmRental, () => { return true; });
-
-            
         }
 
         private void AddBookToBasket()
         {
             App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
             {
-                User currUser = App.CurrentUser;
-                currUser.AddToBasket(book);
-                SelectByUser();
+                SelectedUser.AddToBasket(book);
+                Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
             });
         }
 
         private void ConfirmRental()
         {
-            
             SelectedUser.Basket.Confirm();
             if (AddBasket()) 
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
             App.NotifyColleagues(AppMessages.MSG_CONFIRM_BASKET);
-        }
-
-        public void SelectByUser()
-        {
-            var res = new ObservableCollection<RentalItem>();
-            if (SelectedUser == null)
-                selectedUser = App.CurrentUser;
-            var v = (from r in App.Model.RentalItems
-                     where SelectedUser.UserId == r.Rental.User.UserId
-                     select r);
-            if (v != null)
-            {
-                foreach (var b in v)
-                {
-                    res.Add(b);
-                }
-                Items = res;
-            }
-            App.Model.SaveChanges();
         }
 
         private void DeleteRental()

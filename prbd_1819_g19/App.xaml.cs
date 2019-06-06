@@ -31,7 +31,8 @@ namespace prbd_1819_g19
         MSG_CONFIRM_BASKET,
         MSG_NBCOPIES_CHANGED,
         MSG_LINK_CAT,
-        MSG_FILL_CAT_INPUT
+        MSG_FILL_CAT_INPUT,
+        ADD_BASKET
 
     }
 

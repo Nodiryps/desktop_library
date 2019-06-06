@@ -18,90 +18,15 @@ namespace prbd_1819_g19
     /// </summary>
     public partial class BookDetailView : UserControlBase
     {
-        public User Member { get; set; }
-        private ImageHelper imageHelper;
 
-        public Category catSelected { get; set; }
+        private ImageHelper imageHelper;
+        public User Member { get; set; }
 
         private ObservableCollection<CategoriesCheckboxList<Category>> checkboxList;
         public ObservableCollection<CategoriesCheckboxList<Category>> CheckboxList
         {
             get => checkboxList;
             set => SetProperty<ObservableCollection<CategoriesCheckboxList<Category>>>(ref checkboxList, value);
-        }
-
-        private void FillCHeckboxList()
-        {
-            if (book.Categories.Count() == 0)
-            {
-                AddBookCatUnchecked();
-            }
-            else {
-                AddBookCatChecked();
-                AddCheckboxListRest();
-            }
-        }
-
-        private void AddCheckboxListRest()
-        {
-            foreach (Category cat in Cats)
-                if (!book.Categories.Contains(cat))
-                    CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, false));
-        }
-
-        private void AddBookCatChecked()
-        {
-            foreach (Category cat in book.Categories)
-                CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, true));
-        }
-
-        private void AddBookCatUnchecked()
-        {
-            foreach (Category cat in Cats)
-                CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, false));
-        }
-
-        private bool IsEmpty()
-        {
-            return CheckboxList.Count() <= 0;
-        }
-
-        public class CategoriesCheckboxList<T> : INotifyPropertyChanged      ////////////////////////////////////INNER CLASS
-        {
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            private bool isChecked;
-            private T item;
-
-            public CategoriesCheckboxList()
-            { }
-
-            public CategoriesCheckboxList(T item, bool isChecked = false)
-            {
-                this.item = item;
-                this.isChecked = isChecked;
-            }
-
-            public T Item
-            {
-                get { return item; }
-                set
-                {
-                    item = value;
-                    if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Item"));
-                }
-            }
-
-
-            public bool IsChecked
-            {
-                get { return isChecked; }
-                set
-                {
-                    isChecked = value;
-                    if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsChecked"));
-                }
-            }
         }
 
         private ObservableCollection<Category> cats;
@@ -144,8 +69,6 @@ namespace prbd_1819_g19
             }
         }
 
-
-
         private Book book;
         public Book Book
         {
@@ -168,9 +91,21 @@ namespace prbd_1819_g19
         public int Quantity
         {
             get { return quantity; }
-            set {
+            set
+            {
                 quantity = value;
-               RaisePropertyChanged(nameof(Quantity));
+                RaisePropertyChanged(nameof(Quantity));
+            }
+        }
+
+        private bool boolCat;
+        public bool BoolCat
+        {
+            get => boolCat;
+            set
+            {
+                boolCat = value;
+                RaisePropertyChanged(nameof(BoolCat));
             }
         }
 
@@ -222,7 +157,7 @@ namespace prbd_1819_g19
                 RaisePropertyChanged(nameof(Editor));
             }
         }
-        
+
         public string AbsolutePicturePath
         {
             get { return book.AbsolutePicturePath; }
@@ -231,15 +166,7 @@ namespace prbd_1819_g19
 
         public string AddCopyVisible
         {
-            get => HiddenShow(); 
-        }
-
-        private string HiddenShow()
-        {
-            if (IsNew)
-                return "hidden";
-            else
-                return "show";
+            get => HiddenShow();
         }
 
         public ICommand Save { get; set; }
@@ -248,12 +175,14 @@ namespace prbd_1819_g19
         public ICommand LoadImage { get; set; }
         public ICommand ClearImage { get; set; }
         public ICommand AddCopy { get; set; }
+        public ICommand CatChecked { get; set; }
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
         private Timer timer = new Timer(1000);
 #endif
+        /////////////////////////////////////////////////////////CONSTRUCT/////////////////////////////////////////////////////////
 
-        public BookDetailView(Book book, bool isNew)/////////////////////////////////////////////////////////CONSTRUCT
+        public BookDetailView(Book book, bool isNew)
         {
             InitializeComponent();
             DataContext = this;
@@ -274,8 +203,7 @@ namespace prbd_1819_g19
             LoadImage = new RelayCommand(LoadImageAction);
             ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
             AddCopy = new RelayCommand(AddCopyBook);
-            
-
+            CatChecked = new RelayCommand(EnableBoolCat);
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
             App.Register<string>(this, AppMessages.MSG_TIMER, s => {
@@ -293,7 +221,7 @@ namespace prbd_1819_g19
             {
                 selectedDate = DateTime.Now;
             }
-            book.AddCopies(Quantity,selectedDate);
+            book.AddCopies(Quantity, selectedDate);
             Copies = new ObservableCollection<BookCopy>(book.Copies);
             App.Model.SaveChanges();
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
@@ -344,13 +272,18 @@ namespace prbd_1819_g19
 
         private void SaveAction()
         {
+            book.Categories.Clear();
+            foreach (var c in CheckboxList)
+            {
+                if (c.IsChecked)
+                {
+                    book.Categories.Add(c.Item);
+                }
+            }
             if (IsNew)
             {
-                //ArraySegment<CategoriesCheckboxList> checkBox = new ArraySegment<CategoriesCheckboxList>();
-                
                 AddCatCheckBox();
                 App.Model.Books.Add(Book);
-
                 IsNew = false;
             }
             imageHelper.Confirm(Book.Title);
@@ -370,10 +303,9 @@ namespace prbd_1819_g19
         private List<Category> ListCheckboxes()
         {
             List<Category> list = new List<Category>();
-            //for (var i = 0; i < checkboxList.Count(); ++i)
-                foreach (var checkBox in CheckboxList)
-                    if (checkBox.IsChecked)
-                        list.Add(checkBox.Item);
+            foreach (var checkBox in CheckboxList)
+                if (checkBox.IsChecked)
+                    list.Add(checkBox.Item);
             return list;
         }
 
@@ -408,12 +340,20 @@ namespace prbd_1819_g19
                 }
             }
         }
-        
-        private bool CanSaveOrCancelAction()
+
+        private string HiddenShow()
         {
             if (IsNew)
+                return "hidden";
+            else
+                return "show";
+        }
+
+        private bool CanSaveOrCancelAction()
+        {
+            if (App.IsAdmin() && IsNew)
             {
-                return App.IsAdmin() && CheckBoxesCondition() && IsOk(ISBN) && IsOk(Title) && IsOk(Author) && IsOk(Editor) && Quantity >= 1;
+                return CheckBoxesCondition() && InputsOk();
             }
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
                           where c.Entity == Book
@@ -421,19 +361,100 @@ namespace prbd_1819_g19
             return change != null && change.State != EntityState.Unchanged;
         }
 
+        private bool InputsOk()
+        {
+            return IsOk(ISBN) && IsOk(Title) && IsOk(Author) && IsOk(Editor) && Quantity >= 1;
+        }
+
         private bool IsOk(string s)
         {
             return !string.IsNullOrEmpty(s) && !HasErrors;
         }
 
+        private void EnableBoolCat()
+        {
+            BoolCat = true;
+        }
+
         private bool CheckBoxesCondition()
         {
-            var cpt = 0;
-            var listSize = checkboxList.Count();
-            foreach (var v in checkboxList)
-                if (v.IsChecked)
-                    ++cpt;
-            return cpt > listSize;
+            return boolCat == true;
+        }
+
+        private void FillCHeckboxList()
+        {
+            if (book.Categories.Count() == 0)
+                AddBookCatUnchecked();
+            else
+            {
+                AddBookCatChecked();
+                AddCheckboxListRest();
+            }
+        }
+
+        private void AddCheckboxListRest()
+        {
+            foreach (Category cat in Cats)
+                if (!book.Categories.Contains(cat))
+                    CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, false));
+        }
+
+        private void AddBookCatChecked()
+        {
+            foreach (Category cat in book.Categories)
+                CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, true));
+        }
+
+        private void AddBookCatUnchecked()
+        {
+            foreach (Category cat in Cats)
+                if (!book.Categories.Contains(cat))
+                    CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, false));
+        }
+
+        private bool IsEmpty()
+        {
+            return CheckboxList.Count() <= 0;
+        }
+
+        ////////////////////////////////////INNER CLASS////////////////////////////////////
+
+        public class CategoriesCheckboxList<T> : INotifyPropertyChanged
+        {
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            private bool isChecked;
+            private T item;
+
+            public CategoriesCheckboxList()
+            { }
+
+            public CategoriesCheckboxList(T item, bool isChecked = false)
+            {
+                this.item = item;
+                this.isChecked = isChecked;
+            }
+
+            public T Item
+            {
+                get { return item; }
+                set
+                {
+                    item = value;
+                    if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Item"));
+                }
+            }
+
+
+            public bool IsChecked
+            {
+                get { return isChecked; }
+                set
+                {
+                    isChecked = value;
+                    if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsChecked"));
+                }
+            }
         }
     }
 }

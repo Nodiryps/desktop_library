@@ -118,12 +118,15 @@ namespace prbd_1819_g19
                 BoolInput = true;
 
                 Add = new RelayCommand(() => {
-                    var catToAdd = (from cat in App.Model.Categories
-                                    where cat.Name != ThisCat
-                                    select cat).FirstOrDefault();
-                    if (catToAdd != null)
+                    if (!string.IsNullOrWhiteSpace(ThisCat))
                     {
-                        App.Model.CreateCategory(ThisCat);
+                        var catToAdd = (from cat in App.Model.Categories
+                                        where cat.Name != ThisCat
+                                        select cat).FirstOrDefault();
+                        if (catToAdd != null)
+                        {
+                            App.Model.CreateCategory(ThisCat);
+                        }
                     }
                     ThisCat = "";
                     Category = new ObservableCollection<Category>(App.Model.Categories);
@@ -132,7 +135,7 @@ namespace prbd_1819_g19
                 });
 
                 Update = new RelayCommand(() => {
-                    if (SelectedCategory != null)
+                    if (!string.IsNullOrWhiteSpace(ThisCat))
                     {
                         var catToUpdate = (from cat in App.Model.Categories
                                            where cat.Name == SelectedCategory.Name
@@ -142,12 +145,13 @@ namespace prbd_1819_g19
                             catToUpdate.Name = ThisCat;
                             App.Model.SaveChanges();
                         }
-                        ThisCat = "";
-                        Category = new ObservableCollection<Category>(App.Model.Categories);
-                        BoolUpdate = false;
-                        BoolDelete = false;
-                        BoolCancel = false;
+
                     }
+                    ThisCat = "";
+                    Category = new ObservableCollection<Category>(App.Model.Categories);
+                    BoolUpdate = false;
+                    BoolDelete = false;
+                    BoolCancel = false;
 
                 });
 

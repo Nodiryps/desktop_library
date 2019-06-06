@@ -6,9 +6,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:prbd_1819_g19"
       xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       mc:Ignorable="d" 
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-      d:DesignHeight="450" d:DesignWidth="800">
+      d:DesignHeight="450" d:DesignWidth="800" x:Name="root">
 
     <UserControl.Resources>
         <BitmapImage x:Key="UnknownBook" UriSource="/images/unknown-book.png"/>
@@ -44,50 +44,27 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Content="ISBN :" VerticalAlignment="Center" Grid.Row="0" />
-            <TextBox Text="{Binding ISBN}" IsReadOnly="False" Grid.Row="0" Grid.Column="1" Margin="5" />
+            <TextBox Text="{Binding ISBN}" IsReadOnly="False" Grid.Row="0" Grid.Column="1" Margin="5,1.667,5,7.667" />
             <Label Content="Title :" VerticalAlignment="Center" Grid.Row="1" />
             <TextBox Text="{Binding Title}" IsReadOnly="False" Grid.Row="1" Grid.Column="1" Margin="5,1.667,5,7.667" />
-
             <Label Content="Author :" VerticalAlignment="Center" Grid.Row="2" />
             <TextBox Text="{Binding Author}" IsReadOnly="False" Grid.Row="2" Grid.Column="2" Margin="5,1.667,5,7.667" />
 
             <Label Content="Editor :" VerticalAlignment="Center" Grid.Row="3" />
-            <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Margin="5" >
+            <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Margin="5,1.667,5,7.667" >
                 <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" />
             </f:ValidatedField>
             <Grid>
                 <Label Content="Categories :" VerticalAlignment="Center" Margin="386,142,-398,-143" Height="30" />
-                <ListBox ItemsSource="{Binding CheckboxList}" Margin="465,145,-615,-195" Name="listBox" SelectedItem="{Binding catSelected}">
+                <ListBox ItemsSource="{Binding CheckboxList}" Margin="465,145,-615,-195" Name="listBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}" >
-
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseClick">
-                                        <i:InvokeCommandAction Command="{Binding cmdCat}" 
-                                           CommandParameter="{Binding ElementName=listBox, Path=SelectedItem}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}"  Command="{Binding ElementName=root, Path=CatChecked}" CommandParameter="{Binding}" >
                             </CheckBox>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <!--<ListView x:Name="CategoriesList" ItemsSource="{Binding CheckboxList, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="0,38.333,5,-53" Grid.Row="4">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel></WrapPanel>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <CheckBox Content="{Binding Category}" IsChecked="{Binding HasIt, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>-->
-
         </Grid>
         <Button x:Name="btnLoad" Content="Load" Margin="0,0,480,268" VerticalAlignment="Bottom" Command="{Binding LoadImage}" HorizontalAlignment="Right" Width="67" Height="21" RenderTransformOrigin="0.5,0.5"/>
         <Button x:Name="btnClear" Content="Clear" Margin="0,0,480,234" VerticalAlignment="Bottom" Command="{Binding ClearImage}" HorizontalAlignment="Right" Width="67" Height="21"/>
@@ -103,7 +80,6 @@
         <Label Content="Date: " HorizontalAlignment="Left" Margin="420,405,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
         <Button Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,15,19" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="75" Height="24"/>
         <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="464,407,0,0" VerticalAlignment="Top" Width="114"/>
-
 
     </Grid>
 </f:UserControlBase>

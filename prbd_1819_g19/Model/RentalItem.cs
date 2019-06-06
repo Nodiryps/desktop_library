@@ -18,6 +18,7 @@ namespace prbd_1819_g19
         {
             ReturnDate = DateTime.Now;
             //Rental.RemoveItem(this);
+            Model.SaveChanges();
         }
 
         public void CancelReturn()

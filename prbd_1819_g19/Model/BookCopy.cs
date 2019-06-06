@@ -11,7 +11,7 @@ namespace prbd_1819_g19
         [Key]
         public int BookCopyId { get; set; }
         public DateTime? AcquisitionDate { get; set; }
-        public virtual User RentedBy { get => (from ri in Model.RentalItems
+        public virtual User RentedBy { get => (from ri in RentalItems
                                                where ri.BookCopy != null && ri.Rental.RentalDate != null && ri.Rental != null 
                                                select ri.Rental.User).FirstOrDefault(); }
         public virtual Book Book { get; set; }

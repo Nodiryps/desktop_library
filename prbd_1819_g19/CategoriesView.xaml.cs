@@ -27,7 +27,7 @@ namespace prbd_1819_g19
         public ObservableCollection<Category> Category
         {
             get => category;
-            set => SetProperty<ObservableCollection<Category>>(ref category, value, () => {} );
+            set => SetProperty<ObservableCollection<Category>>(ref category, value, () => { });
         }
 
         public Category selectedCategory;
@@ -41,43 +41,60 @@ namespace prbd_1819_g19
         public string ThisCat
         {
             get => thisCat;
-            set => SetProperty<string>(ref thisCat, value, () => Validate());
-        }
-
-        
-        
-        /// <summary>
-        /// CONSTRUCT//////////////////////////////////////////////////////
-        /// </summary>
-        public CategoriesView()
-        {
-            ViewSettings();
-            App.Register<Category>(this, AppMessages.MSG_FILL_CAT_INPUT, cat => { SelectedCategory = cat; });
-            SetCat();
-            Buttons();
-            
-        }
-
-        private void ViewSettings()
-        {
-            InitializeComponent();
-            DataContext = this;
-            Category = new ObservableCollection<Category>(App.Model.Categories);
-        }
-
-        private void Buttons()
-        {
-            if (App.IsAdmin())
+            set
             {
-                EnableTable();
-                EnableBtnsAndInput();
-
-                Add = new RelayCommand(AddCat);
-                Update = new RelayCommand(UpdateCat);
-                Delete = new RelayCommand(DeleteCat);
-                Cancel = new RelayCommand(CancelCat);
+                if (App.IsAdmin())
+                {
+                    thisCat = value;
+                    ThisCatChanged();
+                    RaisePropertyChanged(nameof(ThisCat));
+                }
+                
             }
-            
+        }
+
+        private bool boolAdd;
+        public bool BoolAdd
+        {
+            get => boolAdd;
+            set => SetProperty<bool>(ref boolAdd, value);
+        }
+
+        private bool boolUpdate;
+        public bool BoolUpdate
+        {
+            get => boolUpdate;
+            set => SetProperty<bool>(ref boolUpdate, value);
+        }
+
+        private bool boolDelete;
+        public bool BoolDelete
+        {
+            get => boolDelete;
+            set => SetProperty<bool>(ref boolDelete, value);
+        }
+
+        private bool boolCancel;
+        public bool BoolCancel
+        {
+            get => boolCancel;
+            set => SetProperty<bool>(ref boolCancel, value);
+        }
+
+        
+
+        private bool boolInput;
+        public bool BoolInput
+        {
+            get => boolInput;
+            set => SetProperty<bool>(ref boolInput, value);
+        }
+
+        private bool boolTable;
+        public bool BoolTable
+        {
+            get => boolTable;
+            set => SetProperty<bool>(ref boolTable, value);
         }
 
         public ICommand Add { get; set; }
@@ -86,169 +103,107 @@ namespace prbd_1819_g19
         public ICommand Cancel { get; set; }
         public ICommand SetThisCat { get; set; }
 
-        private void SetCat()
+        /// <summary>
+        /// CONSTRUCT//////////////////////////////////////////////////////
+        /// </summary>
+        public CategoriesView()
         {
-            SetThisCat = new RelayCommand(() =>
-            {
-                if (SelectedCategory != null)
-                    ThisCat = SelectedCategory.Name;
-            });
-        }
-        
-        private void AddCat()
-        {
-            var catToAdd = (from cat in App.Model.Categories
-                               where cat.Name != ThisCat
-                               select cat).FirstOrDefault();
-            if (catToAdd != null)
-            {
-                App.Model.CreateCategory(ThisCat);
-                
-            }
-            Reset();
-            App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
-        }
-
-        private void UpdateCat()
-        {
-            if(SelectedCategory != null)
-            {
-                var catToUpdate = (from cat in App.Model.Categories
-                                   where cat.Name == SelectedCategory.Name
-                                   select cat).FirstOrDefault();
-                if (catToUpdate != null)
-                {
-                    catToUpdate.Name = ThisCat;
-                    App.Model.SaveChanges();
-                    //category = new ObservableCollection<Category>(App.Model.Categories);
-                }
-                //category = new ObservableCollection<Category>(App.Model.Categories);
-            }
-
-            Reset();
-            App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
-        }
-
-        private void DeleteCat()
-        {
-            var catToDel = (from cat in App.Model.Categories
-                         where cat.Name == ThisCat
-                         select cat).FirstOrDefault();
-            if (catToDel != null)
-                App.Model.Categories.Remove(catToDel);
-            else
-                AddError("DeleteCat", Properties.Resources.Error_Required);
-            App.Model.SaveChanges();
-            Reset();
-            App.NotifyColleagues(AppMessages.MSG_CAT_DEL);
-        }
-
-        private void CancelCat()
-        {
-            Reset();
-        }
-        
-        public override bool Validate()
-        {
-            ClearErrors();
-            if (IsNullOrEmpty(thisCat))
-                AddError("EditCategory", Properties.Resources.Error_Required);
-            else
-            {
-                if (ThisCatExists())
-                    AddError("EditCategory", Properties.Resources.Error_AlreadyExists);
-                 else
-                    AddError("EditCategory", Properties.Resources.Error_DoesNotExist);
-            }
-            RaiseErrors();
-            return !HasErrors;
-        }
-
-        private bool ThisCatExists()
-        {
-            foreach (var c in Category)
-                return c.Name.ToUpper().Equals(ThisCat.ToUpper());
-            return false;
-        }
-
-        private bool IsNullOrEmpty(string cat)
-        {
-            return string.IsNullOrEmpty(cat) 
-                || string.IsNullOrWhiteSpace(cat);
-        }
-        
-        private void Reset()
-        {
-            ThisCat = "";
-            SelectedCategory = null;
+            InitializeComponent();
+            DataContext = this;
             Category = new ObservableCollection<Category>(App.Model.Categories);
-        }
 
-        private void EnableBtnsAndInput()
-        {
-            EnableInput();
-
-            if (!IsNullOrEmpty(ThisCat))
+            if (App.IsAdmin())
             {
-                if (ThisCatExists())
+                BoolTable = true;
+                BoolInput = true;
+
+                Add = new RelayCommand(() => {
+                    var catToAdd = (from cat in App.Model.Categories
+                                    where cat.Name != ThisCat
+                                    select cat).FirstOrDefault();
+                    if (catToAdd != null)
+                    {
+                        App.Model.CreateCategory(ThisCat);
+                    }
+                    ThisCat = "";
+                    Category = new ObservableCollection<Category>(App.Model.Categories);
+                    BoolAdd = false;
+                    BoolCancel = false;
+                });
+
+                Update = new RelayCommand(() => {
+                    if (SelectedCategory != null)
+                    {
+                        var catToUpdate = (from cat in App.Model.Categories
+                                           where cat.Name == SelectedCategory.Name
+                                           select cat).FirstOrDefault();
+                        if (catToUpdate != null)
+                        {
+                            catToUpdate.Name = ThisCat;
+                            App.Model.SaveChanges();
+                        }
+                        ThisCat = "";
+                        Category = new ObservableCollection<Category>(App.Model.Categories);
+                        BoolUpdate = false;
+                        BoolDelete = false;
+                        BoolCancel = false;
+                    }
+
+                });
+
+                Delete = new RelayCommand(() => {
+                    var catToDel = (from cat in App.Model.Categories
+                                    where cat.Name == ThisCat
+                                    select cat).FirstOrDefault();
+                    if (catToDel != null)
+                        App.Model.Categories.Remove(catToDel);
+                    else
+                        AddError("ThisCat", Properties.Resources.Error_Required);
+                    App.Model.SaveChanges();
+                    ThisCat = "";
+                    Category = new ObservableCollection<Category>(App.Model.Categories);
+                    BoolUpdate = false;
+                    BoolAdd = false;
+                    BoolDelete = false;
+                    BoolCancel = false;
+                });
+
+                Cancel = new RelayCommand(() => {
+                    ThisCat = "";
+                    Category = new ObservableCollection<Category>(App.Model.Categories);
+                    BoolUpdate = false;
+                    BoolAdd = false;
+                    BoolDelete = false;
+                    BoolCancel = false;
+                });
+
+                SetThisCat = new RelayCommand(() =>
                 {
-                    EnableAdd();
-                }
-                else
-                {
-                    EnableUpdate();
-                    EnableDelete();
-                }
-                EnableAdd();
-                EnableUpdate();
-                EnableDelete();
+                    ThisCat = SelectedCategory.Name;
+                    BoolUpdate = true;
+                    BoolDelete = true;
+                    BoolCancel = true;
+                    BoolAdd = false;
+                });
             }
 
         }
 
-        private bool boolInput = false;
-        public bool BoolInput
+        public void ThisCatChanged()
         {
-            get => boolInput;
-            set => RaisePropertyChanged(nameof(boolInput));
+            if (ThisCat != "" && BoolUpdate)
+            {
+                BoolAdd = false;
+
+            }
+            else if(ThisCat != "" && !BoolUpdate)
+            {
+                BoolAdd = true;
+            }
+            BoolCancel = true;
+
         }
 
-        private bool boolTable = false;
-        public bool BoolTable
-        {
-            get => boolTable;
-            set => RaisePropertyChanged(nameof(boolTable));
-        }
 
-        private bool boolAdd = false;
-        public bool BoolAdd
-        {
-            get => boolAdd;
-            set => RaisePropertyChanged(nameof(boolAdd));
-        }
-
-        private bool boolUpdate = false;
-        public bool BoolUpdate
-        {
-            get => boolUpdate;
-            set => RaisePropertyChanged(nameof(boolUpdate));
-        }
-
-        private bool boolDelete = false;
-        public bool BoolDelete
-        {
-            get => boolDelete;
-            set => RaisePropertyChanged(nameof(boolDelete));
-        }
-
-        private void EnableInput() {boolInput = true;}
-
-        private void EnableAdd() { boolAdd = true; }
-
-        private void EnableUpdate() { boolUpdate = true; }
-
-        private void EnableDelete() { boolDelete = true; }
-
-        private void EnableTable() { boolTable = true; }
     }
 }

@@ -7,6 +7,7 @@
       xmlns:local="clr-namespace:prbd_1819_g19"
       xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
       mc:Ignorable="d" 
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
@@ -56,10 +57,18 @@
             </f:ValidatedField>
             <Grid>
                 <Label Content="Categories :" VerticalAlignment="Center" Margin="386,142,-398,-143" Height="30" />
-                <ListBox ItemsSource="{Binding CheckboxList}" Margin="465,145,-615,-195" >
+                <ListBox ItemsSource="{Binding CheckboxList}" Margin="465,145,-615,-195" Name="listBox" SelectedItem="{Binding catSelected}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}" />
+                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}" >
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseClick">
+                                        <i:InvokeCommandAction Command="{Binding cmdCat}" 
+                                           CommandParameter="{Binding ElementName=listBox, Path=SelectedItem}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

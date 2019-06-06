@@ -31,13 +31,8 @@ namespace prbd_1819_g19
             Delete = new RelayCommand(DeleteRental, () => { return true; });
             Clear = new RelayCommand(ClearBasket);
             ConfirmBasket();
-            //App.Register(this, AppMessages.MSG_BASKET_CHANGED, () => {
-            //    Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
-            //});
             UsersComboBox();
             AddBookToBasket();
-
-            //ConfirmBtn();
         }
 
         private void ClearBasket()
@@ -121,10 +116,11 @@ namespace prbd_1819_g19
 
         private void ConfirmBasket()
         {
+
+            Console.WriteLine("ConfirmBasket");
             Confirm = new RelayCommand(ConfirmRental, () => { return true; });
 
-            App.NotifyColleagues(AppMessages.MSG_CONFIRM_BASKET, items);
-            //App.NotifyColleagues(AppMessages.MSG_BASKET_CHANGED, items);
+            
         }
 
         private void AddBookToBasket()
@@ -139,9 +135,11 @@ namespace prbd_1819_g19
 
         private void ConfirmRental()
         {
+            
             SelectedUser.Basket.Confirm();
             if (AddBasket()) 
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+            App.NotifyColleagues(AppMessages.MSG_CONFIRM_BASKET);
         }
 
         public void SelectByUser()

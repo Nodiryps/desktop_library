@@ -8,6 +8,8 @@
         xmlns:localCat="clr-namespace:prbd_1819_g19"
         xmlns:localBasket="clr-namespace:prbd_1819_g19"
         xmlns:localRent="clr-namespace:prbd_1819_g19"
+        xmlns:localRentalBy="clr-namespace:prbd_1819_g19"
+        xmlns:localExam2="clr-namespace:prbd_1819_g19"
         xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
         
         mc:Ignorable="d"
@@ -42,7 +44,16 @@
                     <localRent:RentalView/>
                 </ContentControl>
             </TabItem>
-
+            <TabItem x:Name="RentalByTab" Header="Books By Rentals">
+                <ContentControl>
+                    <localRentalBy:RentalBy/>
+                </ContentControl>
+            </TabItem>
+            <TabItem x:Name="Exam2" Header="Items By Books">
+                <ContentControl>
+                    <localExam2:Exam2/>
+                </ContentControl>
+            </TabItem>
         </TabControl>
     </Grid>
 </f:WindowBase>

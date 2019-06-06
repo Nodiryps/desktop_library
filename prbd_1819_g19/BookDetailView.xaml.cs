@@ -21,6 +21,8 @@ namespace prbd_1819_g19
         public User Member { get; set; }
         private ImageHelper imageHelper;
 
+        public Category catSelected { get; set; }
+
         private ObservableCollection<CategoriesCheckboxList<Category>> checkboxList;
         public ObservableCollection<CategoriesCheckboxList<Category>> CheckboxList
         {
@@ -30,7 +32,6 @@ namespace prbd_1819_g19
 
         private void FillCHeckboxList()
         {
-               
             if (book.Categories.Count() == 0)
             {
                 AddBookCatUnchecked();

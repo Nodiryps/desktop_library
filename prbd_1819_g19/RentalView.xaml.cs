@@ -32,22 +32,23 @@ namespace prbd_1819_g19
             {
                 enableTable = true;
             }
+
             Rentalz = new ObservableCollection<Rental>();
             Items = new ObservableCollection<RentalItem>();
-            AddRentals();
-            //RefreshView();
-            App.Register<RentalItem>(this, AppMessages.MSG_CONFIRM_BASKET, rental => 
-            {
-                //RefreshView();
-            });
-            SetRental = new RelayCommand<Rental>(rental => { //Pour remplir le lableau de droite
+            Rentalz = new ObservableCollection<Rental>(FillRentals());
+
+            SetRental = new RelayCommand<Rental>(rental => { //Pour remplir le tableau de droite
                 if(SelectedRental != null)
                 Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
             });
 
+            App.Register(this, AppMessages.MSG_CONFIRM_BASKET, () =>
+            {
+                Rentalz = new ObservableCollection<Rental>(FillRentals());
+            });
+
             Return();
             Delete();
-            //AddBook();
 
         }
 
@@ -92,15 +93,14 @@ namespace prbd_1819_g19
                 {
                     boolClicked = true;
                     ri.DoReturn();
-                    RefreshView();
                 }
                 else
                 {
                     ri.ReturnDate = null;
                     boolClicked = false;
-                    RefreshView();
                 }
-                
+                Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
+                Rentalz = new ObservableCollection<Rental>(Refresh());
             });
         }
 
@@ -109,7 +109,8 @@ namespace prbd_1819_g19
             DeleteBtn = new RelayCommand<RentalItem>(ri => {
                 if(ri.ReturnDate != null)
                     SelectedRental.RemoveItem(ri);
-                RefreshView();
+                Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
+                Rentalz = new ObservableCollection<Rental>(Refresh());
             });
         }
 
@@ -123,32 +124,21 @@ namespace prbd_1819_g19
             Rentalz = new ObservableCollection<Rental>(tmp);
         }
 
-       private void FillRentalz()
+        private List<Rental> Refresh()
         {
-            foreach(RentalItem ri in Items)
-            {
-                if (ri.Rental.RentalDate != null)
-                    Rentalz.Add(ri.Rental);
-
-            }
-
+            return (
+                    from r in App.Model.Rentals
+                    where r.RentalDate != null && r.Items.Count > 0
+                    select r
+                ).ToList();
         }
 
-        public void AddRentals()
+        private List<Rental> FillRentals()
         {
-            foreach (var r in App.Model.Rentals)
-            {
-                if (r.RentalDate != null)
-                    Rentalz.Add(r);
-                
-            }
+            return (from r in App.Model.Rentals
+                    where r.RentalDate != null
+                    //&&(from ri in r.Items where ri.ReturnDate != null select ri)
+                    select r).ToList();
         }
-
-
-
-
-
-
-
     }
 }

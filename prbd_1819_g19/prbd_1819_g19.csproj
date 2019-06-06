@@ -122,6 +122,9 @@
     <Compile Include="CategoriesView.xaml.cs">
       <DependentUpon>CategoriesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Exam2.xaml.cs">
+      <DependentUpon>Exam2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -130,6 +133,9 @@
     </Compile>
     <Compile Include="BookDetailView.xaml.cs">
       <DependentUpon>BookDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RentalBy.xaml.cs">
+      <DependentUpon>RentalBy.xaml</DependentUpon>
     </Compile>
     <Compile Include="RentalView.xaml.cs">
       <DependentUpon>RentalView.xaml</DependentUpon>
@@ -187,6 +193,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Exam2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -196,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BookDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RentalBy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

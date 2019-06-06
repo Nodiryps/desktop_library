@@ -14,32 +14,6 @@ namespace prbd_1819_g19
     /// </summary>
     public partial class BooksView : UserControlBase
     {
-
-        public BooksView()//////////////////////////////////////CONSTRUCT
-        {
-            InitializeComponent();
-            DataContext = this;
-
-            Books = new ObservableCollection<Book>(App.Model.Books);
-            Categories = new ObservableCollection<Category>(App.Model.Categories);
-
-            ClearFilter = new RelayCommand(() => { Filter = ""; });
-            if(App.IsAdmin())
-                NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); });
-            DisplayBookDetails = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book); });
-            CategoryFilter = new RelayCommand<Category>(cat=> { ApplyComboBoxFilter(); });
-            AddToBasket = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET,book); });
-            LinkCat = new RelayCommand<Category>(cat => { App.NotifyColleagues(AppMessages.MSG_LINK_CAT, cat); });
-            ClearComboBox = new RelayCommand(() => { Categories = new ObservableCollection<Category>(); Categories = new ObservableCollection<Category>(App.Model.Categories);});
-
-            App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
-            App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
-            App.Register(this, AppMessages.MSG_CAT_CHANGED, () => { Categories = new ObservableCollection<Category>(App.Model.Categories); });
-            App.Register(this, AppMessages.MSG_NBCOPIES_CHANGED, () => { Books = new ObservableCollection<Book>(App.Model.Books); });
-        }
-
-
-
         public Category SelectedCat { get; set; }
 
         private ObservableCollection<Book> books;
@@ -71,6 +45,33 @@ namespace prbd_1819_g19
         public ICommand AddToBasket { get; set; }
         public ICommand LinkCat { get; set; }
 
+
+        //////////////////////////////////////CONSTRUCT//////////////////////////////////////
+        public BooksView()
+        {
+            InitializeComponent();
+            DataContext = this;
+            Filter = "";
+
+            Books = new ObservableCollection<Book>(App.Model.Books);
+            //Categories = new ObservableCollection<Category>(fillCat());
+            FillCat();
+
+            ClearFilter = new RelayCommand(() => { Filter = ""; SelectedCat = null; });
+            if (App.IsAdmin())
+                NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); });
+            DisplayBookDetails = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book); });
+            CategoryFilter = new RelayCommand<Category>(cat => { ApplyComboBoxFilter(); });
+            AddToBasket = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET, book); });
+            LinkCat = new RelayCommand<Category>(cat => { App.NotifyColleagues(AppMessages.MSG_LINK_CAT, cat); });
+            ClearComboBox = new RelayCommand(() => { Categories = new ObservableCollection<Category>(App.Model.Categories); });
+
+            App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
+            App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
+            App.Register(this, AppMessages.MSG_CAT_CHANGED, () => { Categories = new ObservableCollection<Category>(App.Model.Categories); });
+            App.Register(this, AppMessages.MSG_NBCOPIES_CHANGED, () => { Books = new ObservableCollection<Book>(App.Model.Books); });
+        }
+
         private void ApplyFilterAction()
         {
             IEnumerable<Book> filtered = App.Model.Books;
@@ -81,10 +82,6 @@ namespace prbd_1819_g19
                                || b.Author.Contains(filter) || b.Editor.Contains(filter)
                            select b;
                 Books = new ObservableCollection<Book>(filtered);
-                foreach (var t in filtered)
-                {
-                    Console.Write(t.Title);
-                }
             }
             else
             {
@@ -94,10 +91,62 @@ namespace prbd_1819_g19
 
         private void ApplyComboBoxFilter()
         {
-            if(SelectedCat != null)
-                Books = new ObservableCollection<Book>(SelectedCat.Books);
+            Console.WriteLine(Filter=="");
+            if(Filter != "")
+            {
+                if (SelectedCat != null)
+                {
+                    if(SelectedCat.Name != "All")
+                    {
+                        Console.WriteLine("coucou1");
+                        var query = from b in App.Model.Books
+                                    where b.Isbn.Contains(filter) || b.Title.Contains(filter)
+                                      || b.Author.Contains(filter) || b.Editor.Contains(filter)
+                                    select b;
+                        books.Clear();
+                        foreach (var b in query)
+                        {
+                            if (b.Categories.Contains(SelectedCat))
+                            {
+                                Books.Add(b);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var query = from b in App.Model.Books
+                                    where b.Isbn.Contains(filter) || b.Title.Contains(filter)
+                                      || b.Author.Contains(filter) || b.Editor.Contains(filter)
+                                    select b;
+                        books.Clear();
+                        foreach (var b in query)
+                        {
+                            if (b.Categories.Contains(SelectedCat))
+                            {
+                                Books.Add(b);
+                            }
+                        }
+
+                    }
+                }
+            }
             else
-                Books = new ObservableCollection<Book>(App.Model.Books);
+            {
+                if (Filter != null)
+                {
+                    if(SelectedCat.Name == "All")
+                    {
+                        ApplyFilterAction();
+                        Console.WriteLine("filter  vide");
+                    }
+                    
+                    else
+                    {
+                        Books = new ObservableCollection<Book>(SelectedCat.Books);
+                    }
+                }
+                
+            }
 
         }
 
@@ -116,6 +165,17 @@ namespace prbd_1819_g19
              {
                  Categories = new ObservableCollection<Category>(App.Model.Categories);
              });
+        }
+
+        public void FillCat() {
+            Categories = new ObservableCollection<Category>(App.Model.Categories);
+            Category All = App.Model.Categories.Create();
+            All.CategoryId = -1;
+            All.Name = "All";
+
+            Categories.Insert(0, All);
+            SelectedCat = All;
+            //Categories.Add(All);
         }
     }
 }

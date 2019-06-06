@@ -12,7 +12,7 @@ namespace prbd_1819_g19
         public virtual ICollection<Book> Books { get; set; } = new HashSet<Book>();
 
 
-        protected Category(){}/////////////////////////////CONSTRUCT/////////////////////////////
+        protected Category(){}/////////////////////////////CONSTRUCT
 
         public bool HasBook(Book book)
         {

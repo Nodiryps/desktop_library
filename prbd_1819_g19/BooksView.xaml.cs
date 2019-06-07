@@ -52,14 +52,11 @@ namespace prbd_1819_g19
             InitializeComponent();
             DataContext = this;
             Filter = "";
-
             Books = new ObservableCollection<Book>(App.Model.Books);
-            //Categories = new ObservableCollection<Category>(fillCat());
             FillCat();
 
             ClearFilter = new RelayCommand(() => { Filter = ""; SelectedCat = null; });
-            if (App.IsAdmin())
-                NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); });
+            if (App.IsAdmin()) { NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); }); }
             DisplayBookDetails = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book); });
             CategoryFilter = new RelayCommand<Category>(cat => { ApplyComboBoxFilter(); });
             AddToBasket = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET, book); });
@@ -74,108 +71,54 @@ namespace prbd_1819_g19
 
         private void ApplyFilterAction()
         {
-            IEnumerable<Book> filtered = App.Model.Books;
             if (!string.IsNullOrEmpty(Filter))
-            {
-                filtered = from b in App.Model.Books
-                           where b.Isbn.Contains(filter) || b.Title.Contains(filter)
-                               || b.Author.Contains(filter) || b.Editor.Contains(filter)
-                           select b;
-                Books = new ObservableCollection<Book>(filtered);
-            }
+                Books = new ObservableCollection<Book>(FilterQuery());
             else
-            {
                 Books = new ObservableCollection<Book>(App.Model.Books);
-            }
         }
 
         private void ApplyComboBoxFilter()
         {
-            Console.WriteLine(Filter=="");
-            if(Filter != "")
+            if(Filter != "" && SelectedCat != null)
             {
-                if (SelectedCat != null)
+                if(SelectedCat.Name != "All")
                 {
-                    if(SelectedCat.Name != "All")
-                    {
-                        Console.WriteLine("coucou1");
-                        var query = from b in App.Model.Books
-                                    where b.Isbn.Contains(filter) || b.Title.Contains(filter)
-                                      || b.Author.Contains(filter) || b.Editor.Contains(filter)
-                                    select b;
-                        books.Clear();
-                        foreach (var b in query)
-                        {
-                            if (b.Categories.Contains(SelectedCat))
-                            {
-                                Books.Add(b);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var query = from b in App.Model.Books
-                                    where b.Isbn.Contains(filter) || b.Title.Contains(filter)
-                                      || b.Author.Contains(filter) || b.Editor.Contains(filter)
-                                    select b;
-                        books.Clear();
-                        foreach (var b in query)
-                        {
-                            if (b.Categories.Contains(SelectedCat))
-                            {
-                                Books.Add(b);
-                            }
-                        }
-
-                    }
+                    books.Clear();
+                    foreach (var b in FilterQuery())
+                        if (b.Categories.Contains(SelectedCat))
+                            Books.Add(b);
+                }
+                else
+                {
+                    ApplyFilterAction();
                 }
             }
             else
             {
                 if (Filter != null)
-                {
                     if(SelectedCat.Name == "All")
-                    {
                         ApplyFilterAction();
-                        Console.WriteLine("filter  vide");
-                    }
-                    
                     else
-                    {
                         Books = new ObservableCollection<Book>(SelectedCat.Books);
-                    }
-                }
-                
             }
-
         }
 
-        private void RefreshBook()
+        private List<Book> FilterQuery()
         {
-            App.Register(this, AppMessages.MSG_NEW_BOOK, () =>
-            {
-                Books = new ObservableCollection<Book>(App.Model.Books);
-
-            });
-        }
-
-        private void RefreshCategories()
-        {
-            App.Register(this, AppMessages.MSG_CAT_CHANGED, () =>
-             {
-                 Categories = new ObservableCollection<Category>(App.Model.Categories);
-             });
+            return (from b in App.Model.Books
+                        where b.Isbn.Contains(filter) || b.Title.Contains(filter)
+                            || b.Author.Contains(filter) || b.Editor.Contains(filter)
+                        select b).ToList();
         }
 
         public void FillCat() {
-            Categories = new ObservableCollection<Category>(App.Model.Categories);
             Category All = App.Model.Categories.Create();
             All.CategoryId = -1;
             All.Name = "All";
 
+            Categories = new ObservableCollection<Category>(App.Model.Categories);
             Categories.Insert(0, All);
             SelectedCat = All;
-            //Categories.Add(All);
         }
     }
 }

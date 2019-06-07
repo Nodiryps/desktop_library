@@ -44,19 +44,19 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Content="ISBN :" VerticalAlignment="Center" Grid.Row="0" />
-            <TextBox Text="{Binding ISBN}" IsReadOnly="False" Grid.Row="0" Grid.Column="1" Margin="5,1.667,5,7.667" />
+            <TextBox Text="{Binding ISBN}" IsReadOnly="False" Grid.Row="0" Grid.Column="1" Margin="5,1.667,5,7.667" Height="28"/>
             <Label Content="Title :" VerticalAlignment="Center" Grid.Row="1" />
-            <TextBox Text="{Binding Title}" IsReadOnly="False" Grid.Row="1" Grid.Column="1" Margin="5,1.667,5,7.667" />
+            <TextBox Text="{Binding Title}" IsReadOnly="False" Grid.Row="1" Grid.Column="1" Margin="5,1.667,5,7.667" Height="28"/>
             <Label Content="Author :" VerticalAlignment="Center" Grid.Row="2" />
-            <TextBox Text="{Binding Author}" IsReadOnly="False" Grid.Row="2" Grid.Column="2" Margin="5,1.667,5,7.667" />
+            <TextBox Text="{Binding Author}" IsReadOnly="False" Grid.Row="2" Grid.Column="2" Margin="5,1.667,5,7.667" Height="28" />
 
             <Label Content="Editor :" VerticalAlignment="Center" Grid.Row="3" />
             <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Margin="5,1.667,5,7.667" >
-                <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" Height="28" />
             </f:ValidatedField>
             <Grid>
-                <Label Content="Categories :" VerticalAlignment="Center" Margin="386,142,-398,-143" Height="30" />
-                <ListBox ItemsSource="{Binding CheckboxList}" Margin="465,145,-615,-195" Name="listBox">
+                <Label Content="Categories :" VerticalAlignment="Center" Margin="409,142,-421,-143" Height="30" />
+                <ListBox ItemsSource="{Binding CheckboxList}" Margin="488,145,-689,-195" Name="listBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}"  Command="{Binding ElementName=root, Path=CatChecked}" CommandParameter="{Binding}" >

@@ -49,7 +49,6 @@ namespace prbd_1819_g19
                     ThisCatChanged();
                     RaisePropertyChanged(nameof(ThisCat));
                 }
-                
             }
         }
 
@@ -117,7 +116,7 @@ namespace prbd_1819_g19
                 BoolTable = true;
                 BoolInput = true;
 
-                Add = new RelayCommand(() => {
+                Add = new RelayCommand<ICollection<Category>>(list => {
                     if (!string.IsNullOrWhiteSpace(ThisCat))
                     {
                         var catToAdd = (from cat in App.Model.Categories
@@ -128,13 +127,12 @@ namespace prbd_1819_g19
                             App.Model.CreateCategory(ThisCat);
                         }
                     }
-                    ThisCat = "";
-                    Category = new ObservableCollection<Category>(App.Model.Categories);
-                    BoolAdd = false;
-                    BoolCancel = false;
+
+                    Reset();
+                    App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED, list);
                 });
 
-                Update = new RelayCommand(() => {
+                Update = new RelayCommand<ICollection<Category>>(list => {
                     if (!string.IsNullOrWhiteSpace(ThisCat))
                     {
                         var catToUpdate = (from cat in App.Model.Categories
@@ -145,17 +143,12 @@ namespace prbd_1819_g19
                             catToUpdate.Name = ThisCat;
                             App.Model.SaveChanges();
                         }
-
                     }
-                    ThisCat = "";
-                    Category = new ObservableCollection<Category>(App.Model.Categories);
-                    BoolUpdate = false;
-                    BoolDelete = false;
-                    BoolCancel = false;
-
+                    Reset();
+                    App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED, list);
                 });
 
-                Delete = new RelayCommand(() => {
+                Delete = new RelayCommand<ICollection<Category>>(list => {
                     var catToDel = (from cat in App.Model.Categories
                                     where cat.Name == ThisCat
                                     select cat).FirstOrDefault();
@@ -164,21 +157,12 @@ namespace prbd_1819_g19
                     else
                         AddError("ThisCat", Properties.Resources.Error_Required);
                     App.Model.SaveChanges();
-                    ThisCat = "";
-                    Category = new ObservableCollection<Category>(App.Model.Categories);
-                    BoolUpdate = false;
-                    BoolAdd = false;
-                    BoolDelete = false;
-                    BoolCancel = false;
+                    Reset();
+                    App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED, list);
                 });
 
                 Cancel = new RelayCommand(() => {
-                    ThisCat = "";
-                    Category = new ObservableCollection<Category>(App.Model.Categories);
-                    BoolUpdate = false;
-                    BoolAdd = false;
-                    BoolDelete = false;
-                    BoolCancel = false;
+                    Reset();
                 });
 
                 SetThisCat = new RelayCommand(() =>
@@ -190,24 +174,25 @@ namespace prbd_1819_g19
                     BoolAdd = false;
                 });
             }
-
         }
 
         public void ThisCatChanged()
         {
             if (ThisCat != "" && BoolUpdate)
-            {
                 BoolAdd = false;
-
-            }
             else if(ThisCat != "" && !BoolUpdate)
-            {
                 BoolAdd = true;
-            }
             BoolCancel = true;
-
         }
 
-
+        private void Reset()
+        {
+            ThisCat = "";
+            Category = new ObservableCollection<Category>(App.Model.Categories);
+            BoolUpdate = false;
+            BoolAdd = false;
+            BoolDelete = false;
+            BoolCancel = false;
+        }
     }
 }

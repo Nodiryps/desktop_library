@@ -94,8 +94,6 @@ namespace prbd_1819_g19
             });
         }
 
-       
-
         private void DeleteCategory()
         {
             App.Register<Category>(this, AppMessages.MSG_CAT_DEL, catToDel =>
@@ -141,7 +139,7 @@ namespace prbd_1819_g19
                 var tab = (from TabItem t in tabControl.Items
                            where t.Content == ctl
                            select t).SingleOrDefault();
-                //ctl.Dispose();
+                ctl.Dispose();
                 tabControl.Items.Remove(tab);
                 tabControl.SelectedIndex = 0;
             });

@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 
 namespace prbd_1819_g19
@@ -63,15 +64,12 @@ namespace prbd_1819_g19
             get => boolGrid;
             set => SetProperty<bool>(ref boolGrid, value);
         }
+
         private bool boolCat;
         public bool BoolCat
         {
             get => boolCat;
-            set
-            {
-                boolCat = value;
-                RaisePropertyChanged(nameof(BoolCat));
-            }
+            set => SetProperty<bool>(ref boolCat, value);
         }
 
         public string PicturePath
@@ -91,18 +89,18 @@ namespace prbd_1819_g19
             set => SetProperty<Book>(ref book, value);
         }
 
-        public string ISBN
+        public string Isbn
         {
             get { return book.Isbn; }
             set
             {
                 book.Isbn = value;
-                RaisePropertyChanged(nameof(ISBN));
-                App.NotifyColleagues(AppMessages.MSG_ISBN_CHANGED, string.IsNullOrEmpty(value) ? "<new book>" : value);
+                RaisePropertyChanged(nameof(Isbn));
+                App.NotifyColleagues(AppMessages.MSG_ISBN_CHANGED, string.IsNullOrEmpty(value) ? " ??? " : value);
             }
         }
 
-        private int quantity;
+        private int quantity = 1;
         public int Quantity
         {
             get { return quantity; }
@@ -164,10 +162,11 @@ namespace prbd_1819_g19
         {
             get => HiddenShow();
         }
-
+        
         public ICommand Save { get; set; }
         public ICommand Cancel { get; set; }
         public ICommand Delete { get; set; }
+        public ICommand Exit { get; set; }
         public ICommand LoadImage { get; set; }
         public ICommand ClearImage { get; set; }
         public ICommand AddCopy { get; set; }
@@ -188,20 +187,21 @@ namespace prbd_1819_g19
             Copies = new ObservableCollection<BookCopy>(book.Copies);
             FillCheckboxList();
             imageHelper = new ImageHelper(App.IMAGE_PATH, Book.PicturePath);
+            Exit = new RelayCommand(ExitAction);
 
             if (App.IsAdmin())
             {
                 BoolGrid = true;
 
                 Save = new RelayCommand(SaveAction, CanSaveOrCancelAction);
-                Cancel = new RelayCommand(CancelAction, CanSaveOrCancelAction);
+                Cancel = new RelayCommand(CancelAction);
                 Delete = new RelayCommand(DeleteAction, () => !IsNew);
                 LoadImage = new RelayCommand(LoadImageAction);
                 ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
                 AddCopy = new RelayCommand(AddCopyBook);
                 CatChecked = new RelayCommand(() => { EnableBoolCat(); Console.WriteLine("EnableBoolCat"); });
-
             }
+            
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
             App.Register<string>(this, AppMessages.MSG_TIMER, s => {
@@ -255,6 +255,12 @@ namespace prbd_1819_g19
             }
         }
 
+        private void ExitAction()
+        {
+            ResetBookDatas();
+            App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB, this);
+        }
+
         private void SaveAction()
         {
             if (IsNew)
@@ -280,15 +286,19 @@ namespace prbd_1819_g19
 
         private void DeleteAction()
         {
-            this.CancelAction();
-            if (File.Exists(PicturePath))
+            MessageBoxResult dialog = MessageBox.Show("Are you sur you want to delete this book? (" + Book.Title + ')', "DELETE CONFIRM", MessageBoxButton.OKCancel);
+            if (dialog == MessageBoxResult.OK)
             {
-                File.Delete(PicturePath);
+                CancelAction();
+                if (File.Exists(PicturePath))
+                {
+                    File.Delete(PicturePath);
+                }
+                Book.Delete();
+                App.Model.SaveChanges();
+                App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
+                App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB, this);
             }
-            Book.Delete();
-            App.Model.SaveChanges();
-            App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
-            App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB, this);
         }
 
         private void CancelAction()
@@ -298,7 +308,7 @@ namespace prbd_1819_g19
 
             if (IsNew)
             {
-                ISBN = null;
+                Isbn = null;
                 Title = null;
                 Author = null;
                 Editor = null;
@@ -307,26 +317,30 @@ namespace prbd_1819_g19
             }
             else
             {
-                var change = (from c in App.Model.ChangeTracker.Entries<Book>()
-                              where c.Entity == Book
-                              select c).FirstOrDefault();
-                if (change != null)
-                {
-                    change.Reload();
-                    RaisePropertyChanged(nameof(ISBN));
-                    RaisePropertyChanged(nameof(Title));
-                    RaisePropertyChanged(nameof(Author));
-                    RaisePropertyChanged(nameof(Editor));
-                    RaisePropertyChanged(nameof(PicturePath));
-                }
+                ResetBookDatas();
+            }
+        }
+
+        private void ResetBookDatas()
+        {
+            var change = (from c in App.Model.ChangeTracker.Entries<Book>()
+                          where c.Entity == Book
+                          select c).FirstOrDefault();
+            if (change != null)
+            {
+                change.Reload();
+                RaisePropertyChanged(nameof(Isbn));
+                RaisePropertyChanged(nameof(Title));
+                RaisePropertyChanged(nameof(Author));
+                RaisePropertyChanged(nameof(Editor));
+                RaisePropertyChanged(nameof(PicturePath));
             }
         }
 
         private bool CanSaveOrCancelAction()
         {
             if (App.IsAdmin()) 
-                if(!IsNew)
-                    return Validate() || BoolCat;
+                return Validate() || BoolCat;
             
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
                           where c.Entity == Book
@@ -351,27 +365,41 @@ namespace prbd_1819_g19
             InputValidations(Title);
             InputValidations(Author);
             InputValidations(Editor);
-            InputValidations(ISBN);
+            InputValidations(Isbn);
         }
 
         private void InputValidations(string s)
         {
             if (!IsOk(s))
-                AddError("s", Properties.Resources.Error_Required);
+                AddError('\"'+ s + '\"', Properties.Resources.Error_Required);
             if (s.Length < 3)
-                AddError("s", Properties.Resources.Error_LengthGreaterEqual3);
+                AddError('\"' + s + '\"', Properties.Resources.Error_LengthGreaterEqual3);
         }
 
         private void IsbnValidations()
         {
-            if (ISBN.Length != 3)
-                AddError("ISBN", Properties.Resources.Error_IsbnLength);
+            if(IsbnExists())
+                AddError("Isbn", Properties.Resources.Error_AlreadyExists);
+            if (Isbn.Length > 3)
+                AddError("Isbn", Properties.Resources.Error_IsbnLength);
         }
 
         private void QuantityValidations()
         {
             if (Quantity < 1)
                 AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
+        }
+
+        private bool IsbnExists()
+        {
+            //var old = (from b in App.Model.Books
+            //           where b.BookId.Equals(book.BookId)
+            //           select b).FirstOrDefault();
+            return (from b in App.Model.Books
+                           where b.Isbn.Equals(Isbn) 
+                              && b.BookId != book.BookId
+                           select b).FirstOrDefault() != null;
+            //&& !newBook.Isbn.Equals(old.Isbn);
         }
 
         private bool IsOk(string s)

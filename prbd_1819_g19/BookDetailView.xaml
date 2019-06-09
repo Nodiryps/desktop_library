@@ -48,22 +48,22 @@
 
             <Label Content="ISBN :" VerticalAlignment="Center" Grid.Row="0" Height="26" Margin="0,2,0,1" />
             <f:ValidatedField Grid.Row="0" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding ISBN}" IsReadOnly="False" />
+                <TextBox Text="{Binding Isbn}" IsReadOnly="False" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
             </f:ValidatedField>
 
             <Label Content="Title :" VerticalAlignment="Center" Grid.Row="1" Height="26" Margin="0,1,0,2" />
             <f:ValidatedField Grid.Row="1" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding Title}" IsReadOnly="False" />
+                <TextBox Text="{Binding Title}" IsReadOnly="False" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1"/>
             </f:ValidatedField>
 
             <Label Content="Author :" VerticalAlignment="Center" Grid.Row="2" Height="26" Margin="0,2,0,1" />
             <f:ValidatedField Grid.Row="2" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding Author}" IsReadOnly="False" />
+                <TextBox Text="{Binding Author}" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="2" Grid.Column="1"/>
             </f:ValidatedField>
 
             <Label Content="Editor :" VerticalAlignment="Center" Grid.Row="3" Height="26" Margin="0,2,0,1" />
             <f:ValidatedField Grid.Row="3" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding Editor}"/>
+                <TextBox Text="{Binding Editor}" IsReadOnly="False" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1"/>
             </f:ValidatedField>
             <Grid>
                 <Label Content="Categories :" VerticalAlignment="Center" Margin="579,199,-591,-200" Height="30" />
@@ -86,8 +86,9 @@
                Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, 
                     FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" RenderTransformOrigin="0.486,0.508"/>
         <Label Content="Quantity:" VerticalAlignment="Center" Margin="375,167,364,257" RenderTransformOrigin="1.169,3.423" />
-        <TextBox Text="{Binding Quantity}" VerticalAlignment="Center" Margin="438,169,335,257" RenderTransformOrigin="0.507,0.577" Height="24"/>
-
+        <f:ValidatedField VerticalAlignment="Center" Margin="438,169,335,257" RenderTransformOrigin="0.507,0.577" Height="24">
+            <TextBox Text="{Binding Quantity}"/>
+        </f:ValidatedField>
         <Label Content="Date: " HorizontalAlignment="Left" Margin="376,198,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
         <Button Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,260,257" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>
         <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,200,0,0" VerticalAlignment="Top" Width="123"/>

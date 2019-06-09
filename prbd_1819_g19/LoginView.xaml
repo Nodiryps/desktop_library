@@ -52,7 +52,9 @@
         <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
             <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" >
                 <Run Text="Click"/>
-                <Hyperlink Command="{Binding SignUp}"><Run Text="HERE"/></Hyperlink>
+                <Hyperlink Command="{Binding SignUp}">
+                    <Run Text="HERE"/>
+                </Hyperlink>
                 <Run Text="to subscribe"/>
             </TextBlock>
         </DockPanel>

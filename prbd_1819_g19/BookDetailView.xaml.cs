@@ -215,14 +215,17 @@ namespace prbd_1819_g19
 
         private void AddCopyBook()
         {
-            if (selectedDate == null)
-            {
-                selectedDate = DateTime.Now;
-            }
-            book.AddCopies(Quantity, selectedDate);
+            AddCopies();
             Copies = new ObservableCollection<BookCopy>(book.Copies);
             App.Model.SaveChanges();
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
+        }
+
+        private void AddCopies()
+        {
+            if (selectedDate == null)
+                selectedDate = DateTime.Now;
+            book.AddCopies(Quantity, selectedDate);
         }
 
         private void LoadImageAction()
@@ -244,9 +247,9 @@ namespace prbd_1819_g19
 
         public override void Dispose()
         {
-#if DEBUG_USERCONTROLS_WITH_TIMER
-            timer.Stop();
-#endif
+            #if DEBUG_USERCONTROLS_WITH_TIMER
+                        timer.Stop();
+            #endif
             base.Dispose();
             if (imageHelper.IsTransitoryState)
             {
@@ -268,6 +271,7 @@ namespace prbd_1819_g19
                 App.Model.Books.Add(Book);
                 IsNew = false;
             }
+            AddCopies();
             AddCategoriesCheckBox();
             imageHelper.Confirm(Book.Title);
             PicturePath = imageHelper.CurrentFile;
@@ -286,7 +290,9 @@ namespace prbd_1819_g19
 
         private void DeleteAction()
         {
-            MessageBoxResult dialog = MessageBox.Show("Are you sur you want to delete this book? (" + Book.Title + ')', "DELETE CONFIRM", MessageBoxButton.OKCancel);
+            MessageBoxResult dialog = MessageBox.Show("Are you sur you want to delete this book? (" + Book.Title + ')',
+                                                      "DELETE CONFIRM", 
+                                                      MessageBoxButton.OKCancel);
             if (dialog == MessageBoxResult.OK)
             {
                 CancelAction();
@@ -351,11 +357,12 @@ namespace prbd_1819_g19
         public override bool Validate()
         {
             ClearErrors();
-
-            InputsValidations();
-            IsbnValidations();
-            QuantityValidations();
-
+            if (!IsNew)
+            {
+                InputsValidations();
+                IsbnValidations();
+                QuantityValidations();
+            }
             RaiseErrors();
             return !HasErrors;
         }
@@ -378,7 +385,9 @@ namespace prbd_1819_g19
 
         private void IsbnValidations()
         {
-            if(IsbnExists())
+            if(!IsNumeric(Isbn))
+                AddError("Isbn", Properties.Resources.Error_IsbnNumeric);
+            if (IsbnExists())
                 AddError("Isbn", Properties.Resources.Error_AlreadyExists);
             if (Isbn.Length > 3)
                 AddError("Isbn", Properties.Resources.Error_IsbnLength);
@@ -388,6 +397,12 @@ namespace prbd_1819_g19
         {
             if (Quantity < 1)
                 AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
+        }
+
+        public bool IsNumeric(string s)
+        {
+            float output;
+            return float.TryParse(s, out output);
         }
 
         private bool IsbnExists()

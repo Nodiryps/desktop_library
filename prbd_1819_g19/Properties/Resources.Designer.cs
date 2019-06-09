@@ -79,11 +79,20 @@ namespace prbd_1819_g19.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à length must be  == 3.
+        ///   Recherche une chaîne localisée semblable à Length must be  == 3.
         /// </summary>
         public static string Error_IsbnLength {
             get {
                 return ResourceManager.GetString("Error_IsbnLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Must be a number (3).
+        /// </summary>
+        public static string Error_IsbnNumeric {
+            get {
+                return ResourceManager.GetString("Error_IsbnNumeric", resourceCulture);
             }
         }
         

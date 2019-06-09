@@ -22,39 +22,26 @@ namespace prbd_1819_g19
     /// </summary>
     public partial class BasketView : UserControlBase
     {
-        public BasketView()
+        private ObservableCollection<User> users;
+        public ObservableCollection<User> Users
         {
-            InitializeComponent();
-            DataContext = this;
-            SelectedUser = App.CurrentUser;
-            Users = new ObservableCollection<User>(App.Model.Users);
-            Delete = new RelayCommand(DeleteRental, () => { return true; });
-            Clear = new RelayCommand(ClearBasket);
-            ConfirmBasket();
-            UsersComboBox();
-            AddBookToBasket();
+            get => users;
+            set => SetProperty<ObservableCollection<User>>(ref users, value, () => { });
         }
 
-        private void ClearBasket()
+        public RentalItem selectedItem;
+        public RentalItem SelectedItem
         {
-            foreach (var v in SelectedUser.Basket.Items.ToList())
-            {
-                if (v != null)
-                    App.Model.RentalItems.Remove(v);
-                else
-                    AddError("DeleteCat", Properties.Resources.Error_Required);
-                App.Model.SaveChanges();
-            }
-            SelectedUser.ClearBasket();
-            Items = new ObservableCollection<RentalItem>();
-            App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
-
+            get => selectedItem;
+            set => SetProperty<RentalItem>(ref selectedItem, value);
         }
 
-        public ICommand UserFilter { get; set; }
-        public ICommand Confirm { get; set; }
-        public ICommand Clear { get; set; }
-        public ICommand Delete { get; set; }
+        private ObservableCollection<RentalItem> items;
+        public ObservableCollection<RentalItem> Items
+        {
+            get => items;
+            set => SetProperty<ObservableCollection<RentalItem>>(ref items, value, () => { });
+        }
 
         public User selectedUser;
         public User SelectedUser
@@ -77,30 +64,40 @@ namespace prbd_1819_g19
                 return "show";
         }
 
-        private ObservableCollection<User> users;
-        public ObservableCollection<User> Users
+        public ICommand UserFilter { get; set; }
+        public ICommand Confirm { get; set; }
+        public ICommand Clear { get; set; }
+        public ICommand Delete { get; set; }
+
+        /////////////////////////////////////////////////////////CONSTRUCT/////////////////////////////////////////////////////////
+        public BasketView()
         {
-            get => users;
-            set => SetProperty<ObservableCollection<User>>(ref users, value, () => { });
+            InitializeComponent();
+            DataContext = this;
+            SelectedUser = App.CurrentUser;
+            if(SelectedUser.Basket != null) { Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items); }
+            Users = new ObservableCollection<User>(App.Model.Users);
+            Delete = new RelayCommand(DeleteRental);
+            Clear = new RelayCommand(ClearBasket);
+            ConfirmBasket();
+            UsersComboBox();
+            AddBookToBasket();
         }
 
-        public User GetUserCurrent()
+        private void ClearBasket()
         {
-            return App.CurrentUser;
-        }
+            foreach (var v in SelectedUser.Basket.Items.ToList())
+            {
+                if (v != null)
+                    App.Model.RentalItems.Remove(v);
+                else
+                    AddError("DeleteCat", Properties.Resources.Error_Required);
+                App.Model.SaveChanges();
+            }
+            SelectedUser.ClearBasket();
+            Items = new ObservableCollection<RentalItem>();
+            App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
 
-        public RentalItem selectedItem;
-        public RentalItem SelectedItem
-        {
-            get => selectedItem;
-            set => SetProperty<RentalItem>(ref selectedItem, value);
-        }
-
-        private ObservableCollection<RentalItem> items;
-        public ObservableCollection<RentalItem> Items
-        {
-            get => items;
-            set => SetProperty<ObservableCollection<RentalItem>>(ref items, value, () => { });
         }
 
         private void UsersComboBox()
@@ -116,8 +113,7 @@ namespace prbd_1819_g19
 
         private void ConfirmBasket()
         {
-            Console.WriteLine("ConfirmBasket");
-            Confirm = new RelayCommand(ConfirmRental, () => { return true; });
+            Confirm = new RelayCommand(ConfirmRental);
         }
 
         private void AddBookToBasket()
@@ -147,7 +143,7 @@ namespace prbd_1819_g19
             else
                 AddError("DeleteCat", Properties.Resources.Error_Required);
             App.Model.SaveChanges();
-            Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+            //Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
             App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
             Reset();
         }

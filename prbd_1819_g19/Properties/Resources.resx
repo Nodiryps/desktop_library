@@ -124,7 +124,10 @@
     <value>does not exist</value>
   </data>
   <data name="Error_IsbnLength" xml:space="preserve">
-    <value>length must be  == 3</value>
+    <value>Length must be  == 3</value>
+  </data>
+  <data name="Error_IsbnNumeric" xml:space="preserve">
+    <value>Must be a number (3)</value>
   </data>
   <data name="Error_LengthGreaterEqual3" xml:space="preserve">
     <value>length must be &gt;= 3</value>

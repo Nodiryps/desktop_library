@@ -20,7 +20,7 @@
     <Grid IsEnabled="{Binding BoolGrid}">
 
 
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="360,238,240,20" AutoGenerateColumns="False" IsReadOnly="True" 
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="360,238,220,20" AutoGenerateColumns="False" IsReadOnly="True" 
                  IsEnabled="{Binding ReadMode}" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding BookCopyId}" SortDirection="Descending"/>
@@ -66,8 +66,8 @@
                 <TextBox Text="{Binding Editor}" IsReadOnly="False" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1"/>
             </f:ValidatedField>
             <Grid>
-                <Label Content="Categories :" VerticalAlignment="Center" Margin="579,199,-591,-200" Height="30" />
-                <ListBox ItemsSource="{Binding CheckboxList}" Margin="584,224,-705,-385" Name="listBox">
+                <Label Content="Categories :" VerticalAlignment="Center" Margin="619,199,-631,-200" Height="30" />
+                <ListBox ItemsSource="{Binding CheckboxList}" Margin="624,224,-705,-385" Name="listBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}"  
@@ -85,13 +85,13 @@
         <Image x:Name="img" HorizontalAlignment="Left" Height="187" Margin="40,170,0,0" VerticalAlignment="Top" Width="180" RenderOptions.BitmapScalingMode="Fant"
                Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, 
                     FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" RenderTransformOrigin="0.486,0.508"/>
-        <Label Content="Quantity:" VerticalAlignment="Center" Margin="375,167,364,257" RenderTransformOrigin="1.169,3.423" />
-        <f:ValidatedField VerticalAlignment="Center" Margin="438,169,335,257" RenderTransformOrigin="0.507,0.577" Height="24">
+        <Label Content="Quantity:" VerticalAlignment="Center" Margin="415,167,324,257" RenderTransformOrigin="1.169,3.423" />
+        <f:ValidatedField VerticalAlignment="Center" Margin="478,169,295,257" RenderTransformOrigin="0.507,0.577" Height="24">
             <TextBox Text="{Binding Quantity}"/>
         </f:ValidatedField>
         <Label Content="Date: " HorizontalAlignment="Left" Margin="376,198,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
-        <Button Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,260,257" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>
-        <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,200,0,0" VerticalAlignment="Top" Width="123"/>
+        <Button Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,220,257" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>
+        <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,200,0,0" VerticalAlignment="Top" Width="163"/>
 
     </Grid>
 </f:UserControlBase>

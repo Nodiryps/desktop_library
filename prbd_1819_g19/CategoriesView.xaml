@@ -17,7 +17,7 @@
                   ItemsSource="{Binding Category}" IsEnabled="{Binding BoolTable}" 
                   AutoGenerateColumns="False" IsReadOnly="True"  SelectionMode="Single">
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
+                <i:EventTrigger EventName="MouseDoubleClick" FocusManager.FocusedElement="{Binding ElementName=textBox}">
                     <i:InvokeCommandAction Command="{Binding SetThisCat}" 
                                            CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItem}"/>
                 </i:EventTrigger>
@@ -42,7 +42,7 @@
 
         <f:ValidatedField HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="305" Margin="0,220,0,0">
             <TextBox Name="textBox" TextWrapping="Wrap" Text="{Binding ThisCat, UpdateSourceTrigger=PropertyChanged}" 
-                     IsEnabled="{Binding BoolInput}" Margin="10,0,0,0" />
+                     IsEnabled="{Binding BoolInput}" Margin="10,0,0,0"/>
             
         </f:ValidatedField>
 

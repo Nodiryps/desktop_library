@@ -23,41 +23,6 @@ namespace prbd_1819_g19
     /// </summary>
     public partial class RentalView : UserControlBase
     {
-        public RentalView()
-        {
-            InitializeComponent();
-            DataContext = this;
-            EnableTable = true;
-            if (App.IsAdmin())
-            {
-                enableTable = true;
-            }
-
-            Rentalz = new ObservableCollection<Rental>();
-            Items = new ObservableCollection<RentalItem>();
-            Rentalz = new ObservableCollection<Rental>(FillRentals());
-
-            SetRental = new RelayCommand<Rental>(rental => { //Pour remplir le tableau de droite
-                if(SelectedRental != null)
-                Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
-            });
-
-            App.Register(this, AppMessages.MSG_CONFIRM_BASKET, () =>
-            {
-                Rentalz = new ObservableCollection<Rental>(FillRentals());
-            });
-
-            Return();
-            Delete();
-
-        }
-
-        public ICommand SetRental { get; set; }
-        public ICommand ReturnBtn { get; set; }
-        public ICommand DeleteBtn { get; set; }
-
-        private bool boolClicked = false;
-
         private ObservableCollection<Rental> rentalz;
         public ObservableCollection<Rental> Rentalz
         {
@@ -86,6 +51,41 @@ namespace prbd_1819_g19
             set => RaisePropertyChanged(nameof(enableTable));
         }
 
+        private bool boolClicked = false;
+
+        public ICommand SetRental { get; set; }
+        public ICommand ReturnBtn { get; set; }
+        public ICommand DeleteBtn { get; set; }
+
+        public RentalView()
+        {
+            InitializeComponent();
+            DataContext = this;
+            EnableTable = true;
+            if (App.IsAdmin())
+            {
+                enableTable = true;
+            }
+            
+            Rentalz = new ObservableCollection<Rental>();
+            Items = new ObservableCollection<RentalItem>();
+            Rentalz = new ObservableCollection<Rental>(FillRentals());
+
+            SetRental = new RelayCommand<Rental>(rental => { //Pour remplir le tableau de droite
+                if(SelectedRental != null)
+                Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
+            });
+
+            App.Register(this, AppMessages.MSG_CONFIRM_BASKET, () =>
+            {
+                Rentalz = new ObservableCollection<Rental>(FillRentals());
+            });
+
+            Return();
+            Delete();
+
+        }
+        
         private void Return()
         {
             ReturnBtn = new RelayCommand<RentalItem>(ri => {
@@ -135,10 +135,22 @@ namespace prbd_1819_g19
 
         private List<Rental> FillRentals()
         {
-            return (from r in App.Model.Rentals
-                    where r.RentalDate != null
-                    //&&(from ri in r.Items where ri.ReturnDate != null select ri)
-                    select r).ToList();
+            List<Rental> list = new List<Rental>();
+
+            if (App.IsAdmin())
+            {
+                list = (from r in App.Model.Rentals
+                        where r.RentalDate != null
+                        select r).ToList();
+            }
+            else
+            {
+                list = (from r in App.Model.Rentals
+                        where r.RentalDate != null
+                            && r.User.UserId == App.CurrentUser.UserId
+                        select r).ToList();
+            }
+            return list;
         }
     }
 }

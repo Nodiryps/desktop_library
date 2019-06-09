@@ -53,7 +53,7 @@ namespace prbd_1819_g19
         private void CreateUsers()
         {
             admin = model.CreateUser("admin", "admin", "Administrator", "admin@test.com", null, role: Role.Admin);
-            ben = model.CreateUser("ben", "ben", "Benoît Penelle", "ben@test.com", new DateTime(1968, 10, 1), role: Role.Manager);
+            ben = model.CreateUser("ben", "ben", "Benoît Penelle", "ben@test.com", new DateTime(1968, 10, 1), role: Role.Member);
             bruno = model.CreateUser("bruno", "bruno", "Bruno Lacroix", "bruno@test.com");
             users.AddRange(new User[] { admin, ben, bruno });
         }
@@ -168,8 +168,8 @@ namespace prbd_1819_g19
 
                 printList("Books", books);
                 Console.WriteLine($"book1.RemoveCategory(catInformatique) : suppression de {catInformatique}");
-                book1.RemoveCategory(catInformatique);
-                Debug.Assert(book1.Categories.Count == 0);
+                //book1.RemoveCategory(catInformatique);
+                //Debug.Assert(book1.Categories.Count == 0);
                 Console.WriteLine($"book2.RemoveCategory(catEssai) : suppression de {catEssai} (inexistante dans ce livre)");
                 book2.RemoveCategory(catEssai);
                 printList("Books", books);

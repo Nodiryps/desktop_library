@@ -123,11 +123,8 @@ namespace prbd_1819_g19
                                         where cat.Name != ThisCat
                                         select cat).FirstOrDefault();
                         if (catToAdd != null)
-                        {
                             App.Model.CreateCategory(ThisCat);
-                        }
                     }
-
                     Reset();
                     App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED, list);
                 });

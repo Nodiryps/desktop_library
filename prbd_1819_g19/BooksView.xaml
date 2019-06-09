@@ -46,8 +46,14 @@
             <Button Content="Clear" Command="{Binding ClearFilter}" Margin="725,0,10,-5" RenderTransformOrigin="0.522,0.57" />
         </Grid>
 
-        <ListView x:Name="listView" ItemsSource="{Binding Books}" Grid.Row="2" BorderBrush="Transparent" 
+        <ListView x:Name="listView" ItemsSource="{Binding Books}" Grid.Row="2" BorderBrush="Transparent"
                   SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,20,0,0" Grid.ColumnSpan="3">
+            <ListView.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFD8D8D8" Offset="1"/>
+                    <GradientStop Color="White"/>
+                </LinearGradientBrush>
+            </ListView.Background>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding DisplayBookDetails}" 
@@ -69,23 +75,17 @@
                             <TextBlock FontSize="10" Width="80" TextAlignment="Center" Text="{Binding Editor}" />
                             <Image Margin="5" Width="55" Height="80" Source="{Binding AbsolutePicturePath,Converter={f:UriToCachedImageConverter}, 
                                     TargetNullValue={StaticResource UnknownBook}}" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" />
-                            <ListView x:Name="listViewCat" ItemsSource="{Binding Categories}">
+                            <ListView x:Name="listViewCat" ItemsSource="{Binding Categories}" Background="Transparent" BorderThickness="0">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock>
-                                        <Hyperlink Command="{Binding ElementName=root, Path=LinkCat}" CommandParameter="{Binding}">
-                                            <TextBlock Text="{Binding}" x:Name="linkCat"/>
-                                        </Hyperlink>
-                                            </TextBlock>
+                                        <TextBlock  FontSize="10">
+                                            <Hyperlink Command="{Binding ElementName=root, Path=LinkCat}" CommandParameter="{Binding}">
+                                                <TextBlock Text="{Binding}" x:Name="linkCat"/>
+                                            </Hyperlink>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
 
-                                <!--<i:Interaction.Triggers>-->
-                                <!--<i:EventTrigger EventName="MouseDoubleClick">
-                                        <i:InvokeCommandAction Command="{Binding LinkCat}" 
-                                           CommandParameter="{Binding SelectedItem, ElementName=listViewCat}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>-->
                             </ListView>
                             <TextBlock FontSize="10" Width="80" TextAlignment="Center" Text="Copies: " />
                             <TextBlock FontSize="10" Width="80" TextAlignment="Center" Text="{Binding NumAvailableCopies}" />
@@ -94,11 +94,10 @@
                         </StackPanel>
                     </Border>
 
-
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button x:Name="btnNew" Content="New Book" Command="{Binding NewBooks}" HorizontalAlignment="Left" Margin="0,10" Grid.Row="3" Padding="5,1" Width="81" Grid.Column="1"/>
+        <Button x:Name="btnNew" BorderThickness="3" BorderBrush="LightSeaGreen" Content="New Book" Visibility="{Binding HideBtnNewBook}" Command="{Binding NewBooks}" HorizontalAlignment="Left" Margin="0,10" Grid.Row="3" Padding="5,1" Width="76" Grid.Column="1"/>
 
     </Grid>
 </f:UserControlBase>

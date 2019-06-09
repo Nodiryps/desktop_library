@@ -12,6 +12,7 @@
         d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
+        
         <DataGrid x:Name="dataGrid" Margin="0,0,0,250" SelectedItem="{Binding SelectedCategory}" 
                   ItemsSource="{Binding Category}" IsEnabled="{Binding BoolTable}" 
                   AutoGenerateColumns="False" IsReadOnly="True"  SelectionMode="Single">
@@ -40,7 +41,7 @@
         </DataGrid>
 
         <f:ValidatedField HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="305" Margin="0,220,0,0">
-            <TextBox TextWrapping="Wrap" Text="{Binding ThisCat, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox Name="textBox" TextWrapping="Wrap" Text="{Binding ThisCat, UpdateSourceTrigger=PropertyChanged}" 
                      IsEnabled="{Binding BoolInput}" Margin="10,0,0,0" />
             
         </f:ValidatedField>

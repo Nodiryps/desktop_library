@@ -37,6 +37,8 @@ namespace prbd_1819_g19
             set => SetProperty<string>(ref filter, value, ApplyFilterAction);
         }
 
+        public string HideBtnNewBook { get => HiddenShow(); }
+
         public ICommand ClearFilter { get; set; }
         public ICommand NewBooks { get; set; }
         public ICommand DisplayBookDetails { get; set; }
@@ -55,7 +57,10 @@ namespace prbd_1819_g19
             FillCat();
 
             ClearFilter = new RelayCommand(() => { Filter = ""; SelectedCat = null; });
-            if (App.IsAdmin()) { NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); }); }
+            if (App.IsAdmin())
+            {
+                NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); });
+            }
             DisplayBookDetails = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book); });
             CategoryFilter = new RelayCommand<Category>(cat => { ApplyComboBoxFilter(); });
             AddToBasket = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET, book); });
@@ -115,6 +120,14 @@ namespace prbd_1819_g19
             Categories = new ObservableCollection<Category>(App.Model.Categories);
             Categories.Insert(0, All);
             SelectedCat = All;
+        }
+
+        private string HiddenShow()
+        {
+            if (App.IsAdmin())
+                return "show";
+            else
+                return "hidden";
         }
     }
 }

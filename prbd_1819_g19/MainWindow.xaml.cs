@@ -91,9 +91,6 @@ namespace prbd_1819_g19
                 Dispatcher.InvokeAsync(() => tab.Focus());
 
                 CloseAnglet(tab);
-                CloseTab();
-
-
             });
         }
 
@@ -141,17 +138,19 @@ namespace prbd_1819_g19
         private void CloseTab()
         {
             App.Register<UserControlBase>(this, AppMessages.MSG_CLOSE_TAB, ctl => {
-                var tab = (from TabItem t in tabControl.Items where t.Content == ctl select t).SingleOrDefault();
-                ctl.Dispose();
+                var tab = (from TabItem t in tabControl.Items
+                           where t.Content == ctl
+                           select t).SingleOrDefault();
+                //ctl.Dispose();
                 tabControl.Items.Remove(tab);
+                tabControl.SelectedIndex = 0;
             });
         }
 
         public void CloseAnglet(TabItem tab)
         {
             tab.MouseDown += (o, e) => {
-                if (e.ChangedButton == MouseButton.Middle &&
-                    e.ButtonState == MouseButtonState.Pressed)
+                if (e.ChangedButton == MouseButton.Middle && e.ButtonState == MouseButtonState.Pressed)
                 {
                     tabControl.Items.Remove(o);
                     (tab.Content as UserControlBase).Dispose();

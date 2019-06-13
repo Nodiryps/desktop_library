@@ -123,6 +123,9 @@
   <data name="Error_DoesNotExist" xml:space="preserve">
     <value>does not exist</value>
   </data>
+  <data name="Error_InputDetailString" xml:space="preserve">
+    <value>Length must be between 2 and 50.</value>
+  </data>
   <data name="Error_IsbnLength" xml:space="preserve">
     <value>Length must be  == 3</value>
   </data>

@@ -109,7 +109,7 @@ namespace prbd_1819_g19
         {
             InitializeComponent();
             DataContext = this;
-            Category = new ObservableCollection<Category>(App.Model.Categories);
+            Category = new ObservableCollection<Category>(App.Model.Categories.OrderBy(b => b.Name));
 
             if (App.IsAdmin())
             {
@@ -133,7 +133,7 @@ namespace prbd_1819_g19
                     if (!string.IsNullOrWhiteSpace(ThisCat))
                     {
                         var catToUpdate = (from cat in App.Model.Categories
-                                           where cat.Name == SelectedCategory.Name
+                                           where cat.Name == SelectedCategory.Name orderby cat.Name
                                            select cat).FirstOrDefault();
                         if (catToUpdate != null)
                         {
@@ -185,7 +185,7 @@ namespace prbd_1819_g19
         private void Reset()
         {
             ThisCat = "";
-            Category = new ObservableCollection<Category>(App.Model.Categories);
+            Category = new ObservableCollection<Category>(App.Model.Categories.OrderBy(b => b.Name));
             BoolUpdate = false;
             BoolAdd = false;
             BoolDelete = false;

@@ -82,12 +82,12 @@ namespace prbd_1819_g19
                 App.SelectedUser.AddToBasket(book);
                 Console.WriteLine("AddTOBasketBooksView :" + App.CurrentUser);
                 App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET, book);
-                Books = new ObservableCollection<Book>(App.Model.Books);
+                Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title));
             });            
 
-            App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
+            App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title)); });
             App.Register<ICollection<Category>>(this, AppMessages.MSG_CAT_CHANGED, list => { FillCat(); ApplyFilterAction(); });
-            App.Register(this, AppMessages.MSG_NBCOPIES_CHANGED, () => { Books = new ObservableCollection<Book>(App.Model.Books); });
+            App.Register(this, AppMessages.MSG_NBCOPIES_CHANGED, () => { Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title)); });
         }
 
         private void ApplyFilterAction()

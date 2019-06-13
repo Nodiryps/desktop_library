@@ -72,6 +72,13 @@ namespace prbd_1819_g19
             set => SetProperty<bool>(ref boolCat, value);
         }
 
+        private bool boolSave;
+        public bool BoolSave
+        {
+            get => boolSave;
+            set => SetProperty<bool>(ref boolSave, value);
+        }
+
         public string PicturePath
         {
             get { return Book.AbsolutePicturePath; }
@@ -89,45 +96,61 @@ namespace prbd_1819_g19
             set => SetProperty<Book>(ref book, value);
         }
 
+        private string isbn;
         public string Isbn
         {
             get { return book.Isbn; }
             set
             {
                 book.Isbn = value;
-                RaisePropertyChanged(nameof(Isbn));
+                //RaisePropertyChanged(nameof(Isbn));
+                SetProperty<string>(ref isbn, value, InputValidationsIsbn);
                 App.NotifyColleagues(AppMessages.MSG_ISBN_CHANGED, string.IsNullOrEmpty(value) ? " ??? " : value);
             }
         }
 
-        private int quantity = 1;
+        private int quantity = 0;
         public int Quantity
         {
             get { return quantity; }
             set
             {
                 quantity = value;
-                RaisePropertyChanged(nameof(Quantity));
+                SetProperty<int>(ref quantity, value, QuantityValidations);
             }
         }
-
+        private string title;
         public string Title
         {
             get { return Book.Title; }
             set
             {
                 Book.Title = value;
-                RaisePropertyChanged(nameof(Title));
+                SetProperty<string>(ref title, value, InputValidationsTitle);
             }
         }
 
+        private string author;
         public string Author
         {
             get { return book.Author; }
             set
             {
                 book.Author = value;
-                RaisePropertyChanged(nameof(Author));
+                SetProperty<string>(ref author, value, InputValidationsAuthor);
+            }
+        }
+
+        private string editor;
+        public string Editor
+        {
+            get { return book.Editor; }
+            set
+            {
+                book.Editor = value;
+
+                SetProperty<string>(ref editor, value, InputValidationsEditor);
+
             }
         }
 
@@ -142,16 +165,6 @@ namespace prbd_1819_g19
             }
         }
 
-        public string Editor
-        {
-            get { return book.Editor; }
-            set
-            {
-                book.Editor = value;
-                RaisePropertyChanged(nameof(Editor));
-            }
-        }
-
         public string AbsolutePicturePath
         {
             get { return book.AbsolutePicturePath; }
@@ -162,7 +175,7 @@ namespace prbd_1819_g19
         {
             get => HiddenShow();
         }
-        
+
         public ICommand Save { get; set; }
         public ICommand Cancel { get; set; }
         public ICommand Delete { get; set; }
@@ -201,7 +214,7 @@ namespace prbd_1819_g19
                 AddCopy = new RelayCommand(AddCopyBook);
                 CatChecked = new RelayCommand(() => { EnableBoolCat(); Console.WriteLine("EnableBoolCat"); });
             }
-            
+
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
             App.Register<string>(this, AppMessages.MSG_TIMER, s => {
@@ -225,7 +238,8 @@ namespace prbd_1819_g19
         {
             if (selectedDate == null)
                 selectedDate = DateTime.Now;
-            book.AddCopies(Quantity, selectedDate);
+            if (Quantity > 0)
+                book.AddCopies(Quantity, selectedDate);
         }
 
         private void LoadImageAction()
@@ -247,9 +261,9 @@ namespace prbd_1819_g19
 
         public override void Dispose()
         {
-            #if DEBUG_USERCONTROLS_WITH_TIMER
+#if DEBUG_USERCONTROLS_WITH_TIMER
                         timer.Stop();
-            #endif
+#endif
             base.Dispose();
             if (imageHelper.IsTransitoryState)
             {
@@ -292,7 +306,7 @@ namespace prbd_1819_g19
         private void DeleteAction()
         {
             MessageBoxResult dialog = MessageBox.Show("Are you sur you want to delete this book? (" + Book.Title + ')',
-                                                      "DELETE CONFIRM", 
+                                                      "DELETE CONFIRM",
                                                       MessageBoxButton.OKCancel);
             if (dialog == MessageBoxResult.OK)
             {
@@ -346,8 +360,11 @@ namespace prbd_1819_g19
 
         private bool CanSaveOrCancelAction()
         {
-            if (App.IsAdmin()) 
-                return Validate() || BoolCat;
+            //if (App.IsAdmin())
+            //    return Validate();
+            Console.WriteLine("Validate: " + Validate());
+            if (Validate())
+                BoolSave = true;
 
             return InputModified();
         }
@@ -363,17 +380,20 @@ namespace prbd_1819_g19
         public override bool Validate()
         {
             ClearErrors();
-            if (!IsNew)
-            {
-                InputsValidations();
-                QuantityValidations();
-            }
+            //RaiseErrors();
+            //if (!IsNew)
+            //{
+            InputsValidations();
+            QuantityValidations();
+            //}
             //else if(IsNew && InputModified())
             //{
             //    InputsValidations();
             //    QuantityValidations();
             //}
+            
             RaiseErrors();
+
             return !HasErrors;
         }
 
@@ -387,38 +407,100 @@ namespace prbd_1819_g19
 
         private void InputValidationsTitle()
         {
-            if (!IsOk(Title))
+            if (IsOk(Title))
+            {
+                if (Title.Length < 2 || Title.Length > 50)
+                {
+                    BoolSave = false;
+                    ClearErrors();
+                    AddError("Title", Properties.Resources.Error_InputDetailString);
+                }
+            }
+
+            else
+            {
+                BoolSave = false;
+                ClearErrors();
                 AddError("Title", Properties.Resources.Error_Required);
-            if (Title.Length < 3)
-                AddError("Title", Properties.Resources.Error_LengthGreaterEqual3);
+            }
+
         }
-        
+
         private void InputValidationsAuthor()
         {
-            if (!IsOk(Author))
+            if (IsOk(Author))
+            {
+                if (Author.Length < 2 || Author.Length > 50)
+                {
+                    BoolSave = false;
+                    ClearErrors();
+                    AddError("Author", Properties.Resources.Error_InputDetailString);
+                }
+            }
+            else
+            {
+                BoolSave = false;
+                ClearErrors();
                 AddError("Author", Properties.Resources.Error_Required);
-            if (Author.Length < 3)
-                AddError("Author", Properties.Resources.Error_LengthGreaterEqual3);
+            }
+
         }
 
         private void InputValidationsEditor()
         {
-            if (!IsOk(Editor))
+            if (IsOk(Editor))
+            {
+                if (Editor.Length < 2)
+                {
+                    BoolSave = false;
+                    ClearErrors();
+                    AddError("Editor", Properties.Resources.Error_InputDetailString);
+                }
+            }
+            else
+            {
+                BoolSave = false;
+                ClearErrors();
                 AddError("Editor", Properties.Resources.Error_Required);
-            if (Editor.Length < 3)
-                AddError("Editor", Properties.Resources.Error_LengthGreaterEqual3);
+            }
+
         }
 
         private void InputValidationsIsbn()
         {
-            if (!IsOk(Isbn))
+            if (IsOk(Isbn))
+            {
+                if (IsNumeric(Isbn))
+                {
+                    if (Isbn.Length == 3)
+                    {
+                        if (IsbnExists())
+                        {
+                            BoolSave = false;
+                            ClearErrors();
+                            AddError("Isbn", Properties.Resources.Error_AlreadyExists);
+                        }
+                    }
+                    else
+                    {
+                        BoolSave = false;
+                        ClearErrors();
+                        AddError("Isbn", Properties.Resources.Error_IsbnLength);
+                    }
+                }
+                else
+                {
+                    BoolSave = false;
+                    ClearErrors();
+                    AddError("Isbn", Properties.Resources.Error_IsbnNumeric);
+                }
+            }
+            else
+            {
+                BoolSave = false;
+                ClearErrors();
                 AddError("Isbn", Properties.Resources.Error_Required);
-            if (!IsNumeric(Isbn))
-                AddError("Isbn", Properties.Resources.Error_IsbnNumeric);
-            if (IsbnExists())
-                AddError("Isbn", Properties.Resources.Error_AlreadyExists);
-            if (Isbn.Length != 3)
-                AddError("Isbn", Properties.Resources.Error_IsbnLength);
+            }
         }
 
         //private void InputValidations(string s)
@@ -431,8 +513,30 @@ namespace prbd_1819_g19
 
         private void QuantityValidations()
         {
-            if (Quantity < 1)
-                AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
+            if (IsOk(Quantity.ToString()))
+            {
+                if (IsNumeric(Isbn))
+                {
+                    if (Quantity < 0)
+                    {
+                        BoolSave = false;
+                        ClearErrors();
+                        AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
+                    }
+                }
+                else
+                {
+                    BoolSave = false;
+                    ClearErrors();
+                    AddError("Quantity", Properties.Resources.Error_IsbnNumeric);
+                }
+            }
+            else
+            {
+                BoolSave = false;
+                ClearErrors();
+                AddError("Quantity", Properties.Resources.Error_Required);
+            }
         }
 
         public bool IsNumeric(string s)
@@ -444,9 +548,9 @@ namespace prbd_1819_g19
         private bool IsbnExists()
         {
             return (from b in App.Model.Books
-                           where b.Isbn.Equals(Isbn) 
-                              && b.BookId != book.BookId
-                           select b).FirstOrDefault() != null;
+                    where b.Isbn.Equals(Isbn)
+                       && b.BookId != book.BookId
+                    select b).FirstOrDefault() != null;
         }
 
         private bool IsOk(string s)
@@ -497,13 +601,13 @@ namespace prbd_1819_g19
                 if (!book.Categories.Contains(cat))
                     CheckboxList.Add(new CategoriesCheckboxList<Category>(cat, false));
         }
-        
+
         ////////////////////////////////////INNER CLASS////////////////////////////////////
         public class CategoriesCheckboxList<T> : INotifyPropertyChanged
         {
             public event PropertyChangedEventHandler PropertyChanged;
 
-            
+
             private T item;
             public T Item
             {

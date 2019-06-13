@@ -20,7 +20,7 @@
     <Grid>
 
 
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="360,238,220,20" AutoGenerateColumns="False" IsReadOnly="True" 
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="360,280,220,20" AutoGenerateColumns="False" IsReadOnly="True" 
                  IsEnabled="{Binding BoolGrid}" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding BookCopyId}" SortDirection="Descending"/>
@@ -28,10 +28,10 @@
                 <DataGridTextColumn Header="Rented By" Binding="{Binding RentedBy}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Cancel" Margin="0,0,585,50" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolGrid}"/>
-        <Button Content="Save" Margin="0,0,678,50" VerticalAlignment="Bottom" Command="{Binding Save}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolGrid}"/>
-        <Button Content="Delete" Margin="0,0,678,22" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolGrid}"/>
-        <Button Content="Exit" Margin="0,0,585,22" VerticalAlignment="Bottom" Command="{Binding Exit}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="True"/>
+        <Button Content="Cancel" Margin="0,0,585,50" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" />
+        <Button Content="Save" Margin="0,0,678,50" VerticalAlignment="Bottom" Command="{Binding Save}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolSave}"/>
+        <Button Content="Delete" Margin="0,0,678,22" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20"/>
+        <Button Content="Exit" Margin="0,0,585,22" VerticalAlignment="Bottom" Command="{Binding Exit}" HorizontalAlignment="Right" Width="75" Height="20"/>
 
         <Grid Height="229" Margin="20,16,0,0" VerticalAlignment="Top" IsEnabled="{Binding BoolGrid}" HorizontalAlignment="Left" Width="770">
             <Grid.RowDefinitions>
@@ -43,31 +43,32 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="64"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="350*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Content="ISBN :" VerticalAlignment="Center" Grid.Row="0" Height="26" Margin="0,2,0,1" />
-            <f:ValidatedField Grid.Row="0" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding Isbn}" IsReadOnly="False" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
+            <Label Content="ISBN :" VerticalAlignment="Center" Grid.Row="0" Height="26" Margin="0,0,0,20" />
+            <f:ValidatedField Grid.Row="0" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2">
+                <TextBox Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" MaxLength="3"/>
             </f:ValidatedField>
 
-            <Label Content="Title :" VerticalAlignment="Center" Grid.Row="1" Height="26" Margin="0,1,0,2" />
-            <f:ValidatedField Grid.Row="1" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding Title}" IsReadOnly="False"/>
+            <Label Content="Title :" VerticalAlignment="Center" Height="26" Margin="0,36,0,30" Grid.RowSpan="2" />
+            <f:ValidatedField Margin="0,38,5,38" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2">
+                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" MaxLength="50"/>
             </f:ValidatedField>
 
-            <Label Content="Author :" VerticalAlignment="Center" Grid.Row="2" Height="26" Margin="0,2,0,1" />
-            <f:ValidatedField Grid.Row="2" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding Author}" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="2" Grid.Column="1"/>
+            <Label Content="Author :" VerticalAlignment="Center" Grid.Row="1" Height="26" Margin="0,26,0,40" Grid.RowSpan="2" />
+            <f:ValidatedField Grid.Row="1" Margin="0,27,5,3" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2">
+                <TextBox Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" MaxLength="50"/>
             </f:ValidatedField>
 
-            <Label Content="Editor :" VerticalAlignment="Center" Grid.Row="3" Height="26" Margin="0,2,0,1" />
-            <f:ValidatedField Grid.Row="3" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding Editor}" IsReadOnly="False" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1"/>
+            <Label Content="Editor :" VerticalAlignment="Center" Grid.Row="2" Height="26" Margin="0,16,0,4" />
+            <f:ValidatedField Grid.Row="2" Margin="0,18,5,13" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2">
+                <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" MaxLength="50"/>
             </f:ValidatedField>
             <Grid>
-                <Label Content="Categories :" VerticalAlignment="Center" Margin="619,199,-631,-200" Height="30" />
-                <ListBox ItemsSource="{Binding CheckboxList}" Margin="624,224,-705,-385" Name="listBox">
+                <Label Content="Categories :" VerticalAlignment="Center" Margin="619,234,-631,-218" Height="30" />
+                <ListBox ItemsSource="{Binding CheckboxList}" Margin="624,264,-705,-368" Name="listBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}"  
@@ -85,13 +86,13 @@
         <Image x:Name="img" HorizontalAlignment="Left" Height="187" Margin="40,170,0,0" VerticalAlignment="Top" Width="180" RenderOptions.BitmapScalingMode="Fant"
                Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, 
                     FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" IsEnabled="{Binding BoolGrid}" RenderTransformOrigin="0.486,0.508"/>
-        <Label IsEnabled="{Binding BoolGrid}" Content="Quantity:" VerticalAlignment="Center" Margin="415,167,324,257" RenderTransformOrigin="1.169,3.423" />
+        <Label IsEnabled="{Binding BoolGrid}" Content="Quantity:" VerticalAlignment="Center" Margin="417,166,322,258" RenderTransformOrigin="1.169,3.423" />
         <f:ValidatedField IsEnabled="{Binding BoolGrid}" VerticalAlignment="Center" Margin="478,169,295,257" RenderTransformOrigin="0.507,0.577" Height="24">
-            <TextBox Text="{Binding Quantity}"/>
+            <TextBox Text="{Binding Quantity}" MaxLength="2" Height="21" HorizontalAlignment="Left" Width="27"/>
         </f:ValidatedField>
-        <Label IsEnabled="{Binding BoolGrid}" Content="Date: " HorizontalAlignment="Left" Margin="376,198,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
-        <Button IsEnabled="{Binding BoolGrid}" Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,220,257" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>
-        <DatePicker IsEnabled="{Binding BoolGrid}" SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,200,0,0" VerticalAlignment="Top" Width="163"/>
+        <Label IsEnabled="{Binding BoolGrid}" Content="Date: " HorizontalAlignment="Left" Margin="376,219,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
+        <Button IsEnabled="{Binding BoolGrid}" Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,220,260" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>
+        <DatePicker IsEnabled="{Binding BoolGrid}" SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,221,0,0" VerticalAlignment="Top" Width="163"/>
 
     </Grid>
 </f:UserControlBase>

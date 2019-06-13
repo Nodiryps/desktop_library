@@ -79,6 +79,15 @@ namespace prbd_1819_g19.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Length must be between 2 and 50..
+        /// </summary>
+        public static string Error_InputDetailString {
+            get {
+                return ResourceManager.GetString("Error_InputDetailString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Length must be  == 3.
         /// </summary>
         public static string Error_IsbnLength {

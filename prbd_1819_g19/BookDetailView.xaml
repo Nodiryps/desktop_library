@@ -17,23 +17,23 @@
 
 
 
-    <Grid IsEnabled="{Binding BoolGrid}">
+    <Grid>
 
 
         <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="360,238,220,20" AutoGenerateColumns="False" IsReadOnly="True" 
-                 IsEnabled="{Binding ReadMode}" SelectionMode="Single">
+                 IsEnabled="{Binding BoolGrid}" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding BookCopyId}" SortDirection="Descending"/>
                 <DataGridTextColumn Header="Acquisition Date" Binding="{Binding AcquisitionDate}" />
                 <DataGridTextColumn Header="Rented By" Binding="{Binding RentedBy}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Cancel" Margin="0,0,585,50" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20"/>
-        <Button Content="Save" Margin="0,0,678,50" VerticalAlignment="Bottom" Command="{Binding Save}" IsEnabled="True" HorizontalAlignment="Right" Width="75" Height="20"/>
-        <Button Content="Delete" Margin="0,0,678,22" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20"/>
-        <Button Content="Exit" Margin="0,0,585,22" VerticalAlignment="Bottom" Command="{Binding Exit}" HorizontalAlignment="Right" Width="75" Height="20"/>
+        <Button Content="Cancel" Margin="0,0,585,50" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolGrid}"/>
+        <Button Content="Save" Margin="0,0,678,50" VerticalAlignment="Bottom" Command="{Binding Save}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolGrid}"/>
+        <Button Content="Delete" Margin="0,0,678,22" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolGrid}"/>
+        <Button Content="Exit" Margin="0,0,585,22" VerticalAlignment="Bottom" Command="{Binding Exit}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="True"/>
 
-        <Grid Height="146" Margin="16,16,0,0" VerticalAlignment="Top" IsEnabled="{Binding SelectedMessage, Converter={f:NullToBoolValueConverter}}" HorizontalAlignment="Left" Width="774">
+        <Grid Height="229" Margin="20,16,0,0" VerticalAlignment="Top" IsEnabled="{Binding BoolGrid}" HorizontalAlignment="Left" Width="770">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30*"/>
                 <RowDefinition Height="30*"/>
@@ -79,19 +79,19 @@
                 </ListBox>
             </Grid>
         </Grid>
-        <Button x:Name="btnLoad" Content="Load" Margin="0,0,485,260" VerticalAlignment="Bottom" Command="{Binding LoadImage}" HorizontalAlignment="Right" Width="67" Height="21" RenderTransformOrigin="0.5,0.5"/>
-        <Button x:Name="btnClear" Content="Clear" Margin="0,0,485,231" VerticalAlignment="Bottom" Command="{Binding ClearImage}" HorizontalAlignment="Right" Width="67" Height="21"/>
+        <Button x:Name="btnLoad" Content="Load" Margin="0,0,485,260" VerticalAlignment="Bottom" Command="{Binding LoadImage}" IsEnabled="{Binding BoolGrid}" HorizontalAlignment="Right" Width="67" Height="21" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="btnClear" Content="Clear" Margin="0,0,485,231" VerticalAlignment="Bottom" Command="{Binding ClearImage}" IsEnabled="{Binding BoolGrid}" HorizontalAlignment="Right" Width="67" Height="21"/>
 
         <Image x:Name="img" HorizontalAlignment="Left" Height="187" Margin="40,170,0,0" VerticalAlignment="Top" Width="180" RenderOptions.BitmapScalingMode="Fant"
                Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, 
-                    FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" RenderTransformOrigin="0.486,0.508"/>
-        <Label Content="Quantity:" VerticalAlignment="Center" Margin="415,167,324,257" RenderTransformOrigin="1.169,3.423" />
-        <f:ValidatedField VerticalAlignment="Center" Margin="478,169,295,257" RenderTransformOrigin="0.507,0.577" Height="24">
+                    FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" IsEnabled="{Binding BoolGrid}" RenderTransformOrigin="0.486,0.508"/>
+        <Label IsEnabled="{Binding BoolGrid}" Content="Quantity:" VerticalAlignment="Center" Margin="415,167,324,257" RenderTransformOrigin="1.169,3.423" />
+        <f:ValidatedField IsEnabled="{Binding BoolGrid}" VerticalAlignment="Center" Margin="478,169,295,257" RenderTransformOrigin="0.507,0.577" Height="24">
             <TextBox Text="{Binding Quantity}"/>
         </f:ValidatedField>
-        <Label Content="Date: " HorizontalAlignment="Left" Margin="376,198,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
-        <Button Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,220,257" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>
-        <DatePicker SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,200,0,0" VerticalAlignment="Top" Width="163"/>
+        <Label IsEnabled="{Binding BoolGrid}" Content="Date: " HorizontalAlignment="Left" Margin="376,198,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
+        <Button IsEnabled="{Binding BoolGrid}" Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,220,257" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>
+        <DatePicker IsEnabled="{Binding BoolGrid}" SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,200,0,0" VerticalAlignment="Top" Width="163"/>
 
     </Grid>
 </f:UserControlBase>

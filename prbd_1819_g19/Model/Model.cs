@@ -5,18 +5,14 @@ using System.Collections.Generic;
 using PRBD_Framework;
 using MySql.Data.EntityFramework;
 
-namespace prbd_1819_g19
-{
+namespace prbd_1819_g19 {
     public enum DbType { MsSQL, MySQL }
     public enum EFDatabaseInitMode { CreateIfNotExists, DropCreateIfChanges, DropCreateAlways }
 
     [DbConfigurationType(typeof(MySqlEFConfiguration))]
-    public class MySqlModel : Model
-    {
-        public MySqlModel(EFDatabaseInitMode initMode) : base("name=library-mysql")
-        {
-            switch (initMode)
-            {
+    public class MySqlModel : Model {
+        public MySqlModel(EFDatabaseInitMode initMode) : base("name=library-mysql") {
+            switch (initMode) {
                 case EFDatabaseInitMode.CreateIfNotExists:
                     Database.SetInitializer<MySqlModel>(new CreateDatabaseIfNotExists<MySqlModel>());
                     break;
@@ -29,26 +25,21 @@ namespace prbd_1819_g19
             }
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
+        protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
             // see: https://blog.craigtp.co.uk/Post/2017/04/05/Entity_Framework_with_MySQL_-_Booleans,_Bits_and_%22String_was_not_recognized_as_a_valid_boolean%22_errors.
             modelBuilder.Properties<bool>().Configure(c => c.HasColumnType("bit"));
         }
 
-        public override void Reseed(string tableName)
-        {
+        public override void Reseed(string tableName) {
             Database.ExecuteSqlCommand($"ALTER TABLE {tableName} AUTO_INCREMENT=1");
         }
     }
 
-    public class MsSqlModel : Model
-    {
-        public MsSqlModel(EFDatabaseInitMode initMode) : base("name=library-mssql")
-        {
-            switch (initMode)
-            {
+    public class MsSqlModel : Model {
+        public MsSqlModel(EFDatabaseInitMode initMode) : base("name=library-mssql") {
+            switch (initMode) {
                 case EFDatabaseInitMode.CreateIfNotExists:
                     Database.SetInitializer<MsSqlModel>(new CreateDatabaseIfNotExists<MsSqlModel>());
                     break;
@@ -61,21 +52,17 @@ namespace prbd_1819_g19
             }
         }
 
-        public override void Reseed(string tableName)
-        {
+        public override void Reseed(string tableName) {
             Database.ExecuteSqlCommand($"DBCC CHECKIDENT('{tableName}', RESEED, 0)");
         }
     }
 
-    public abstract class Model : DbContext
-    {
+    public abstract class Model : DbContext {
         protected Model(string name) : base(name) { }
 
-        public static Model CreateModel(DbType type, EFDatabaseInitMode initMode = EFDatabaseInitMode.DropCreateIfChanges)
-        {
+        public static Model CreateModel(DbType type, EFDatabaseInitMode initMode = EFDatabaseInitMode.DropCreateIfChanges) {
             Console.WriteLine($"Creating model for {type}\n");
-            switch (type)
-            {
+            switch (type) {
                 case DbType.MsSQL:
                     return new MsSqlModel(initMode);
                 case DbType.MySQL:
@@ -135,16 +122,16 @@ namespace prbd_1819_g19
             return newUser;
         }
 
-        public Book CreateBook(string isbn, string title, string author, string editor, int numCopies)
+        public Book CreateBook(string isbn, string title, string author, string editor, int numCopies )
         {
+       
 
-
-            Book newBook = Books.Create();
-            newBook.Isbn = isbn; newBook.Title = title; newBook.Author = author; newBook.Editor = editor;
-            Books.Add(newBook);
-            newBook.AddCopies(numCopies, DateTime.Now);
-            SaveChanges();
-            return newBook;
+                Book newBook = Books.Create();
+                newBook.Isbn = isbn; newBook.Title = title; newBook.Author = author; newBook.Editor = editor;
+                Books.Add(newBook);
+                newBook.AddCopies(numCopies, DateTime.Now);
+                SaveChanges();
+                return newBook;
 
         }
 
@@ -193,7 +180,7 @@ namespace prbd_1819_g19
             var query = from rentItem in RentalItems
                         where rentItem.ReturnDate == null
                         select rentItem;
-            foreach (var r in query)
+            foreach(var r in query) 
             {
                 list.Add(r);
             }

@@ -18,7 +18,7 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -26,14 +26,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
+        
         <Label x:Name="label" Content="Username" VerticalAlignment="Center" Padding="5" />
         <f:ValidatedField Grid.Column="1" VerticalAlignment="Center">
             <TextBox x:Name="txtPseudo" TextWrapping="Wrap" Grid.Column="1" 
                      Text="{Binding Pseudo, UpdateSourceTrigger=PropertyChanged}"/>
         </f:ValidatedField>
 
-
+        
         <Label Content="Password" Grid.Row="1" VerticalAlignment="Center" Padding="5"/>
         <f:ValidatedField Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
             <PasswordBox x:Name="txtPassword"
@@ -49,7 +49,7 @@
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" IsDefault="True" Margin="10,0,0,0" 
                     Command="{Binding Login}"/>
         </DockPanel>
-
+        
         <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
             <TextBlock Height="auto" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Width="220" >
                 <Run Text="Click"/>

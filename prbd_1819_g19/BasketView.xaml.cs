@@ -80,8 +80,8 @@ namespace prbd_1819_g19
         {
             InitializeComponent();
             DataContext = this;
-
-            SelectedUser = App.CurrentUser;
+            
+            SelectedUser = App.CurrentUser; 
             if (SelectedUser.Basket != null)
             {
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
@@ -93,7 +93,7 @@ namespace prbd_1819_g19
             UsersComboBox();
             AddBookToBasket();
             App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
-            {
+            { 
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
             });
         }
@@ -120,7 +120,7 @@ namespace prbd_1819_g19
                 Console.WriteLine(SelectedUser);
                 if (SelectedUser.Basket == null)
                     SelectedUser.CreateBasket();
-                Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+                    Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
             });
         }
 
@@ -131,7 +131,7 @@ namespace prbd_1819_g19
 
         private void AddBookToBasket()
         {
-
+          
         }
 
         private void ConfirmRental()
@@ -143,7 +143,7 @@ namespace prbd_1819_g19
                 SelectedUser.CreateBasket();
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
             }
-
+                
             App.NotifyColleagues(AppMessages.MSG_CONFIRM_BASKET);
         }
 

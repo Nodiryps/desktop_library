@@ -39,19 +39,20 @@ namespace prbd_1819_g19
 
         private void LoginAction()
         {
-
+            Console.WriteLine("CU login before Find: " + App.CurrentUser);
             App.CurrentUser = null;
-
+            Console.WriteLine("CU login after null : " + App.CurrentUser);
 
             if (Validate())
-            {
+            { 
                 var member = App.Model.Users.Find(UserId()); // on recherche le membre 
+                Console.WriteLine("Requete Find: "+member);
                 App.CurrentUser = member; // le membre connecté devient le membre courant
                 App.SelectedUser = member;
-
-                ShowMainView(); // ouverture de la fenêtre principale
-                Close(); // fermeture de la fenêtre de login
-
+                 
+                    ShowMainView(); // ouverture de la fenêtre principale
+                    Close(); // fermeture de la fenêtre de login
+               
             }
         }
 
@@ -72,11 +73,11 @@ namespace prbd_1819_g19
 
             RaiseErrors();
             return !HasErrors;
-        }
+        } 
 
         private int UserId()
         {
-            return (from u in App.Model.Users
+            return (from u in App.Model.Users 
                     where u.UserName == pseudo
                     select u.UserId).FirstOrDefault();
         }

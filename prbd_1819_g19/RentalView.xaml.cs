@@ -51,12 +51,12 @@ namespace prbd_1819_g19
             set => RaisePropertyChanged(nameof(enableTable));
         }
 
-        
+        private bool boolClicked;
 
         public ICommand SetRental { get; set; }
         public ICommand ReturnBtn { get; set; }
         public ICommand DeleteBtn { get; set; }
-
+        
         ///////////////////////////////////CONSTRUCT///////////////////////////////////
         public RentalView()
         {
@@ -67,13 +67,13 @@ namespace prbd_1819_g19
             {
                 enableTable = true;
             }
-
+            
             Items = new ObservableCollection<RentalItem>();
             Rentalz = new ObservableCollection<Rental>(FillRentals());
 
             SetRental = new RelayCommand<Rental>(rental => { //Pour remplir le tableau de droite
-                if (SelectedRental != null)
-                    Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
+                if(SelectedRental != null)
+                Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
             });
 
             App.Register(this, AppMessages.MSG_CONFIRM_BASKET, () =>
@@ -81,18 +81,16 @@ namespace prbd_1819_g19
                 Rentalz = new ObservableCollection<Rental>(FillRentals());
             });
 
-
+          
             Return();
             Delete();
 
         }
-
-        private bool boolClicked;
-
+        
         private void Return()
         {
             ReturnBtn = new RelayCommand<RentalItem>(ri => {
-                if (ri.ReturnDate == null)
+                if(ri.ReturnDate == null)
                 {
                     boolClicked = true;
                     ri.DoReturn();
@@ -103,7 +101,7 @@ namespace prbd_1819_g19
                     boolClicked = false;
                     App.Model.SaveChanges();
                 }
-
+                
                 Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
                 Rentalz = new ObservableCollection<Rental>(FillRentals());
                 App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
@@ -113,7 +111,7 @@ namespace prbd_1819_g19
         private void Delete()
         {
             DeleteBtn = new RelayCommand<RentalItem>(ri => {
-                if (ri.ReturnDate != null)
+                if(ri.ReturnDate != null)
                     SelectedRental.RemoveItem(ri);
                 Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
                 Rentalz = new ObservableCollection<Rental>(FillRentals());

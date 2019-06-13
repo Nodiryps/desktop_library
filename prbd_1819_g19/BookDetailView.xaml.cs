@@ -271,6 +271,7 @@ namespace prbd_1819_g19
                 App.Model.Books.Add(Book);
                 IsNew = false;
             }
+
             AddCopies();
             AddCategoriesCheckBox();
             imageHelper.Confirm(Book.Title);
@@ -347,7 +348,12 @@ namespace prbd_1819_g19
         {
             if (App.IsAdmin()) 
                 return Validate() || BoolCat;
-            
+
+            return InputModified();
+        }
+
+        private bool InputModified()
+        {
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
                           where c.Entity == Book
                           select c).FirstOrDefault();
@@ -360,38 +366,68 @@ namespace prbd_1819_g19
             if (!IsNew)
             {
                 InputsValidations();
-                IsbnValidations();
                 QuantityValidations();
             }
+            //else if(IsNew && InputModified())
+            //{
+            //    InputsValidations();
+            //    QuantityValidations();
+            //}
             RaiseErrors();
             return !HasErrors;
         }
 
         private void InputsValidations()
         {
-            InputValidations(Title);
-            InputValidations(Author);
-            InputValidations(Editor);
-            InputValidations(Isbn);
+            InputValidationsTitle();
+            InputValidationsAuthor();
+            InputValidationsEditor();
+            InputValidationsIsbn();
         }
 
-        private void InputValidations(string s)
+        private void InputValidationsTitle()
         {
-            if (!IsOk(s))
-                AddError('\"'+ s + '\"', Properties.Resources.Error_Required);
-            if (s.Length < 3)
-                AddError('\"' + s + '\"', Properties.Resources.Error_LengthGreaterEqual3);
+            if (!IsOk(Title))
+                AddError("Title", Properties.Resources.Error_Required);
+            if (Title.Length < 3)
+                AddError("Title", Properties.Resources.Error_LengthGreaterEqual3);
+        }
+        
+        private void InputValidationsAuthor()
+        {
+            if (!IsOk(Author))
+                AddError("Author", Properties.Resources.Error_Required);
+            if (Author.Length < 3)
+                AddError("Author", Properties.Resources.Error_LengthGreaterEqual3);
         }
 
-        private void IsbnValidations()
+        private void InputValidationsEditor()
         {
-            if(!IsNumeric(Isbn))
+            if (!IsOk(Editor))
+                AddError("Editor", Properties.Resources.Error_Required);
+            if (Editor.Length < 3)
+                AddError("Editor", Properties.Resources.Error_LengthGreaterEqual3);
+        }
+
+        private void InputValidationsIsbn()
+        {
+            if (!IsOk(Isbn))
+                AddError("Isbn", Properties.Resources.Error_Required);
+            if (!IsNumeric(Isbn))
                 AddError("Isbn", Properties.Resources.Error_IsbnNumeric);
             if (IsbnExists())
                 AddError("Isbn", Properties.Resources.Error_AlreadyExists);
-            if (Isbn.Length > 3)
+            if (Isbn.Length != 3)
                 AddError("Isbn", Properties.Resources.Error_IsbnLength);
         }
+
+        //private void InputValidations(string s)
+        //{
+        //    if (!IsOk(s))
+        //        AddError('\"' + s + '\"', Properties.Resources.Error_Required);
+        //    if (s.Length < 3)
+        //        AddError('\"' + s + '\"', Properties.Resources.Error_LengthGreaterEqual3);
+        //}
 
         private void QuantityValidations()
         {
@@ -407,14 +443,10 @@ namespace prbd_1819_g19
 
         private bool IsbnExists()
         {
-            //var old = (from b in App.Model.Books
-            //           where b.BookId.Equals(book.BookId)
-            //           select b).FirstOrDefault();
             return (from b in App.Model.Books
                            where b.Isbn.Equals(Isbn) 
                               && b.BookId != book.BookId
                            select b).FirstOrDefault() != null;
-            //&& !newBook.Isbn.Equals(old.Isbn);
         }
 
         private bool IsOk(string s)

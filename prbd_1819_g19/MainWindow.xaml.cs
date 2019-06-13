@@ -41,7 +41,9 @@ namespace prbd_1819_g19
 
         private void LogOut()
         {
+
             Logout = new RelayCommand(() => {
+                Console.WriteLine("CU logout : " + App.CurrentUser);
                 App.CurrentUser = null;
                 new LoginView().Show();
                 Close();

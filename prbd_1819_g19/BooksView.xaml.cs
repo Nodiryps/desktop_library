@@ -58,42 +58,32 @@ namespace prbd_1819_g19
             Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title));
             FillCat();
 
-            ClearFilter = new RelayCommand(() =>
+            ClearFilter = new RelayCommand(() => 
             {
-
                 Filter = "";
-                FillCat();
                 Category All = App.Model.Categories.Create();
                 All.Name = "All";
                 Categories = new ObservableCollection<Category>(App.Model.Categories);
                 Categories.Insert(0, All);
                 SelectedCat = All;
-
                 ComboBox.SelectedItem = All;
-
-
-                ApplyFilterAction();
-
             });
+
             if (App.IsAdmin())
             {
                 NewBooks = new RelayCommand(() => { App.NotifyColleagues(AppMessages.MSG_NEW_BOOK); });
             }
+
             DisplayBookDetails = new RelayCommand<Book>(book => { App.NotifyColleagues(AppMessages.MSG_DISPLAY_BOOK, book); });
             CategoryFilter = new RelayCommand<Category>(cat => { ApplyFilterAction(); });
-
-            AddToBasket = new RelayCommand<Book>(book => {
+            LinkCat = new RelayCommand<Category>(cat => { App.NotifyColleagues(AppMessages.MSG_LINK_CAT, cat); });
+            AddToBasket = new RelayCommand<Book>(book => 
+            {
                 App.SelectedUser.AddToBasket(book);
                 Console.WriteLine("AddTOBasketBooksView :" + App.CurrentUser);
                 App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET, book);
-
                 Books = new ObservableCollection<Book>(App.Model.Books);
-
-            });
-
-
-
-            LinkCat = new RelayCommand<Category>(cat => { App.NotifyColleagues(AppMessages.MSG_LINK_CAT, cat); });
+            });            
 
             App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { Books = new ObservableCollection<Book>(App.Model.Books); });
             App.Register<ICollection<Category>>(this, AppMessages.MSG_CAT_CHANGED, list => { FillCat(); ApplyFilterAction(); });
@@ -107,19 +97,19 @@ namespace prbd_1819_g19
             {
                 if (StringOk(filter) && SelectedCat.Name == "All")
                 {
-                    Books = new ObservableCollection<Book>(FilterQuery());
+                    Books = new ObservableCollection<Book>(FilterQuery().OrderBy(b=>b.Title));
                 }
 
                 else if (StringOk(filter) && SelectedCat.Name != "All")
                 {
-                    Books = new ObservableCollection<Book>(FilterQueryCat());
+                    Books = new ObservableCollection<Book>(FilterQueryCat().OrderBy(b => b.Title));
                 }
-                else if (!StringOk(filter))
+                else if (!StringOk(filter) )
                 {
-                    if (SelectedCat.Name != "All")
+                    if(SelectedCat.Name != "All")
                     {
                         Books.Clear();
-                        foreach (var c in App.Model.Books)
+                        foreach (var c in App.Model.Books.OrderBy(b => b.Title))
                         {
                             Console.WriteLine(SelectedCat);
                             if (c.Categories.Contains(SelectedCat))
@@ -128,93 +118,49 @@ namespace prbd_1819_g19
                             }
                         }
                     }
-                    else if (SelectedCat.Name == "All")
+                    else if(SelectedCat.Name == "All")
                         Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title));
                 }
             }
         }
 
-        //private void ApplyComboBoxFilter()
-        //{
-        //    if(SelectedCat != null)
-        //    {
-        //        if (Filter != "")
-        //        {
-        //            if (SelectedCat.Name != "All")
-        //            {
-        //                Books.Clear();
-        //                foreach (var b in FilterQuery())
-        //                    if (b.Categories.Contains(SelectedCat))
-        //                        Books.Add(b);
-        //            }
-        //            else
-        //                ApplyFilterAction();
-        //        }
-        //        if (Filter == "")
-        //        {
-        //            if (SelectedCat.Name != "All")
-        //            {
-        //                Books.Clear();
-        //                foreach (var b in FilterQuery())
-        //                    if (b.Categories.Contains(SelectedCat))
-        //                        Books.Add(b);
-        //            }
-        //            if (StringOk(filter))
-        //                if (SelectedCat.Name == "All")
-        //                    ApplyFilterAction();
-        //                else
-        //                {
-        //                    Books.Clear();
-        //                    Books = new ObservableCollection<Book>(SelectedCat.Books);
-        //                }
-        //        }
-        //    }
-        //}
-
         private List<Book> FilterQuery()
         {
             return (from b in App.Model.Books
-                    where b.Isbn.Contains(filter) || b.Title.Contains(filter)
-                        || b.Author.Contains(filter) || b.Editor.Contains(filter)
-                    orderby b.Title
-                    select b).ToList();
+                        where b.Isbn.Contains(filter) || b.Title.Contains(filter)
+                            || b.Author.Contains(filter) || b.Editor.Contains(filter) orderby b.Title
+                        select b).ToList();
         }
 
-        //private List<Book> FilterQueryOnlyCat()
-        //{
-        //    var list = new List<Book>();
-
-        //    foreach (var c in App.Model.Books.OrderBy(b => b.Title))
-        //    {
-        //        if (c.Categories.Contains(SelectedCat))
-        //        {
-        //            list.Add(c);
-        //        }
-        //    }
-        //    return list;
-        //}
+        private List<Book> FilterQueryOnlyCat()
+        {
+            var list = new List<Book>();
+            
+            foreach (var c in App.Model.Books.OrderBy(b => b.Title)) {
+                if (c.Categories.Contains(SelectedCat)) {
+                    list.Add(c);
+                }
+            }
+            return list;
+        }
 
         private List<Book> FilterQueryCat()
         {
             var list = new List<Book>();
-            var query = (from b in App.Model.Books
-                         where b.Isbn.Contains(filter) || b.Title.Contains(filter)
-                             || b.Author.Contains(filter) || b.Editor.Contains(filter)
-                         orderby b.Title
-                         select b).ToList();
+            var query= (from b in App.Model.Books
+                    where b.Isbn.Contains(filter) || b.Title.Contains(filter)
+                        || b.Author.Contains(filter) || b.Editor.Contains(filter) orderby b.Title
+                    select b).ToList();
 
-            foreach (var b in query)
-            {
-                if (b.Categories.Contains(SelectedCat))
-                {
+            foreach (var b in query) {
+                if (b.Categories.Contains(SelectedCat)) {
                     list.Add(b);
                 }
             }
             return list;
         }
 
-        public void FillCat()
-        {
+        public void FillCat() {
             Categories = new ObservableCollection<Category>();
             Category All = App.Model.Categories.Create();
             All.CategoryId = -1;
@@ -222,7 +168,7 @@ namespace prbd_1819_g19
 
             Categories = new ObservableCollection<Category>(App.Model.Categories);
             Categories.Insert(0, All);
-            SelectedCat = All;
+            SelectedCat = Categories.ElementAt(0);
         }
 
         private string HiddenShow()

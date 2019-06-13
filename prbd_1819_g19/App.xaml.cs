@@ -38,7 +38,22 @@ namespace prbd_1819_g19
 
     public partial class App : ApplicationBase
     {
-        public static Model Model = Model.CreateModel(DbType.MsSQL);
+
+        private static DbType type;
+        private static DbType Type
+        {
+            get => type;
+            set
+            {
+#if MSSQL
+             type = DbType.MsSQL;
+#else
+                type = DbType.MySQL;
+#endif
+            }
+        }
+
+        public static Model Model = Model.CreateModel(Type);
 
         public static User CurrentUser { get; set; }
         public static User SelectedUser { get; set; }

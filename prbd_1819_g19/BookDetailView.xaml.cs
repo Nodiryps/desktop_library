@@ -385,13 +385,14 @@ namespace prbd_1819_g19
             //{
             InputsValidations();
             QuantityValidations();
+
             //}
             //else if(IsNew && InputModified())
             //{
             //    InputsValidations();
             //    QuantityValidations();
             //}
-            
+
             RaiseErrors();
 
             return !HasErrors;

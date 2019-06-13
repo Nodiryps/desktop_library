@@ -88,7 +88,7 @@
                     FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" IsEnabled="{Binding BoolGrid}" RenderTransformOrigin="0.486,0.508"/>
         <Label IsEnabled="{Binding BoolGrid}" Content="Quantity:" VerticalAlignment="Center" Margin="417,166,322,258" RenderTransformOrigin="1.169,3.423" />
         <f:ValidatedField IsEnabled="{Binding BoolGrid}" VerticalAlignment="Center" Margin="478,169,295,257" RenderTransformOrigin="0.507,0.577" Height="24">
-            <TextBox Text="{Binding Quantity}" MaxLength="2" Height="21" HorizontalAlignment="Left" Width="27"/>
+            <TextBox Text="{Binding Quantity}" MaxLength="2" Height="46" HorizontalAlignment="Left" Width="27"/>
         </f:ValidatedField>
         <Label IsEnabled="{Binding BoolGrid}" Content="Date: " HorizontalAlignment="Left" Margin="376,219,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
         <Button IsEnabled="{Binding BoolGrid}" Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,220,260" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>

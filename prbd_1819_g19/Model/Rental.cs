@@ -20,7 +20,7 @@ namespace prbd_1819_g19
         public virtual ICollection<RentalItem> Items { get; set; } = new HashSet<RentalItem>();
         public virtual User User { get; set; }
 
-        protected Rental(){}/////////////////////////////CONSTRUCT/////////////////////////////
+        protected Rental() { }/////////////////////////////CONSTRUCT/////////////////////////////
 
         public RentalItem RentCopy(BookCopy copy)
         {
@@ -28,13 +28,13 @@ namespace prbd_1819_g19
             if (copy != null)
             {
                 item = Model.RentalItems.Create();
-                
+
                 item.BookCopy = copy;
                 item.ReturnDate = null;
                 item.Rental = this;
                 Items.Add(item);
                 copy.RentalItems.Add(item);
-                App.Model.SaveChanges();
+                Model.SaveChanges();
             }
             return item;
         }
@@ -54,6 +54,7 @@ namespace prbd_1819_g19
         {
             if (!ItemsIsEmpty() && Items.Contains(item))
                 Items.Remove(item);
+            Model.SaveChanges();
         }
 
         public void Return(RentalItem item)

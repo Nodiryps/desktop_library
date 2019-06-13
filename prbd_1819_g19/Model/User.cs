@@ -27,7 +27,7 @@ namespace prbd_1819_g19
                     select rental).FirstOrDefault();
         }
 
-        protected User(){}////////////////////////////////////CONSTRUCT////////////////////////////////////
+        protected User() { }////////////////////////////////////CONSTRUCT////////////////////////////////////
 
 
         public Rental CreateBasket()
@@ -40,9 +40,10 @@ namespace prbd_1819_g19
             Model.SaveChanges();
             return newRental;
         }
-        
+
         public RentalItem AddToBasket(Book book)
         {
+            Console.WriteLine("test");
             if (Basket == null)
                 CreateBasket(); // si pas de rental.rentalDate à null, on en créé un nvx => rentalDate == null
 
@@ -51,7 +52,7 @@ namespace prbd_1819_g19
 
             if (copy != null)
                 Basket.RentCopy(copy);
-                Model.SaveChanges();
+            Model.SaveChanges();
             return ri;
         }
 
@@ -75,8 +76,8 @@ namespace prbd_1819_g19
 
         public void Return(BookCopy copy)
         {
-            RentalItem ri = copy.RentalItems.FirstOrDefault( rental => rental.ReturnDate == null );
-            if(ri != null)
+            RentalItem ri = copy.RentalItems.FirstOrDefault(rental => rental.ReturnDate == null);
+            if (ri != null)
             {
                 ri.ReturnDate = DateTime.Now;
                 Model.SaveChanges();

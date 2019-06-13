@@ -48,7 +48,13 @@ namespace prbd_1819_g19
         {
 
             get => selectedUser;
-            set => SetProperty<User>(ref selectedUser, value);
+            set
+            {
+                SetProperty<User>(ref selectedUser, value);
+                if (SelectedUser != null)
+                    App.SelectedUser = SelectedUser;
+            }
+
         }
 
         public string IsAdmin
@@ -74,14 +80,22 @@ namespace prbd_1819_g19
         {
             InitializeComponent();
             DataContext = this;
+
             SelectedUser = App.CurrentUser;
-            if(SelectedUser.Basket != null) { Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items); }
+            if (SelectedUser.Basket != null)
+            {
+                Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+            }
             Users = new ObservableCollection<User>(App.Model.Users);
             Delete = new RelayCommand(DeleteRental);
             Clear = new RelayCommand(ClearBasket);
             ConfirmBasket();
             UsersComboBox();
             AddBookToBasket();
+            App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
+            {
+                Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+            });
         }
 
         private void ClearBasket()
@@ -103,10 +117,9 @@ namespace prbd_1819_g19
         private void UsersComboBox()
         {
             UserFilter = new RelayCommand(() => {
+                Console.WriteLine(SelectedUser);
                 if (SelectedUser.Basket == null)
-                {
                     SelectedUser.CreateBasket();
-                }
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
             });
         }
@@ -118,18 +131,19 @@ namespace prbd_1819_g19
 
         private void AddBookToBasket()
         {
-            App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
-            {
-                SelectedUser.AddToBasket(book);
-                Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
-            });
+
         }
 
         private void ConfirmRental()
         {
+            Console.WriteLine(SelectedUser.Basket);
             SelectedUser.Basket.Confirm();
-            if (AddBasket()) 
+            if (SelectedUser.Basket == null)
+            {
+                SelectedUser.CreateBasket();
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+            }
+
             App.NotifyColleagues(AppMessages.MSG_CONFIRM_BASKET);
         }
 
@@ -152,14 +166,6 @@ namespace prbd_1819_g19
         {
             selectedItem = null;
             Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
-        }
-
-        public bool AddBasket() {
-            if (selectedUser.Basket == null) {
-                selectedUser.CreateBasket();
-                return true;
-            }
-            return false;
         }
     }
 }

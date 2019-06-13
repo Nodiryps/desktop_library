@@ -40,21 +40,18 @@ namespace prbd_1819_g19
         private void LoginAction()
         {
 
+            App.CurrentUser = null;
+
+
             if (Validate())
-            { 
+            {
                 var member = App.Model.Users.Find(UserId()); // on recherche le membre 
                 App.CurrentUser = member; // le membre connecté devient le membre courant
+                App.SelectedUser = member;
 
-                if (member.Role == Role.Admin)
-                {
-                    ShowMainView(); // ouverture de la fenêtre principale
-                    Close(); // fermeture de la fenêtre de login
-                }
-                else
-                {
-                    ShowMainView(); // ouverture de la fenêtre principale
-                    Close(); // fermeture de la fenêtre de login
-                }
+                ShowMainView(); // ouverture de la fenêtre principale
+                Close(); // fermeture de la fenêtre de login
+
             }
         }
 
@@ -75,11 +72,11 @@ namespace prbd_1819_g19
 
             RaiseErrors();
             return !HasErrors;
-        } 
+        }
 
         private int UserId()
         {
-            return (from u in App.Model.Users 
+            return (from u in App.Model.Users
                     where u.UserName == pseudo
                     select u.UserId).FirstOrDefault();
         }

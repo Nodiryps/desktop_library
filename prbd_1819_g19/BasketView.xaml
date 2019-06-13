@@ -43,20 +43,21 @@
 
             <Label Visibility="{Binding IsAdmin }" Content="This Basket is for :" VerticalAlignment="Center" Grid.Row="1" />
             <f:ValidatedField VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Margin="5" >
-                <ComboBox Name="ComboBox" ItemsSource="{Binding Users}" Visibility="{Binding IsAdmin }" 
+                <ComboBox Name="ComboBox" ItemsSource="{Binding Users}" Visibility="{Binding IsAdmin}" 
                           SelectedItem="{Binding SelectedUser}" Margin="41,0,0,0">
                     <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction  Command="{Binding UserFilter}"  CommandParameter="{Binding ElementName=ComboBox, Path=SelectedUser}" />
-                    </i:EventTrigger>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction  Command="{Binding UserFilter}"  CommandParameter="{Binding ElementName=ComboBox, Path=SelectedItem}" />
+                        </i:EventTrigger>
                     </i:Interaction.Triggers>
 
-                   </ComboBox>
-               
+                </ComboBox>
+
             </f:ValidatedField>
 
         </Grid>
         <Button Content="Confirm" Margin="0,0,698,63" VerticalAlignment="Bottom" Command="{Binding Confirm}" HorizontalAlignment="Right" Width="75" Grid.Row="1" Height="19"/>
         <Button Content="Clear" Margin="0,0,604,63" VerticalAlignment="Bottom" Command="{Binding Clear}" HorizontalAlignment="Right" Width="75" Grid.Row="1" Height="20"/>
+
     </Grid>
 </f:UserControlBase>

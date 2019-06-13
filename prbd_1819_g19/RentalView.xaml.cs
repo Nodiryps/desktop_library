@@ -44,19 +44,20 @@ namespace prbd_1819_g19
             set => SetProperty<Rental>(ref selectedRental, value);
         }
 
-        private bool enableTable = false;
+        private bool enableTable;
         public bool EnableTable
         {
             get => enableTable;
             set => RaisePropertyChanged(nameof(enableTable));
         }
 
-        private bool boolClicked = false;
+        
 
         public ICommand SetRental { get; set; }
         public ICommand ReturnBtn { get; set; }
         public ICommand DeleteBtn { get; set; }
 
+        ///////////////////////////////////CONSTRUCT///////////////////////////////////
         public RentalView()
         {
             InitializeComponent();
@@ -66,14 +67,13 @@ namespace prbd_1819_g19
             {
                 enableTable = true;
             }
-            
-            Rentalz = new ObservableCollection<Rental>();
+
             Items = new ObservableCollection<RentalItem>();
             Rentalz = new ObservableCollection<Rental>(FillRentals());
 
             SetRental = new RelayCommand<Rental>(rental => { //Pour remplir le tableau de droite
-                if(SelectedRental != null)
-                Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
+                if (SelectedRental != null)
+                    Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
             });
 
             App.Register(this, AppMessages.MSG_CONFIRM_BASKET, () =>
@@ -81,15 +81,18 @@ namespace prbd_1819_g19
                 Rentalz = new ObservableCollection<Rental>(FillRentals());
             });
 
+
             Return();
             Delete();
 
         }
-        
+
+        private bool boolClicked;
+
         private void Return()
         {
             ReturnBtn = new RelayCommand<RentalItem>(ri => {
-                if(ri.ReturnDate == null)
+                if (ri.ReturnDate == null)
                 {
                     boolClicked = true;
                     ri.DoReturn();
@@ -98,39 +101,31 @@ namespace prbd_1819_g19
                 {
                     ri.ReturnDate = null;
                     boolClicked = false;
+                    App.Model.SaveChanges();
                 }
+
                 Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
-                Rentalz = new ObservableCollection<Rental>(Refresh());
+                Rentalz = new ObservableCollection<Rental>(FillRentals());
+                App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
             });
         }
 
         private void Delete()
         {
             DeleteBtn = new RelayCommand<RentalItem>(ri => {
-                if(ri.ReturnDate != null)
+                if (ri.ReturnDate != null)
                     SelectedRental.RemoveItem(ri);
                 Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
-                Rentalz = new ObservableCollection<Rental>(Refresh());
+                Rentalz = new ObservableCollection<Rental>(FillRentals());
+                App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
             });
-        }
-
-        private void RefreshView()
-        {
-            Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
-            var tmp = new ObservableCollection<Rental>();
-            foreach (var r in App.Model.Rentals)
-                if (r.RentalDate != null && r.Items.Count() > 0)
-                    tmp.Add(r);
-            Rentalz = new ObservableCollection<Rental>(tmp);
         }
 
         private List<Rental> Refresh()
         {
-            return (
-                    from r in App.Model.Rentals
-                    where r.RentalDate != null && r.Items.Count > 0
-                    select r
-                ).ToList();
+            return (from r in App.Model.Rentals
+                    where r.RentalDate != null && r.Items.Count != 0
+                    select r).ToList();
         }
 
         private List<Rental> FillRentals()
@@ -138,19 +133,25 @@ namespace prbd_1819_g19
             List<Rental> list = new List<Rental>();
 
             if (App.IsAdmin())
-            {
-                list = (from r in App.Model.Rentals
-                        where r.RentalDate != null
-                        select r).ToList();
-            }
+                list = QueryListRentalsAdmin();
             else
-            {
-                list = (from r in App.Model.Rentals
-                        where r.RentalDate != null
-                            && r.User.UserId == App.CurrentUser.UserId
-                        select r).ToList();
-            }
+                list = QueryListRentalsNotAdmin();
             return list;
+        }
+
+        private List<Rental> QueryListRentalsAdmin()
+        {
+            return (from r in App.Model.Rentals
+                    where r.RentalDate != null && r.Items.Count != 0
+                    select r).ToList();
+        }
+
+        private List<Rental> QueryListRentalsNotAdmin()
+        {
+            return (from r in App.Model.Rentals
+                    where r.RentalDate != null
+                        && r.User.UserId == App.CurrentUser.UserId && r.Items.Count != 0
+                    select r).ToList();
         }
     }
 }

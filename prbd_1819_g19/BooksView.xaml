@@ -35,8 +35,8 @@
             <Button Content="Clear" Command="{Binding ClearFilter}" Margin="725,0,10,-5" RenderTransformOrigin="0.522,0.57" />
 
             <Label Content="Categories:" Margin="5,35,667,-50"/>
-            <ComboBox x:Name="ComboBox"  HorizontalAlignment="Left" Margin="90,37,0,-44" VerticalAlignment="Top" Width="680" 
-                  ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="27">
+            <ComboBox x:Name="ComboBox"  HorizontalAlignment="Left" Margin="90,37,0,-44" VerticalAlignment="Top" Width="680" Text="{Binding Text}"
+                  ItemsSource="{Binding Categories}" SelectedIndex="{Binding Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedCat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="27" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction  Command="{Binding CategoryFilter}" CommandParameter="{Binding ElementName=ComboBox, Path=SelectedCat}" />

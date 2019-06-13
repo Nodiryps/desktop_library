@@ -53,7 +53,7 @@
 
             <Label Content="Title :" VerticalAlignment="Center" Grid.Row="1" Height="26" Margin="0,1,0,2" />
             <f:ValidatedField Grid.Row="1" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1">
-                <TextBox Text="{Binding Title}" IsReadOnly="False" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1"/>
+                <TextBox Text="{Binding Title}" IsReadOnly="False"/>
             </f:ValidatedField>
 
             <Label Content="Author :" VerticalAlignment="Center" Grid.Row="2" Height="26" Margin="0,2,0,1" />

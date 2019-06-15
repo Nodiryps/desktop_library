@@ -105,6 +105,7 @@ namespace prbd_1819_g19
                 Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
                 Rentalz = new ObservableCollection<Rental>(FillRentals());
                 App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
+                //App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
             });
         }
 

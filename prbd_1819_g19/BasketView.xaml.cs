@@ -70,6 +70,13 @@ namespace prbd_1819_g19
                 return "show";
         }
 
+        private bool boolConfirm;
+        public bool BoolConfirm
+        {
+            get => boolConfirm;
+            set => SetProperty<bool>(ref boolConfirm, value);
+        }
+
         public ICommand UserFilter { get; set; }
         public ICommand Confirm { get; set; }
         public ICommand Clear { get; set; }
@@ -80,7 +87,6 @@ namespace prbd_1819_g19
         {
             InitializeComponent();
             DataContext = this;
-            
             SelectedUser = App.CurrentUser; 
             if (SelectedUser.Basket != null)
             {
@@ -92,9 +98,11 @@ namespace prbd_1819_g19
             ConfirmBasket();
             UsersComboBox();
             AddBookToBasket();
+            ConfirmDisabled();
             App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
             { 
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+                ConfirmDisabled();
             });
         }
 
@@ -121,6 +129,7 @@ namespace prbd_1819_g19
                 if (SelectedUser.Basket == null)
                     SelectedUser.CreateBasket();
                     Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+                ConfirmDisabled();
             });
         }
 
@@ -136,15 +145,22 @@ namespace prbd_1819_g19
 
         private void ConfirmRental()
         {
-            Console.WriteLine(SelectedUser.Basket);
-            SelectedUser.Basket.Confirm();
-            if (SelectedUser.Basket == null)
+            if(Items != null && Items.Count() > 0)
             {
-                SelectedUser.CreateBasket();
-                Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
+                SelectedUser.Basket.Confirm();
+                BoolConfirm = false;
             }
                 
+            Items = new ObservableCollection<RentalItem>();
             App.NotifyColleagues(AppMessages.MSG_CONFIRM_BASKET);
+        }
+
+        public void ConfirmDisabled()
+        {
+            if (Items != null && Items.Count() > 0)
+                BoolConfirm = true;
+            else
+                BoolConfirm = false;
         }
 
         private void DeleteRental()

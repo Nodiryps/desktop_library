@@ -50,6 +50,7 @@ namespace prbd_1819_g19
             get => enableTable;
             set => RaisePropertyChanged(nameof(enableTable));
         }
+        
 
         private bool boolClicked;
 
@@ -62,10 +63,9 @@ namespace prbd_1819_g19
         {
             InitializeComponent();
             DataContext = this;
-            EnableTable = true;
             if (App.IsAdmin())
             {
-                enableTable = true;
+                EnableTable = true;
             }
             
             Items = new ObservableCollection<RentalItem>();
@@ -105,7 +105,6 @@ namespace prbd_1819_g19
                 Items = new ObservableCollection<RentalItem>(SelectedRental.Items);
                 Rentalz = new ObservableCollection<Rental>(FillRentals());
                 App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
-                //App.NotifyColleagues(AppMessages.MSG_CAT_CHANGED);
             });
         }
 

@@ -108,7 +108,8 @@ namespace prbd_1819_g19
 
         private void ClearBasket()
         {
-            foreach (var v in SelectedUser.Basket.Items.ToList())
+            if (Items != null && Items.Count() > 0)
+                foreach (var v in SelectedUser.Basket.Items.ToList())
             {
                 if (v != null)
                     App.Model.RentalItems.Remove(v);
@@ -118,6 +119,7 @@ namespace prbd_1819_g19
             }
             SelectedUser.ClearBasket();
             Items = new ObservableCollection<RentalItem>();
+            ConfirmDisabled();
             App.NotifyColleagues(AppMessages.MSG_NBCOPIES_CHANGED);
 
         }

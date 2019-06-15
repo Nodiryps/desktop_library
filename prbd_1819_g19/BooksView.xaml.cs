@@ -37,6 +37,13 @@ namespace prbd_1819_g19
             set => SetProperty<string>(ref filter, value, ApplyFilterAction);
         }
 
+        private bool boolAddToBasket;
+        public bool BoolAddToBasket
+        {
+            get => boolAddToBasket;
+            set => SetProperty<bool>(ref boolAddToBasket, value);
+        }
+
         public string HideBtnNewBook { get => HiddenShow(); }
 
         public ICommand ClearFilter { get; set; }
@@ -57,6 +64,12 @@ namespace prbd_1819_g19
             Filter = "";
             Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title));
             FillCat();
+
+            //foreach (var b in Books)
+            //{
+            //    if (b.GetAvailableCopy() == null)
+                    //boolAddToBasket = false;
+            //}
 
             ClearFilter = new RelayCommand(() => 
             {

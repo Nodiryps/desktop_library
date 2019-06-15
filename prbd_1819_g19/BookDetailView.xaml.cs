@@ -176,6 +176,11 @@ namespace prbd_1819_g19
             get => HiddenShow();
         }
 
+        public string IsAdmin
+        {
+            get => IsAdminHidden();
+        }
+
         public ICommand Save { get; set; }
         public ICommand Cancel { get; set; }
         public ICommand Delete { get; set; }
@@ -567,6 +572,15 @@ namespace prbd_1819_g19
         private string HiddenShow()
         {
             if (IsNew)
+                return "hidden";
+            else
+                return "show";
+        }
+
+
+        public string IsAdminHidden()
+        {
+            if (!App.IsAdmin())
                 return "hidden";
             else
                 return "show";

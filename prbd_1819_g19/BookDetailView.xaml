@@ -28,9 +28,9 @@
                 <DataGridTextColumn Header="Rented By" Binding="{Binding RentedBy}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Cancel" Margin="0,0,585,50" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" />
-        <Button Content="Save" Margin="0,0,678,50" VerticalAlignment="Bottom" Command="{Binding Save}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolSave}"/>
-        <Button Content="Delete" Margin="0,0,678,22" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20"/>
+        <Button Content="Cancel" Margin="0,0,585,50" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolCancel}" Visibility="{Binding IsAdmin}"/>
+        <Button Content="Save" Margin="0,0,678,50" VerticalAlignment="Bottom" Command="{Binding Save}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolSave}" Visibility="{Binding IsAdmin}"/>
+        <Button Content="Delete" Margin="0,0,678,22" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolDelete}" Visibility="{Binding IsAdmin}"/>
         <Button Content="Exit" Margin="0,0,585,22" VerticalAlignment="Bottom" Command="{Binding Exit}" HorizontalAlignment="Right" Width="75" Height="20"/>
 
         <Grid Height="229" Margin="20,16,0,0" VerticalAlignment="Top" IsEnabled="{Binding BoolGrid}" HorizontalAlignment="Left" Width="770">

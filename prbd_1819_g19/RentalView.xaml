@@ -27,7 +27,7 @@
                 <DataGridTextColumn Header="#Open" Binding="{Binding NumOpenItems}" />
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="dataGrid2" ItemsSource="{Binding Items}" Margin="440,55,40,120" 
+        <DataGrid x:Name="dataGrid2" ItemsSource="{Binding Items}" Margin="400,55,40,120" 
                   SelectedItem="{Binding SelectedMessage}" AutoGenerateColumns="False" IsReadOnly="True" 
                   IsEnabled="{Binding EnableTable}" SelectionMode="Single" VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>

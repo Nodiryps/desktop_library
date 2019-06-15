@@ -79,6 +79,13 @@ namespace prbd_1819_g19
             set => SetProperty<bool>(ref boolSave, value);
         }
 
+        private bool boolQuantity;
+        public bool BoolQuantity
+        {
+            get => boolQuantity;
+            set => SetProperty<bool>(ref boolQuantity, value);
+        }
+
         public string PicturePath
         {
             get { return Book.AbsolutePicturePath; }
@@ -103,7 +110,6 @@ namespace prbd_1819_g19
             set
             {
                 book.Isbn = value;
-                //RaisePropertyChanged(nameof(Isbn));
                 SetProperty<string>(ref isbn, value, InputValidationsIsbn);
                 App.NotifyColleagues(AppMessages.MSG_ISBN_CHANGED, string.IsNullOrEmpty(value) ? " ??? " : value);
             }
@@ -206,7 +212,7 @@ namespace prbd_1819_g19
             FillCheckboxList();
             imageHelper = new ImageHelper(App.IMAGE_PATH, Book.PicturePath);
             Exit = new RelayCommand(ExitAction);
-
+            Console.WriteLine(Quantity);
             if (App.IsAdmin())
             {
                 BoolGrid = true;
@@ -236,7 +242,9 @@ namespace prbd_1819_g19
             AddCopies();
             Copies = new ObservableCollection<BookCopy>(book.Copies);
             App.Model.SaveChanges();
+            Quantity = 0;
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
+            BoolQuantity = false;
         }
 
         private void AddCopies()
@@ -279,7 +287,8 @@ namespace prbd_1819_g19
 
         private void ExitAction()
         {
-            ResetBookDatas();
+            if(!IsNew)
+                ResetBookDatas();
             App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB, this);
         }
 
@@ -365,9 +374,6 @@ namespace prbd_1819_g19
 
         private bool CanSaveOrCancelAction()
         {
-            //if (App.IsAdmin())
-            //    return Validate();
-            Console.WriteLine("Validate: " + Validate());
             if (Validate())
                 BoolSave = true;
 
@@ -385,21 +391,10 @@ namespace prbd_1819_g19
         public override bool Validate()
         {
             ClearErrors();
-            //RaiseErrors();
-            //if (!IsNew)
-            //{
-            InputsValidations();
-            QuantityValidations();
 
-            //}
-            //else if(IsNew && InputModified())
-            //{
-            //    InputsValidations();
-            //    QuantityValidations();
-            //}
+            InputsValidations();
 
             RaiseErrors();
-
             return !HasErrors;
         }
 
@@ -409,6 +404,7 @@ namespace prbd_1819_g19
             InputValidationsAuthor();
             InputValidationsEditor();
             InputValidationsIsbn();
+            QuantityValidations();
         }
 
         private void InputValidationsTitle()
@@ -521,27 +517,35 @@ namespace prbd_1819_g19
         {
             if (IsOk(Quantity.ToString()))
             {
+                
                 if (IsNumeric(Isbn))
                 {
                     if (Quantity < 0)
                     {
+
+                        Console.WriteLine("premier if");
                         BoolSave = false;
-                        ClearErrors();
-                        AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
+                        //ClearErrors();
+                        AddError("Quantityz", Properties.Resources.Error_NbCopiesNotValid);
                     }
+                    else
+                        BoolQuantity = true;
                 }
                 else
                 {
+                    Console.WriteLine("deuxieme if");
                     BoolSave = false;
                     ClearErrors();
-                    AddError("Quantity", Properties.Resources.Error_IsbnNumeric);
+                    AddError("Quantityz", Properties.Resources.Error_IsbnNumeric);
                 }
             }
             else
             {
+
+                Console.WriteLine("troieme if");
                 BoolSave = false;
                 ClearErrors();
-                AddError("Quantity", Properties.Resources.Error_Required);
+                AddError("Quantityz", Properties.Resources.Error_Required);
             }
         }
 

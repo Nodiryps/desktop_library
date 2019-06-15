@@ -48,7 +48,7 @@ namespace prbd_1819_g19
         public bool EnableTable
         {
             get => enableTable;
-            set => RaisePropertyChanged(nameof(enableTable));
+            set => SetProperty<bool>(ref enableTable, value);
         }
         
 

@@ -12,12 +12,11 @@
         d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
-        
         <DataGrid x:Name="dataGrid" Margin="0,0,0,250" SelectedItem="{Binding SelectedCategory}" 
                   ItemsSource="{Binding Category}" IsEnabled="{Binding BoolTable}" 
                   AutoGenerateColumns="False" IsReadOnly="True"  SelectionMode="Single">
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick" FocusManager.FocusedElement="{Binding ElementName=textBox}">
+                <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding SetThisCat}" 
                                            CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItem}"/>
                 </i:EventTrigger>
@@ -42,19 +41,16 @@
 
         <f:ValidatedField HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="305" Margin="0,220,0,0">
             <TextBox Name="textBox" TextWrapping="Wrap" Text="{Binding ThisCat, UpdateSourceTrigger=PropertyChanged}" 
-                     IsEnabled="{Binding BoolInput}" Margin="10,0,0,0"/>
-            
+                     IsEnabled="{Binding BoolInput}" Visibility="{Binding IsAdmin}" Margin="10,0,0,0"/>
         </f:ValidatedField>
 
         <Button Content="Add" HorizontalAlignment="Left" Margin="314,219,0,0" VerticalAlignment="Top" Width="50" 
-                Command="{Binding Add}" IsEnabled="{Binding BoolAdd}"/>
+                Command="{Binding Add}" IsEnabled="{Binding BoolAdd}" Visibility="{Binding IsAdmin}"/>
         <Button Content="Update" HorizontalAlignment="Left" Margin="373,219,0,0" VerticalAlignment="Top" Width="50" 
-                Command="{Binding Update}" IsEnabled="{Binding BoolUpdate}"/>
+                Command="{Binding Update}" IsEnabled="{Binding BoolUpdate}" Visibility="{Binding IsAdmin}"/>
         <Button Content="Delete" HorizontalAlignment="Left" Margin="432,219,0,0" VerticalAlignment="Top" Width="50" 
-                Command="{Binding Delete}" IsEnabled="{Binding BoolDelete}"/>
+                Command="{Binding Delete}" IsEnabled="{Binding BoolDelete}" Visibility="{Binding IsAdmin}"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="501,219,0,0" VerticalAlignment="Top" Width="50" 
-                Command="{Binding Cancel}" IsEnabled="{Binding BoolCancel}"/>
-
-
+                Command="{Binding Cancel}" IsEnabled="{Binding BoolCancel}" Visibility="{Binding IsAdmin}"/>
     </Grid>
 </f:UserControlBase>

@@ -86,13 +86,13 @@
         <Image x:Name="img" HorizontalAlignment="Left" Height="187" Margin="40,170,0,0" VerticalAlignment="Top" Width="180" RenderOptions.BitmapScalingMode="Fant"
                Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, 
                     FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" IsEnabled="{Binding BoolGrid}" RenderTransformOrigin="0.486,0.508"/>
-        <Label IsEnabled="{Binding BoolGrid}" Content="Quantity:" VerticalAlignment="Center" Margin="411,166,321,258" RenderTransformOrigin="1.169,3.423" />
-        <f:ValidatedField IsEnabled="{Binding BoolGrid}" x:Name="Quantityz" VerticalAlignment="Center" Margin="478,169,295,257" RenderTransformOrigin="0.507,0.577" Height="24">
-            <TextBox Text="{Binding Quantity, UpdateSourceTrigger=LostFocus}" MaxLength="2" Height="21"/>
+        <Label IsEnabled="{Binding BoolGrid}" Content="Quantity:" VerticalAlignment="Center" Margin="392,165,340,259" RenderTransformOrigin="1.169,3.423" />
+        <f:ValidatedField IsEnabled="{Binding BoolGrid}" VerticalAlignment="Center" Margin="460,169,300,260" RenderTransformOrigin="0.507,0.577" Height="21">
+            <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Height="21"/>
         </f:ValidatedField>
-        
+        <Button IsEnabled="{Binding BoolQuantity}" Content="Add Copy" Visibility="{Binding AddCopyVisible}" Command="{Binding AddCopy}" Margin="0,0,220,260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="65" Height="24"/>
+
         <Label IsEnabled="{Binding BoolGrid}" Content="Date: " HorizontalAlignment="Left" Margin="376,219,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
-        <Button IsEnabled="{Binding BoolQuantity}" Content="AddCopy"  Visibility="{Binding AddCopyVisible}" Margin="0,0,220,260" VerticalAlignment="Bottom" Command="{Binding AddCopy}" HorizontalAlignment="Right" Width="65" Height="24"/>
         <DatePicker IsEnabled="{Binding BoolGrid}" SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,221,0,0" VerticalAlignment="Top" Width="163"/>
 
     </Grid>

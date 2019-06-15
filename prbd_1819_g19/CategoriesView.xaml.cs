@@ -80,8 +80,6 @@ namespace prbd_1819_g19
             set => SetProperty<bool>(ref boolCancel, value);
         }
 
-        
-
         private bool boolInput;
         public bool BoolInput
         {
@@ -94,6 +92,11 @@ namespace prbd_1819_g19
         {
             get => boolTable;
             set => SetProperty<bool>(ref boolTable, value);
+        }
+
+        public string IsAdmin
+        {
+            get => IsAdminHidden();
         }
 
         public ICommand Add { get; set; }
@@ -171,6 +174,14 @@ namespace prbd_1819_g19
                     BoolAdd = false;
                 });
             }
+        }
+
+        public string IsAdminHidden()
+        {
+            if (!App.IsAdmin())
+                return "hidden";
+            else
+                return "show";
         }
 
         public void ThisCatChanged()

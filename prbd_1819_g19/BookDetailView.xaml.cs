@@ -242,8 +242,8 @@ namespace prbd_1819_g19
             AddCopies();
             Copies = new ObservableCollection<BookCopy>(book.Copies);
             App.Model.SaveChanges();
-            Quantity = 0;
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
+            Quantity = 0;
             BoolQuantity = false;
         }
 
@@ -270,7 +270,6 @@ namespace prbd_1819_g19
             imageHelper.Clear();
             PicturePath = imageHelper.CurrentFile;
         }
-
 
         public override void Dispose()
         {
@@ -376,7 +375,6 @@ namespace prbd_1819_g19
         {
             if (Validate())
                 BoolSave = true;
-
             return InputModified();
         }
 
@@ -417,6 +415,8 @@ namespace prbd_1819_g19
                     ClearErrors();
                     AddError("Title", Properties.Resources.Error_InputDetailString);
                 }
+                else
+                    ClearErrors();
             }
 
             else
@@ -438,6 +438,8 @@ namespace prbd_1819_g19
                     ClearErrors();
                     AddError("Author", Properties.Resources.Error_InputDetailString);
                 }
+                else
+                    ClearErrors();
             }
             else
             {
@@ -458,6 +460,8 @@ namespace prbd_1819_g19
                     ClearErrors();
                     AddError("Editor", Properties.Resources.Error_InputDetailString);
                 }
+                else
+                    ClearErrors();
             }
             else
             {
@@ -482,6 +486,8 @@ namespace prbd_1819_g19
                             ClearErrors();
                             AddError("Isbn", Properties.Resources.Error_AlreadyExists);
                         }
+                        else
+                            ClearErrors();
                     }
                     else
                     {
@@ -505,31 +511,26 @@ namespace prbd_1819_g19
             }
         }
 
-        //private void InputValidations(string s)
-        //{
-        //    if (!IsOk(s))
-        //        AddError('\"' + s + '\"', Properties.Resources.Error_Required);
-        //    if (s.Length < 3)
-        //        AddError('\"' + s + '\"', Properties.Resources.Error_LengthGreaterEqual3);
-        //}
-
         private void QuantityValidations()
         {
-            if (IsOk(Quantity.ToString()))
-            {
-                
+            //if (IsOk(Quantity.ToString()))
+            //{
                 if (IsNumeric(Isbn))
                 {
                     if (Quantity < 0)
                     {
-
                         Console.WriteLine("premier if");
                         BoolSave = false;
-                        //ClearErrors();
+                        ClearErrors();
                         AddError("Quantityz", Properties.Resources.Error_NbCopiesNotValid);
                     }
                     else
+                    {
+                        Console.WriteLine("else!!!!!!!");
+                        ClearErrors();
                         BoolQuantity = true;
+                    }
+                        
                 }
                 else
                 {
@@ -538,15 +539,15 @@ namespace prbd_1819_g19
                     ClearErrors();
                     AddError("Quantityz", Properties.Resources.Error_IsbnNumeric);
                 }
-            }
-            else
-            {
+            //}
+            //else
+            //{
 
-                Console.WriteLine("troieme if");
-                BoolSave = false;
-                ClearErrors();
-                AddError("Quantityz", Properties.Resources.Error_Required);
-            }
+            //    Console.WriteLine("troisieme if");
+            //    BoolSave = false;
+            //    ClearErrors();
+            //    AddError("Quantityz", Properties.Resources.Error_Required);
+            //}
         }
 
         public bool IsNumeric(string s)

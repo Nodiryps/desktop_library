@@ -83,12 +83,12 @@
 
         <Grid>
             <Label Content="Categories :" VerticalAlignment="Center" Margin="619,160,10,260" Height="30" />
-            <ListBox ItemsSource="{Binding CheckboxList}" Margin="624,190,10,20" Name="listBox">
+            <ListBox  ItemsSource="{Binding CheckboxList}" Margin="624,190,10,20" x:Name="listBox">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}"  
+                        <CheckBox  IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}"  
                                       Command="{Binding ElementName=root, Path=CatChecked, UpdateSourceTrigger=PropertyChanged}" 
-                                      CommandParameter="{Binding}" >
+                                      CommandParameter="{Binding ElementName=listBox}" >
                         </CheckBox>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

@@ -221,9 +221,6 @@ namespace prbd_1819_g19
                 LoadImage = new RelayCommand(LoadImageAction);
                 ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
                 AddCopy = new RelayCommand(AddCopyBook);
-                CatChecked = new RelayCommand(() => {
-                    Console.WriteLine("CatChecked");
-                });
             }
 
 
@@ -302,7 +299,7 @@ namespace prbd_1819_g19
             }
 
             AddCopies();
-            //AddCategoriesCheckBox();
+            AddCategoriesCheckBox();
             imageHelper.Confirm(Book.Title);
             PicturePath = imageHelper.CurrentFile;
             App.Model.SaveChanges();
@@ -315,7 +312,10 @@ namespace prbd_1819_g19
             Book.Categories.Clear();
             foreach (var c in CheckboxList)
                 if (c.IsChecked)
+                {
                     Book.Categories.Add(c.Item);
+
+                }
         }
 
         private void DeleteAction()
@@ -387,22 +387,15 @@ namespace prbd_1819_g19
 
         private bool BookChanged()
         {
+            var cpt = 0;
+            foreach (var c in CheckboxList)
+                if (c.IsChecked)
+                    ++cpt;
+
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
                           where c.Entity == Book 
                           select c).FirstOrDefault();
-            return change != null && change.State != EntityState.Unchanged;
-        }
-
-        private bool CheckboxChecked()
-        {
-            ICollection<Category> list = Book.Categories;
-            var oldCpt = list.Count();
-            list.Clear();
-            foreach (var c in CheckboxList)
-                if (c.IsChecked)
-                    list.Add(c.Item);
-
-            return list.Count() != oldCpt;
+            return change != null && change.State != EntityState.Unchanged || change.Entity.Categories.Count != cpt;
         }
 
         public override bool Validate()

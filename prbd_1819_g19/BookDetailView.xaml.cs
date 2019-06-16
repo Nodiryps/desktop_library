@@ -115,16 +115,17 @@ namespace prbd_1819_g19
             }
         }
 
-        private int quantity = 0;
-        public int Quantity
+        private string quantity;
+        public string Quantity
         {
             get { return quantity; }
             set
             {
                 quantity = value;
-                SetProperty<int>(ref quantity, value, QuantityValidations);
+                SetProperty<string>(ref quantity, value, QuantityValidations);
             }
         }
+
         private string title;
         public string Title
         {
@@ -172,7 +173,7 @@ namespace prbd_1819_g19
         public string AbsolutePicturePath
         {
             get { return book.AbsolutePicturePath; }
-            set {}
+            set { }
         }
 
         public string AddCopyVisible
@@ -192,7 +193,6 @@ namespace prbd_1819_g19
         public ICommand LoadImage { get; set; }
         public ICommand ClearImage { get; set; }
         public ICommand AddCopy { get; set; }
-        public ICommand CatChecked { get; set; }
 
 #if DEBUG_USERCONTROLS_WITH_TIMER
         private Timer timer = new Timer(1000);
@@ -203,6 +203,7 @@ namespace prbd_1819_g19
             InitializeComponent();
             DataContext = this;
             Book = book;
+            Quantity = "0";
             IsNew = isNew;
             Categories = new ObservableCollection<Category>(App.Model.Categories);
             CheckboxList = new ObservableCollection<CategoriesCheckboxList<Category>>();
@@ -234,15 +235,14 @@ namespace prbd_1819_g19
 #endif
         }
 
-        
-
         private void AddCopyBook()
         {
             AddCopies();
             Copies = new ObservableCollection<BookCopy>(book.Copies);
             App.Model.SaveChanges();
             App.NotifyColleagues(AppMessages.MSG_BOOK_CHANGED, Book);
-            Quantity = 0;
+            Quantity = "";
+            Quantity = "0";
             BoolQuantity = false;
         }
 
@@ -250,8 +250,9 @@ namespace prbd_1819_g19
         {
             if (selectedDate == null)
                 selectedDate = DateTime.Now;
-            if (Quantity > 0)
-                book.AddCopies(Quantity, selectedDate);
+            int q = Int32.Parse(Quantity);
+            if (q > 0)
+                book.AddCopies(q, selectedDate);
         }
 
         private void LoadImageAction()
@@ -285,7 +286,7 @@ namespace prbd_1819_g19
 
         private void ExitAction()
         {
-            if(!IsNew)
+            if (!IsNew)
                 ResetBookDatas();
             App.NotifyColleagues(AppMessages.MSG_CLOSE_TAB, this);
         }
@@ -393,7 +394,7 @@ namespace prbd_1819_g19
                     ++cpt;
 
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
-                          where c.Entity == Book 
+                          where c.Entity == Book
                           select c).FirstOrDefault();
             return change != null && change.State != EntityState.Unchanged || change.Entity.Categories.Count != cpt;
         }
@@ -525,41 +526,41 @@ namespace prbd_1819_g19
 
         private void QuantityValidations()
         {
-            //if (IsOk(Quantity.ToString()))
-            //{
-                if (IsNumeric(Isbn))
+            if (IsOk(Quantity))
+            {
+                if (IsNumeric(Quantity))
                 {
-                    if (Quantity < 0)
+                    if (Int32.Parse(Quantity) >= 0)
                     {
-                        Console.WriteLine("premier if");
-                        BoolSave = false;
                         ClearErrors();
-                        AddError("Quantityz", Properties.Resources.Error_NbCopiesNotValid);
+                        BoolQuantity = true;
+                        if (IsNew)
+                            BoolSave = true;
+
                     }
                     else
                     {
-                        Console.WriteLine("else!!!!!!!");
+                        BoolSave = false;
+                        BoolQuantity = false;
                         ClearErrors();
-                        BoolQuantity = true;
+                        AddError("Quantity", Properties.Resources.Error_NbCopiesNotValid);
                     }
-                        
                 }
                 else
                 {
-                    Console.WriteLine("deuxieme if");
                     BoolSave = false;
+                    BoolQuantity = false;
                     ClearErrors();
-                    AddError("Quantityz", Properties.Resources.Error_IsbnNumeric);
+                    AddError("Quantity", Properties.Resources.Error_IsbnNumeric);
                 }
-            //}
-            //else
-            //{
-
-            //    Console.WriteLine("troisieme if");
-            //    BoolSave = false;
-            //    ClearErrors();
-            //    AddError("Quantityz", Properties.Resources.Error_Required);
-            //}
+            }
+            else
+            {
+                BoolSave = false;
+                BoolQuantity = false;
+                ClearErrors();
+                AddError("Quantity", Properties.Resources.Error_Required);
+            }
         }
 
         public bool IsNumeric(string s)

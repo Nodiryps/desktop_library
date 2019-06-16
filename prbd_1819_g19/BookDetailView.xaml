@@ -46,22 +46,22 @@
 
             <Label Content="ISBN :" VerticalAlignment="Center" Grid.Row="0" Height="26" Margin="0,0,0,20" />
             <f:ValidatedField Grid.Row="0" Margin="0,2,5,28" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2">
-                <TextBox Text="{Binding Isbn, UpdateSourceTrigger=LostFocus}" IsReadOnly="False" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" MaxLength="3"/>
+                <TextBox Text="{Binding Isbn, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" MaxLength="3"/>
             </f:ValidatedField>
 
             <Label Content="Title :" VerticalAlignment="Center" Height="26" Margin="0,36,0,30" Grid.RowSpan="2" />
             <f:ValidatedField Margin="0,38,5,38" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2">
-                <TextBox Text="{Binding Title, UpdateSourceTrigger=LostFocus}" IsReadOnly="False" MaxLength="50"/>
+                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" MaxLength="50"/>
             </f:ValidatedField>
 
             <Label Content="Author :" VerticalAlignment="Center" Grid.Row="1" Height="26" Margin="0,26,0,40" Grid.RowSpan="2" />
             <f:ValidatedField Grid.Row="1" Margin="0,27,5,3" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2">
-                <TextBox Text="{Binding Author, UpdateSourceTrigger=LostFocus}" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" MaxLength="50"/>
+                <TextBox Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" MaxLength="50"/>
             </f:ValidatedField>
 
             <Label Content="Editor :" VerticalAlignment="Center" Grid.Row="2" Height="26" Margin="0,16,0,4" />
             <f:ValidatedField Grid.Row="2" Margin="0,18,5,13" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2">
-                <TextBox Text="{Binding Editor, UpdateSourceTrigger=LostFocus}" IsReadOnly="False" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" MaxLength="50"/>
+                <TextBox Text="{Binding Editor, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" MaxLength="50"/>
             </f:ValidatedField>
 
         </Grid>
@@ -73,8 +73,8 @@
                     FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" IsEnabled="{Binding BoolGrid}" RenderTransformOrigin="0.486,0.508"/>
 
         <Label IsEnabled="{Binding BoolGrid}" Content="Quantity:" VerticalAlignment="Center" Margin="392,165,340,259" RenderTransformOrigin="1.169,3.423" />
-        <f:ValidatedField IsEnabled="{Binding BoolGrid}" VerticalAlignment="Center" Margin="460,169,300,260" RenderTransformOrigin="0.507,0.577" Height="21">
-            <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Height="21"/>
+        <f:ValidatedField IsEnabled="{Binding BoolGrid}" VerticalAlignment="Center" Margin="400,169,220,240" RenderTransformOrigin="0.507,0.577" Height="41">
+            <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Height="21" Margin="60,0,80,0" IsReadOnly="False"/>
         </f:ValidatedField>
         <Button IsEnabled="{Binding BoolQuantity}" Content="Add Copy" Visibility="{Binding AddCopyVisible}" Command="{Binding AddCopy}" Margin="0,0,220,260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="65" Height="24"/>
 

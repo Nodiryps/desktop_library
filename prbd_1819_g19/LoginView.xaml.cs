@@ -39,14 +39,11 @@ namespace prbd_1819_g19
 
         private void LoginAction()
         {
-            Console.WriteLine("CU login before Find: " + App.CurrentUser);
             App.CurrentUser = null;
-            Console.WriteLine("CU login after null : " + App.CurrentUser);
 
             if (Validate())
             { 
                 var member = App.Model.Users.Find(UserId()); // on recherche le membre 
-                Console.WriteLine("Requete Find: "+member);
                 App.CurrentUser = member; // le membre connecté devient le membre courant
                 App.SelectedUser = member;
                  

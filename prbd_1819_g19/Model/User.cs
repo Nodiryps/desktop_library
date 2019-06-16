@@ -43,7 +43,6 @@ namespace prbd_1819_g19
         
         public RentalItem AddToBasket(Book book)
         {
-            Console.WriteLine("test");
             if (Basket == null)
                 CreateBasket(); // si pas de rental.rentalDate à null, on en créé un nvx => rentalDate == null
 

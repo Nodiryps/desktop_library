@@ -100,7 +100,6 @@ namespace prbd_1819_g19
             AddToBasket = new RelayCommand<Book>(book => 
             {
                 App.SelectedUser.AddToBasket(book);
-                Console.WriteLine("AddTOBasketBooksView :" + App.CurrentUser);
                 App.NotifyColleagues(AppMessages.MSG_ADD_BOOK_TO_BASKET, book);
                 ApplyFilterAction();
                 //Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title));
@@ -116,11 +115,9 @@ namespace prbd_1819_g19
         public void Disable()
         {
             if (SelectedItem != null)
-                Console.WriteLine("Selected Book: " + SelectedItem);
             {
                 if (SelectedItem.NumAvailableCopies != 0)
                     BoolAddToBasket = true;
-                Console.WriteLine("SET");
             }
         }
 
@@ -128,7 +125,6 @@ namespace prbd_1819_g19
 
         private void ApplyFilterAction()
         {
-            Console.WriteLine(SelectedCat);
             if (SelectedCat != null)
             {
                 if (StringOk(filter) && SelectedCat.Name == "All")
@@ -147,7 +143,6 @@ namespace prbd_1819_g19
                         Books.Clear();
                         foreach (var c in App.Model.Books.OrderBy(b => b.Title))
                         {
-                            Console.WriteLine(SelectedCat);
                             if (c.Categories.Contains(SelectedCat))
                             {
                                 Books.Add(c);

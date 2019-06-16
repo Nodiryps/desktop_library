@@ -154,9 +154,7 @@ namespace prbd_1819_g19
             set
             {
                 book.Editor = value;
-
                 SetProperty<string>(ref editor, value, InputValidationsEditor);
-
             }
         }
 
@@ -174,7 +172,7 @@ namespace prbd_1819_g19
         public string AbsolutePicturePath
         {
             get { return book.AbsolutePicturePath; }
-            set { }
+            set {}
         }
 
         public string AddCopyVisible
@@ -212,7 +210,7 @@ namespace prbd_1819_g19
             FillCheckboxList();
             imageHelper = new ImageHelper(App.IMAGE_PATH, Book.PicturePath);
             Exit = new RelayCommand(ExitAction);
-            Console.WriteLine(Quantity);
+
             if (App.IsAdmin())
             {
                 BoolGrid = true;
@@ -223,7 +221,9 @@ namespace prbd_1819_g19
                 LoadImage = new RelayCommand(LoadImageAction);
                 ClearImage = new RelayCommand(ClearImageAction, () => PicturePath != null);
                 AddCopy = new RelayCommand(AddCopyBook);
-                CatChecked = new RelayCommand(() => { EnableBoolCat(); Console.WriteLine("EnableBoolCat"); });
+                CatChecked = new RelayCommand(() => {
+                    Console.WriteLine("CatChecked");
+                });
             }
 
 
@@ -236,6 +236,8 @@ namespace prbd_1819_g19
             timer.Start();
 #endif
         }
+
+        
 
         private void AddCopyBook()
         {
@@ -300,7 +302,7 @@ namespace prbd_1819_g19
             }
 
             AddCopies();
-            AddCategoriesCheckBox();
+            //AddCategoriesCheckBox();
             imageHelper.Confirm(Book.Title);
             PicturePath = imageHelper.CurrentFile;
             App.Model.SaveChanges();
@@ -348,6 +350,9 @@ namespace prbd_1819_g19
                 Editor = null;
                 PicturePath = imageHelper.CurrentFile;
                 RaisePropertyChanged(nameof(Book));
+                Book.Categories.Clear();
+                CheckboxList.Clear();
+                FillCheckboxList();
             }
             else
             {
@@ -367,6 +372,8 @@ namespace prbd_1819_g19
                 RaisePropertyChanged(nameof(Title));
                 RaisePropertyChanged(nameof(Author));
                 RaisePropertyChanged(nameof(Editor));
+                CheckboxList.Clear();
+                FillCheckboxList();
                 RaisePropertyChanged(nameof(PicturePath));
             }
         }
@@ -375,15 +382,27 @@ namespace prbd_1819_g19
         {
             if (Validate())
                 BoolSave = true;
-            return InputModified();
+            return BookChanged();
         }
 
-        private bool InputModified()
+        private bool BookChanged()
         {
             var change = (from c in App.Model.ChangeTracker.Entries<Book>()
-                          where c.Entity == Book
+                          where c.Entity == Book 
                           select c).FirstOrDefault();
             return change != null && change.State != EntityState.Unchanged;
+        }
+
+        private bool CheckboxChecked()
+        {
+            ICollection<Category> list = Book.Categories;
+            var oldCpt = list.Count();
+            list.Clear();
+            foreach (var c in CheckboxList)
+                if (c.IsChecked)
+                    list.Add(c.Item);
+
+            return list.Count() != oldCpt;
         }
 
         public override bool Validate()

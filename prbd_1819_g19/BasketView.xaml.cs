@@ -127,7 +127,6 @@ namespace prbd_1819_g19
         private void UsersComboBox()
         {
             UserFilter = new RelayCommand(() => {
-                Console.WriteLine(SelectedUser);
                 if (SelectedUser.Basket == null)
                     SelectedUser.CreateBasket();
                     Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);

@@ -15,12 +15,8 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
 
-
-
     <Grid>
-
-
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="360,280,220,20" AutoGenerateColumns="False" IsReadOnly="True" 
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding Copies}" Margin="280,265,220,20" AutoGenerateColumns="False" IsReadOnly="True" 
                  IsEnabled="{Binding BoolGrid}" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding BookCopyId}" SortDirection="Descending"/>
@@ -28,6 +24,7 @@
                 <DataGridTextColumn Header="Rented By" Binding="{Binding RentedBy}" />
             </DataGrid.Columns>
         </DataGrid>
+
         <Button Content="Cancel" Margin="0,0,585,50" VerticalAlignment="Bottom" Command="{Binding Cancel}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolCancel}" Visibility="{Binding IsAdmin}"/>
         <Button Content="Save" Margin="0,0,678,50" VerticalAlignment="Bottom" Command="{Binding Save}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolSave}" Visibility="{Binding IsAdmin}"/>
         <Button Content="Delete" Margin="0,0,678,22" VerticalAlignment="Bottom" Command="{Binding Delete}" HorizontalAlignment="Right" Width="75" Height="20" IsEnabled="{Binding BoolDelete}" Visibility="{Binding IsAdmin}"/>
@@ -66,19 +63,7 @@
             <f:ValidatedField Grid.Row="2" Margin="0,18,5,13" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2">
                 <TextBox Text="{Binding Editor, UpdateSourceTrigger=LostFocus}" IsReadOnly="False" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" MaxLength="50"/>
             </f:ValidatedField>
-            <Grid>
-                <Label Content="Categories :" VerticalAlignment="Center" Margin="619,234,-631,-218" Height="30" />
-                <ListBox ItemsSource="{Binding CheckboxList}" Margin="624,264,-705,-368" Name="listBox">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}"  
-                                      Command="{Binding ElementName=root, Path=CatChecked, UpdateSourceTrigger=PropertyChanged}" 
-                                      CommandParameter="{Binding}" >
-                            </CheckBox>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
+
         </Grid>
         <Button x:Name="btnLoad" Content="Load" Margin="0,0,485,260" VerticalAlignment="Bottom" Command="{Binding LoadImage}" IsEnabled="{Binding BoolGrid}" HorizontalAlignment="Right" Width="67" Height="21" RenderTransformOrigin="0.5,0.5"/>
         <Button x:Name="btnClear" Content="Clear" Margin="0,0,485,231" VerticalAlignment="Bottom" Command="{Binding ClearImage}" IsEnabled="{Binding BoolGrid}" HorizontalAlignment="Right" Width="67" Height="21"/>
@@ -86,14 +71,28 @@
         <Image x:Name="img" HorizontalAlignment="Left" Height="187" Margin="40,170,0,0" VerticalAlignment="Top" Width="180" RenderOptions.BitmapScalingMode="Fant"
                Source="{Binding PicturePath, Converter={f:UriToCachedImageConverter}, 
                     FallbackValue={StaticResource UnknownBook}, TargetNullValue={StaticResource UnknownBook}}" IsEnabled="{Binding BoolGrid}" RenderTransformOrigin="0.486,0.508"/>
+
         <Label IsEnabled="{Binding BoolGrid}" Content="Quantity:" VerticalAlignment="Center" Margin="392,165,340,259" RenderTransformOrigin="1.169,3.423" />
         <f:ValidatedField IsEnabled="{Binding BoolGrid}" VerticalAlignment="Center" Margin="460,169,300,260" RenderTransformOrigin="0.507,0.577" Height="21">
             <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Height="21"/>
         </f:ValidatedField>
         <Button IsEnabled="{Binding BoolQuantity}" Content="Add Copy" Visibility="{Binding AddCopyVisible}" Command="{Binding AddCopy}" Margin="0,0,220,260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="65" Height="24"/>
 
-        <Label IsEnabled="{Binding BoolGrid}" Content="Date: " HorizontalAlignment="Left" Margin="376,219,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
-        <DatePicker IsEnabled="{Binding BoolGrid}" SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,221,0,0" VerticalAlignment="Top" Width="163"/>
+        <Label IsEnabled="{Binding BoolGrid}" Content="Date: " HorizontalAlignment="Left" Margin="376,213,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.098,0.923"/>
+        <DatePicker IsEnabled="{Binding BoolGrid}" SelectedDate="{Binding SelectedDate}" HorizontalAlignment="Left" Margin="417,215,0,0" VerticalAlignment="Top" Width="163"/>
 
+        <Grid>
+            <Label Content="Categories :" VerticalAlignment="Center" Margin="619,160,10,260" Height="30" />
+            <ListBox ItemsSource="{Binding CheckboxList}" Margin="624,190,10,20" Name="listBox">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Path=Item.Name}"  
+                                      Command="{Binding ElementName=root, Path=CatChecked, UpdateSourceTrigger=PropertyChanged}" 
+                                      CommandParameter="{Binding}" >
+                        </CheckBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
     </Grid>
 </f:UserControlBase>

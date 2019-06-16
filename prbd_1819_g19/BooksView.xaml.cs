@@ -37,12 +37,21 @@ namespace prbd_1819_g19
             set => SetProperty<string>(ref filter, value, ApplyFilterAction);
         }
 
+
         private bool boolAddToBasket;
         public bool BoolAddToBasket
         {
             get => boolAddToBasket;
             set => SetProperty<bool>(ref boolAddToBasket, value);
         }
+
+        public Book selectedItem;
+        public Book SelectedItem
+        {
+            get => selectedItem;
+            set => SetProperty<Book>(ref selectedItem, value);
+        }
+
 
         public string HideBtnNewBook { get => HiddenShow(); }
 
@@ -52,6 +61,7 @@ namespace prbd_1819_g19
         public ICommand CategoryFilter { get; set; }
         public ICommand AddToBasket { get; set; }
         public ICommand LinkCat { get; set; }
+        public ICommand Click { get; set; }
 
         public string Text { get; set; }
 
@@ -65,12 +75,6 @@ namespace prbd_1819_g19
             Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title));
             FillCat();
 
-            //foreach (var b in Books)
-            //{
-            //    if (b.GetAvailableCopy() == null)
-                    //boolAddToBasket = false;
-            //}
-
             ClearFilter = new RelayCommand(() => 
             {
                 Filter = "";
@@ -80,7 +84,10 @@ namespace prbd_1819_g19
                 Categories.Insert(0, All);
                 SelectedCat = All;
                 ComboBox.SelectedItem = All;
+                
             });
+
+            Click = new RelayCommand(Disable);
 
             if (App.IsAdmin())
             {
@@ -101,8 +108,23 @@ namespace prbd_1819_g19
 
             App.Register<Book>(this, AppMessages.MSG_BOOK_CHANGED, book => { Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title)); });
             App.Register<ICollection<Category>>(this, AppMessages.MSG_CAT_CHANGED, list => { FillCat(); ApplyFilterAction(); });
-            App.Register(this, AppMessages.MSG_NBCOPIES_CHANGED, () => { Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title)); ApplyFilterAction(); });
+            App.Register(this, AppMessages.MSG_NBCOPIES_CHANGED, () => { Books = new ObservableCollection<Book>(App.Model.Books.OrderBy(b => b.Title)); ApplyFilterAction();});
+
+            
         }
+
+        public void Disable()
+        {
+            if (SelectedItem != null)
+                Console.WriteLine("Selected Book: " + SelectedItem);
+            {
+                if (SelectedItem.NumAvailableCopies != 0)
+                    BoolAddToBasket = true;
+                Console.WriteLine("SET");
+            }
+        }
+
+
 
         private void ApplyFilterAction()
         {

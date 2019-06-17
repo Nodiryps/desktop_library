@@ -101,6 +101,7 @@ namespace prbd_1819_g19
             ConfirmDisabled();
             App.Register<Book>(this, AppMessages.MSG_ADD_BOOK_TO_BASKET, book =>
             { 
+                if(SelectedUser.Basket != null)
                 Items = new ObservableCollection<RentalItem>(SelectedUser.Basket.Items);
                 ConfirmDisabled();
             });
